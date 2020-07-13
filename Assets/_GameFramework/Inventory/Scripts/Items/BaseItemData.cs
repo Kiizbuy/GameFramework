@@ -1,0 +1,39 @@
+﻿using System;
+using UnityEngine;
+
+namespace GameFramework.Inventory.Items
+{
+    public abstract class BaseItemData : ScriptableObject
+    {
+        [SerializeField] private Sprite _icon;
+        [SerializeField] private string _title;
+        [SerializeField] private string _description;
+
+        public Sprite Icon => _icon;
+        public string Title => _title;
+        public virtual string GetDescription() => _description;
+
+        public virtual void PutToInventory(Inventory inventory, int count, Func<BaseItemData, int, ItemState> putNewItem)
+        {
+            for (int i = 0; i < count; i++)
+            {
+                var state = putNewItem(this, 1);
+
+                if (state == null)
+                    return;
+            }
+        }
+
+        public virtual void EjectFromInventory(Inventory inventory, int count, Func<BaseItemData, int, ItemState> ejectItem)
+        {
+            for (int i = 0; i < count; i++)
+            {
+                var state = ejectItem(this, 1);
+
+                if (state == null)
+                    return;
+            }
+        }
+    }
+}
+
