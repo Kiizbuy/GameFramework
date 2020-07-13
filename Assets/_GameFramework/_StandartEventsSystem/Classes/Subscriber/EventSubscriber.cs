@@ -63,9 +63,6 @@ namespace GameFramework.Events
                 return;
             }
 
-            if (eventToMethodSubscriberField.MethodsTemplateData.Count == 0)
-                Debug.Log($"Nothing to subscribe in {eventNameAttribute.EventName} event");
-
             foreach (var item in eventToMethodSubscriberField.MethodsTemplateData)
             {
                 if (item.eventObject == null)
@@ -85,6 +82,7 @@ namespace GameFramework.Events
                         Debug.LogError($"Monobehaviour reference is null. Can't subscribe it");
                         return;
                     }
+
 
                     var newEventDelegate = (Action<EventParameter>)Delegate.CreateDelegate(
                         type: typeof(Action<EventParameter>),
@@ -134,12 +132,12 @@ namespace GameFramework.Events
                 {
                     var eventInfo = item.MonobehaviourReference.GetType().GetEvent(item.MonobehaviourEventName);
                     var newEventDelegate = (Action<EventParameter>)Delegate.CreateDelegate(
-                        type: typeof(Action<EventParameter>),
+                        type: eventInfo.EventHandlerType,
                         target: eventObject,
                         method: methodInfo.Name);
 
-                    eventInfo.RemoveEventHandler(eventObject, newEventDelegate);
-                    eventInfo.AddEventHandler(eventObject, newEventDelegate);
+                    //eventInfo.RemoveEventHandler(item.MonobehaviourReference, newEventDelegate);
+                    eventInfo.AddEventHandler(item.MonobehaviourReference, newEventDelegate);
                 }
             }
         }

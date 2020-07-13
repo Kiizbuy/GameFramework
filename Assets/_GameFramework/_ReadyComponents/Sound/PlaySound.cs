@@ -6,7 +6,7 @@ using UnityEngine.Audio;
 
 namespace GameFramework.Components
 {
-    ///TODO: Refactor This Shitty Code
+    ///TODO: Refactor this Shitty-Code
     public class PlaySound : MonoBehaviour
     {
         public event Action<EventParameter> OnCompleteClip;
@@ -17,6 +17,8 @@ namespace GameFramework.Components
         public MethodToEventSubscribeContainer PlaySubscriber = new MethodToEventSubscribeContainer();
         [MethodName(nameof(Stop))]
         public MethodToEventSubscribeContainer StopSubscriber = new MethodToEventSubscribeContainer();
+        [MethodName(nameof(PlayOneShot))]
+        public MethodToEventSubscribeContainer PlayOneShotSubscriber = new MethodToEventSubscribeContainer();
 
         [SerializeField] private AudioClip _sound;
         [SerializeField] private AudioSource _audioSource;
@@ -33,8 +35,8 @@ namespace GameFramework.Components
 
         private void Awake()
         {
-            if (!AudioMixerInitialized)
-                InitializeAudioMixer();
+            //if (!AudioMixerInitialized)
+            //    InitializeAudioMixer();
 
             if (_audioSource == null)
             {
@@ -48,7 +50,7 @@ namespace GameFramework.Components
         {
             EventSubscriber.Subscribe(this);
         }
-
+        ///Very bad method - Refactor this
         private void InitializeAudioMixer()
         {
             var mixer = Resources.Load<AudioMixer>("GameMasterSound");
@@ -109,8 +111,10 @@ namespace GameFramework.Components
             if (_audioSource.isPlaying && !_multiplePlayback)
                 return;
 
-            StopAllCoroutines();
+            _audioSource.clip = _sound;
             _audioSource.volume = _volume;
+
+            StopAllCoroutines();
 
             if (_smoothFade)
                 StartCoroutine(PlayCoroutine());
@@ -122,6 +126,8 @@ namespace GameFramework.Components
 
         public void Stop(EventParameter parameter)
         {
+            Debug.Log("Stop");
+
             if (_audioSource == null)
                 return;
 
