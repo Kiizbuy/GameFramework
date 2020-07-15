@@ -20,13 +20,15 @@ namespace GameFramework.Components
     {
         event Action<EventParameter> OnHandled;
         void Handle(EventParameter parameter);
-        void Place(EventParameter parameter);
         void Subscribe();
     }
 
     public class SingleSpawnObject : ISpawner
     {
         public event Action<EventParameter> OnSpawn;
+
+        [EventName(nameof(OnSpawn))]
+        public EventToMethodSubscribeСontainer OnSpawnSubscriber = new EventToMethodSubscribeСontainer();
 
         [SerializeField] private GameObject _spawnableObject;
 
@@ -40,7 +42,7 @@ namespace GameFramework.Components
 
         public void Subscribe()
         {
-            throw new NotImplementedException();
+            EventSubscriber.Subscribe(this);
         }
     }
 
@@ -48,12 +50,10 @@ namespace GameFramework.Components
     {
         public event Action<EventParameter> OnSpawn;
 
-        [SerializeField] private List<GameObject> _randomObjects = new List<GameObject>();
+        [EventName(nameof(OnSpawn))]
+        public EventToMethodSubscribeСontainer OnSpawnSubscriber = new EventToMethodSubscribeСontainer();
 
-        public void Handle(EventParameter parameter)
-        {
-            throw new NotImplementedException();
-        }
+        [SerializeField] private List<GameObject> _randomObjects = new List<GameObject>();
 
         public void Spawn(EventParameter parameter)
         {
@@ -64,7 +64,7 @@ namespace GameFramework.Components
 
         public void Subscribe()
         {
-            throw new NotImplementedException();
+            EventSubscriber.Subscribe(this);
         }
     }
 
@@ -79,17 +79,15 @@ namespace GameFramework.Components
 
         public void Handle(EventParameter parameter)
         {
-            throw new NotImplementedException();
-        }
+            parameter.GetTransform().position = _transformPoint.position;
+            parameter.GetTransform().rotation = _transformPoint.rotation;
 
-        public void Place(EventParameter parameter)
-        {
-            throw new NotImplementedException();
+            OnHandled?.Invoke(parameter);
         }
 
         public void Subscribe()
         {
-            throw new NotImplementedException();
+            EventSubscriber.Subscribe(this);
         }
     }
 

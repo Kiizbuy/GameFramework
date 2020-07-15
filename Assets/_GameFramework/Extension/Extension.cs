@@ -108,13 +108,13 @@ namespace GameFramework.Extension
 
         public static T GetRandomElement<T>(this IList<T> list)
         {
-            var lastElementIndex = list.Count - 1;
+            var lastElementIndex = list.Count;
             return list[Random.Range(0, lastElementIndex)];
         }
 
         public static T GetRandomElement<T>(this Array array)
         {
-            var lastElementIndex = array.Length - 1;
+            var lastElementIndex = array.Length;
             return (T)array.GetValue(Random.Range(0, lastElementIndex));
         }
 
