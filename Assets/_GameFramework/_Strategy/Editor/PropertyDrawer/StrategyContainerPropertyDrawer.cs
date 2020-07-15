@@ -27,6 +27,13 @@ namespace GameFramework.Strategy
             _serializedProperty = property;
         }
 
+        private void InitializeInterfacesNames()
+        {
+            _names = new string[1];
+            _names[0] = "(None)";
+            _names = _names.Concat(EditorUtils.GetAllOfInterfaceNames(_propertyField.FieldType)).ToArray();
+        }
+
         private GUIStyle GetLabelGUIStyle()
         {
             var guiStyle = new GUIStyle();
@@ -89,18 +96,17 @@ namespace GameFramework.Strategy
             if (_strategyFieldValue != null)
                 _strategyImplementationIndex = 1 + _interfaceTypes.FindIndex(0, type => type == _strategyFieldValue.GetType());
 
+            var defaultLabelWidth = EditorGUIUtility.labelWidth;
+
+            EditorGUIUtility.labelWidth = 10;
             EditorGUILayout.BeginHorizontal();
             EditorGUILayout.LabelField(label, GetLabelGUIStyle());
             _strategyImplementationIndex = EditorGUILayout.Popup(_strategyImplementationIndex, _names);
             EditorGUILayout.EndHorizontal();
+            EditorGUIUtility.labelWidth = defaultLabelWidth;
+
         }
 
-        private void InitializeInterfacesNames()
-        {
-            _names = new string[1];
-            _names[0] = "None selected strategy implementation";
-            _names = _names.Concat(EditorUtils.GetAllOfInterfaceNames(_propertyField.FieldType)).ToArray();
-        }
 
         private void DrawStrategyImplementationFields(Rect position, SerializedProperty property)
         {
