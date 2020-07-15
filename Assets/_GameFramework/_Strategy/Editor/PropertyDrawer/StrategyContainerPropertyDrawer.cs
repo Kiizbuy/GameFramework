@@ -27,25 +27,42 @@ namespace GameFramework.Strategy
             _serializedProperty = property;
         }
 
+        private GUIStyle GetLabelGUIStyle()
+        {
+            var guiStyle = new GUIStyle();
+
+            guiStyle.fontStyle = FontStyle.Bold;
+            guiStyle.richText = false;
+            guiStyle.fixedWidth = 200;
+
+            return guiStyle;
+        }
+
         public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
         {
             InitProperty(property);
 
             EditorGUI.BeginProperty(position, label, property);
 
+            EditorGUILayout.BeginVertical("Box");
+            EditorGUILayout.BeginVertical("Toolbar");
             DrawpopupStrategyImplementations(property, label);
+            EditorGUILayout.EndVertical();
 
             if (_strategyFieldValue != null)
                 DrawStrategyImplementationFields(position, property);
 
+
             CheckAndChangeStrategyTypeState();
+
+            EditorGUILayout.EndVertical();
 
             EditorGUI.EndProperty();
         }
 
         public override float GetPropertyHeight(SerializedProperty property, GUIContent label)
         {
-            return 50f;
+            return 0f;
         }
 
         private void DrawpopupStrategyImplementations(SerializedProperty property, GUIContent label)
@@ -66,20 +83,23 @@ namespace GameFramework.Strategy
 
             if (_names == null)
             {
-                _names = new string[1];
-                _names[0] = "None selected strategy implementation";
-                _names = _names.Concat(EditorUtils.GetAllOfInterfaceNames(_propertyField.FieldType)).ToArray();
+                InitializeInterfacesNames();
             }
 
             if (_strategyFieldValue != null)
                 _strategyImplementationIndex = 1 + _interfaceTypes.FindIndex(0, type => type == _strategyFieldValue.GetType());
 
             EditorGUILayout.BeginHorizontal();
-            label.text += " Strategy";
-            EditorGUILayout.LabelField(label);
+            EditorGUILayout.LabelField(label, GetLabelGUIStyle());
             _strategyImplementationIndex = EditorGUILayout.Popup(_strategyImplementationIndex, _names);
-
             EditorGUILayout.EndHorizontal();
+        }
+
+        private void InitializeInterfacesNames()
+        {
+            _names = new string[1];
+            _names[0] = "None selected strategy implementation";
+            _names = _names.Concat(EditorUtils.GetAllOfInterfaceNames(_propertyField.FieldType)).ToArray();
         }
 
         private void DrawStrategyImplementationFields(Rect position, SerializedProperty property)

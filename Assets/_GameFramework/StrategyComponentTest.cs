@@ -6,6 +6,10 @@ public interface ISomeStrategy : IStrategyContainer {}
 public class BoxShape : ISomeStrategy
 {
     public int BoxCount;
+    public int BoxCount1;
+    public int BoxCount2;
+    public int BoxCount3;
+
 }
 public class SphereShape : ISomeStrategy
 {
@@ -24,7 +28,7 @@ public class StrategyComponentTest : MonoBehaviour
     public string SomeString;
     public bool SomeBool;
     [SerializeReference, StrategyContainer]
-    public ISomeStrategy Chlen;
+    public ISomeStrategy SomeStrategy;
 
     public GameObject[] SomeArray;
 
@@ -32,10 +36,10 @@ public class StrategyComponentTest : MonoBehaviour
     {
         if(Input.anyKeyDown)
         {
-            if (Chlen == null)
+            if (SomeStrategy == null)
                 Debug.Log("Chlen is null");
             else
-                Debug.Log(Chlen.GetType().Name);
+                Debug.Log(SomeStrategy.GetType().Name);
         }
     }
 }

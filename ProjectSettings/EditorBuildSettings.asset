@@ -4,5 +4,8 @@
 EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
-  m_Scenes: []
+  m_Scenes:
+  - enabled: 1
+    path: Assets/_GameFramework/_Strategy/StrategyTest.unity
+    guid: 023c989fcc5729641af1c96649c91597
   m_configObjects: {}

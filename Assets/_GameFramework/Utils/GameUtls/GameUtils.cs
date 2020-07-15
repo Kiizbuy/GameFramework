@@ -60,33 +60,6 @@ public class GameUtils
         return results.Count > 0;
     }
 
-    public static bool IsTouchBegan(byte id)
-    {
-#if UNITY_EDITOR
-        if (Input.GetMouseButtonDown(id))
-            mMousePress = Input.mousePosition;
-
-        if (Input.GetMouseButtonUp(id))
-            return IsDistanceHigh((Vector2)Input.mousePosition, mMousePress, 5) ? false : true;
-
-        return false;
-
-#endif
-#if UNITY_ANDROID
-			if(Input.GetTouch(id).phase == TouchPhase.Began) pos = Input.GetTouch(id).deltaPosition;
-
-			if(Input.GetTouch(id).phase == TouchPhase.Ended)
-			{
-				if(IsDistanceHigh(Input.GetTouch(id).position, pos, 5)) 
-					return false;
-				else
-					return true;
-			}
-            return false;
-#endif
-
-    }
-
     public static bool isGameObjectSafeToPlace(GameObject GO)
     {
         var verticles = GO.GetComponent<MeshFilter>().mesh.vertices;

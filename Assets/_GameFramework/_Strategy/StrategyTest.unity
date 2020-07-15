@@ -350,7 +350,7 @@ MonoBehaviour:
   SomeInt: 0
   SomeString: 
   SomeBool: 0
-  Chlen:
+  SomeStrategy:
     id: 0
   SomeArray: []
   references:
@@ -362,12 +362,6 @@ MonoBehaviour:
         _spheresArray:
         - 0
         - 0
-        - 1.62
-        - 0
-        - 0
-        - 0
-        - 0
-        - 3.7
         - 0
         - 0
         - 0
@@ -394,14 +388,20 @@ MonoBehaviour:
         - 0
         - 0
         - 0
-        - 10.53
         - 0
         - 0
         - 0
         - 0
-        - 2.25
         - 0
-        - 5.37
+        - 0
+        - 0
+        - 0
+        - 0
+        - 0
+        - 0
+        - 0
+        - 0
+        - 0
         - 0
         - 0
         - 0
