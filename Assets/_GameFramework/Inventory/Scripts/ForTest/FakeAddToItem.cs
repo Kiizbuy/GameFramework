@@ -14,8 +14,5 @@ public class FakeAddToItem : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.Z))
             Inventory.AddItem(BaseItemState.Data, BaseItemState.ItemsCount);
-
-        if (Input.GetKeyDown(KeyCode.X))
-            Inventory.SortItems();
     }
 }

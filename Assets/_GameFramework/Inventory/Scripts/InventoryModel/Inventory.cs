@@ -28,18 +28,35 @@ namespace GameFramework.Inventory
             return _items[itemIndex];
         }
 
-        public void AddItem(BaseItemData item, int count)
+        public ItemState GetItemStateViaName(string itemName)
+            => _items.Where(state => state.Data.Title == itemName).FirstOrDefault();
+
+        public void AddItem(BaseItemData item, int count, UnityAction<BaseItemData> OnAddingItemHasComplete = null)
         {
             item.PutToInventory(this, count, (addableItem, countToPut) => PutNewItem(item, countToPut));
             OnItemsStateChanged?.Invoke();
         }
 
-        private ItemState FindEmptyState()
+        public void RemoveItem(BaseItemData item, int count, UnityAction<BaseItemData> OnRemovingItemHasComplete = null)
+        {
+            item.EjectFromInventory(this, count, (removableItem, countToEject) => RemoveOldItem(item, countToEject));
+            OnItemsStateChanged?.Invoke();
+        }
+
+        private ItemState FindNotEmptyItemState(BaseItemData item, int count)
+            => _items.Where(state => state.Data != null &&
+                                     state.Data.GetType() == item.GetType() && 
+                                     state.Data.Title == item.Title &&
+                                     state.ItemsCount >= count)
+                                    .Reverse()
+                                    .FirstOrDefault();
+
+        private ItemState FindEmptyItemState()
             => _items.Where(state => state.ItemsCount == 0 || state.Data == null).FirstOrDefault();
 
         private ItemState PutNewItem(BaseItemData item, int count)
         {
-            var state = FindEmptyState();
+            var state = FindEmptyItemState();
 
             if (state == null)
             {
@@ -54,9 +71,17 @@ namespace GameFramework.Inventory
             return state;
         }
 
-        private ItemState GetEjectableItem(BaseItemData item, int count)
+        private ItemState RemoveOldItem(BaseItemData item, int count)
         {
-            return null;
+            var state = FindNotEmptyItemState(item, count);
+
+            if(state == null)
+            {
+                Debug.Log($"Not found item {item.Title}");
+                return null;
+            }
+
+            return state;
         }
 
         public void ShuffleItems(int startIndex, int endIndex)

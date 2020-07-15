@@ -14,7 +14,7 @@ namespace GameFramework.Inventory.Items
 
         public override void PutToInventory(Inventory inventory, int count, Func<BaseItemData, int, ItemState> putNewItem)
         {
-            var notFullCollections = GetNotFullItemStateCollections(inventory);
+            var notFullCollections = GetFullItemStateCollections(inventory);
             var remainingCount = count;
 
             foreach (var state in notFullCollections)
@@ -42,12 +42,86 @@ namespace GameFramework.Inventory.Items
             }
         }
 
-        private List<ItemState> GetNotFullItemStateCollections(Inventory inventory)
+        public override void EjectFromInventory(Inventory inventory, int count, Func<BaseItemData, int, ItemState> ejectItem)
+        {
+            var fullCollections = GetFullItemStateCollections(inventory);
+            var remainingCount = count;
+
+            foreach (var state in fullCollections)
+            {
+                var countToEject = Math.Min(state.ItemsCount, remainingCount);
+
+                state.ItemsCount -= countToEject;
+                remainingCount -= countToEject;
+
+                if (state.ItemsCount <= 0)
+                    state.Data = null;
+
+                if (remainingCount <= 0)
+                    return;
+            }
+
+            while (remainingCount > 0)
+            {
+                var countToEject = Math.Min(remainingCount, _maxCollectionCount);
+                var state = ejectItem(this, countToEject);
+
+                if (state == null)
+                    return;
+
+                state.ItemsCount -= countToEject;
+                remainingCount -= countToEject;
+
+                if (state.ItemsCount <= 0)
+                    state.Data = null;
+            }
+            //if (count < 1)
+            //    return;
+
+            //for (int i = count - 1; i >= 0; i--)
+            //{
+            //    var itemState = inventory.GetItemStateViaIndex(i);
+
+            //    if (ItemDoesNotFitValidationParameters(itemState))
+            //        continue;
+            //    var amountRemoved = Mathf.Min(itemState.ItemsCount, count);
+
+            //    itemState.ItemsCount -= amountRemoved;
+            //    count -= amountRemoved;
+
+            //    //if (itemState.Data.Title == Title)
+            //    //    Stock[name] -= amountRemoved;
+
+            //    //Stacks[i] = itemState;
+
+            //    //if (itemState.ItemsCount <= 0)
+            //    //    Stacks.RemoveAt(i);
+            //}
+        }
+
+        private bool ItemDoesNotFitValidationParameters(ItemState itemState)
+            => itemState.Data == null || itemState.ItemsCount == 0 || itemState.Data.Title == string.Empty || itemState.Data.GetType() != GetType() || itemState.Data.Title != Title;
+
+        private List<ItemState> GetFullItemStateCollections(Inventory inventory)
         {
             return inventory.Items.Where(state => (state.Data == null || state.ItemsCount == 0) ||
                                                   (state.Data != null && state.Data.GetType() == GetType() && state.Data.Title == Title)
                                                   )
                                                  .ToList();
         }
+
+        /// <summary>
+        /// Авось пригодится
+        /// </summary>
+        /// <param name="inventory"></param>
+        /// <returns></returns>
+        private List<ItemState> GetNotEmptyItemStates(Inventory inventory)
+                          => inventory.Items.Where(state => state.Data != null &&
+                                                   state.Data.GetType() == GetType() &&
+                                                   state.Data.Title != string.Empty &&
+                                                   state.ItemsCount >= 0 &&
+                                                   state.Data.Title == Title)
+                                                  .Reverse()
+                                                  .ToList();   
     }
 }
