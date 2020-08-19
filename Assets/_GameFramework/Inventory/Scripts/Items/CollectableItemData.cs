@@ -75,28 +75,6 @@ namespace GameFramework.Inventory.Items
                 if (state.ItemsCount <= 0)
                     state.Data = null;
             }
-            //if (count < 1)
-            //    return;
-
-            //for (int i = count - 1; i >= 0; i--)
-            //{
-            //    var itemState = inventory.GetItemStateViaIndex(i);
-
-            //    if (ItemDoesNotFitValidationParameters(itemState))
-            //        continue;
-            //    var amountRemoved = Mathf.Min(itemState.ItemsCount, count);
-
-            //    itemState.ItemsCount -= amountRemoved;
-            //    count -= amountRemoved;
-
-            //    //if (itemState.Data.Title == Title)
-            //    //    Stock[name] -= amountRemoved;
-
-            //    //Stacks[i] = itemState;
-
-            //    //if (itemState.ItemsCount <= 0)
-            //    //    Stacks.RemoveAt(i);
-            //}
         }
 
         private bool ItemDoesNotFitValidationParameters(ItemState itemState)
@@ -104,24 +82,10 @@ namespace GameFramework.Inventory.Items
 
         private List<ItemState> GetFullItemStateCollections(Inventory inventory)
         {
-            return inventory.Items.Where(state => (state.Data == null || state.ItemsCount == 0) ||
-                                                  (state.Data != null && state.Data.GetType() == GetType() && state.Data.Title == Title)
-                                                  )
-                                                 .ToList();
+            return inventory.Items.Where(state =>
+                (state.Data == null || state.ItemsCount == 0) ||
+                (state.Data != null && state.Data.GetType() == GetType() && state.Data.Title == Title))
+                .ToList();
         }
-
-        /// <summary>
-        /// Авось пригодится
-        /// </summary>
-        /// <param name="inventory"></param>
-        /// <returns></returns>
-        private List<ItemState> GetNotEmptyItemStates(Inventory inventory)
-                          => inventory.Items.Where(state => state.Data != null &&
-                                                   state.Data.GetType() == GetType() &&
-                                                   state.Data.Title != string.Empty &&
-                                                   state.ItemsCount >= 0 &&
-                                                   state.Data.Title == Title)
-                                                  .Reverse()
-                                                  .ToList();   
     }
 }

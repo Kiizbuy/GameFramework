@@ -15,7 +15,7 @@ namespace GameFramework.Strategy
         private FieldInfo _propertyField;
         private int _strategyImplementationIndex;
         private List<Type> _interfaceTypes;
-        private string[] _names;
+        private string[] _interfaceNames;
 
         private void InitProperty(SerializedProperty property)
         {
@@ -29,9 +29,9 @@ namespace GameFramework.Strategy
 
         private void InitializeInterfacesNames()
         {
-            _names = new string[1];
-            _names[0] = "(None)";
-            _names = _names.Concat(EditorUtils.GetAllOfInterfaceNames(_propertyField.FieldType)).ToArray();
+            _interfaceNames = new string[1];
+            _interfaceNames[0] = "(None)";
+            _interfaceNames = _interfaceNames.Concat(EditorUtils.GetAllOfInterfaceNames(_propertyField.FieldType)).ToArray();
         }
 
         private GUIStyle GetLabelGUIStyle()
@@ -88,7 +88,7 @@ namespace GameFramework.Strategy
                 return;
             }
 
-            if (_names == null)
+            if (_interfaceNames == null)
             {
                 InitializeInterfacesNames();
             }
@@ -101,7 +101,9 @@ namespace GameFramework.Strategy
             EditorGUIUtility.labelWidth = 10;
             EditorGUILayout.BeginHorizontal();
             EditorGUILayout.LabelField(label, GetLabelGUIStyle());
-            _strategyImplementationIndex = EditorGUILayout.Popup(_strategyImplementationIndex, _names);
+
+            _strategyImplementationIndex = EditorGUILayout.Popup(_strategyImplementationIndex, _interfaceNames);
+
             EditorGUILayout.EndHorizontal();
             EditorGUIUtility.labelWidth = defaultLabelWidth;
 

@@ -1,8 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using GameFramework.Inventory.Items;
+using System.Collections.Generic;
 using UnityEngine;
-using NaughtyAttributes;
-using GameFramework.Inventory.Items;
-
 
 namespace GameFramework.Inventory.BuyCell
 {

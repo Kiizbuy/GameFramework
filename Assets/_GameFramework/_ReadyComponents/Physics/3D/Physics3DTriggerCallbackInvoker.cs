@@ -1,5 +1,6 @@
 ﻿using System;
 using GameFramework.Events;
+using NaughtyAttributes;
 using UnityEngine;
 
 namespace GameFramework.Components
@@ -10,18 +11,20 @@ namespace GameFramework.Components
         public event Action<EventParameter> OnTriggerStayed;
         public event Action<EventParameter> OnTriggerGone;
 
+        [InfoBox("Works only with 'TaggableObject' Component")]
         [EventName(nameof(OnTriggerEntered))]
-        public MethodToEventSubscribeContainer OnTriggerEnterSubscriber = new MethodToEventSubscribeContainer();
+        public EventToMethodSubscribeСontainer OnTriggerEnterSubscriber = new EventToMethodSubscribeСontainer();
         [EventName(nameof(OnTriggerStayed))]
-        public MethodToEventSubscribeContainer OnTriggerStaySubscriber = new MethodToEventSubscribeContainer();
+        public EventToMethodSubscribeСontainer OnTriggerStaySubscriber = new EventToMethodSubscribeСontainer();
         [EventName(nameof(OnTriggerGone))]
-        public MethodToEventSubscribeContainer OnTriggerExitSubscriber = new MethodToEventSubscribeContainer();
+        public EventToMethodSubscribeСontainer OnTriggerExitSubscriber = new EventToMethodSubscribeСontainer();
 
+        [Space(20f)]
         public bool UseOnTriggerEnter = true;
         public bool UseOnTriggerStay = false;
         public bool UseOnTriggerExit = false;
 
-        [SerializeField] private string _objectTag;
+        [SerializeField, Tag] private string _objectTag;
 
         private void Start()
         {

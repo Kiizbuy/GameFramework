@@ -5,11 +5,10 @@ using GameFramework.UnityEngine.EventsExtension;
 
 namespace GameFramework.Components.ForUI
 {
-    public interface IAttackable { }
     [Serializable]
-    public class DamageEvent : UnityEvent<int, IAttackable> { } 
+    public class DamageEvent : UnityEvent<int, IAttackable> { }
 
-    public class Health : MonoBehaviour
+    public class Health : MonoBehaviour, IHealth
     {
         #region UnityEvents
 

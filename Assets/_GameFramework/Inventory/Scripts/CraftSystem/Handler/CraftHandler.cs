@@ -20,7 +20,7 @@ namespace GameFramework.Inventory
         [SerializeField] private Inventory _inventoryOwner;
         [SerializeField] private CraftingType _itemCraftType;
 
-        private List<CraftingQueueItemObject> _craftItemQueues = new List<CraftingQueueItemObject>();
+        private readonly List<CraftingQueueItemObject> _craftItemQueues = new List<CraftingQueueItemObject>();
 
         public void ChangeInventoryOwner(Inventory owner)
             => _inventoryOwner = owner;
@@ -61,7 +61,7 @@ namespace GameFramework.Inventory
         }
 
 
-        public bool Craft(CraftRecipeData recipe, int count)
+        public bool TryCraft(CraftRecipeData recipe, int count)
         {
             if (recipe == null || count <= 0)
             {

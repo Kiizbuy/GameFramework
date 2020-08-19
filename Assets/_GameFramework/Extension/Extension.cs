@@ -15,7 +15,7 @@ namespace GameFramework.Extension
     {
         private static System.Random _random = new System.Random();
 
-        public static void Shuffle<T>(this IList<T> list, int startIndex, int endIndex)
+        public static void Swap<T>(this IList<T> list, int startIndex, int endIndex)
         {
             if(startIndex > list.Count - 1 || startIndex < 0)
             {
@@ -34,7 +34,7 @@ namespace GameFramework.Extension
             list[endIndex] = tempValue;
         }
 
-        public static void Shuffle(this Array array, int startIndex, int endIndex)
+        public static void Swap(this Array array, int startIndex, int endIndex)
         {
             if (startIndex > array.Length - 1 || array.Length < 0)
             {

@@ -84,9 +84,9 @@ namespace GameFramework.Inventory
             return state;
         }
 
-        public void ShuffleItems(int startIndex, int endIndex)
+        public void SwapItems(int startIndex, int endIndex)
         {
-            _items.Shuffle(startIndex, endIndex);
+            _items.Swap(startIndex, endIndex);
             OnItemsStateChanged?.Invoke();
         }
 

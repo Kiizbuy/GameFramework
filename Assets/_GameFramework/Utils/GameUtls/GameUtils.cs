@@ -11,12 +11,7 @@ public class GameUtils
 {
     private static readonly byte[] key = new byte[8] { 22, 41, 18, 47, 38, 217, 65, 64 };
     private static readonly byte[] iv = new byte[8] { 34, 68, 46, 43, 50, 87, 2, 105 };
-#if UNITY_EDITOR
-    private static Vector2 mMousePress;
-#endif
-#if UNITY_ANDROID
-		static Vector2 mTouchPress;
-#endif
+
     private const char VECTOR_COMPONENTS_SEPARATOR = ',';
 
     public static string Encrypt(string s)
@@ -60,7 +55,7 @@ public class GameUtils
         return results.Count > 0;
     }
 
-    public static bool isGameObjectSafeToPlace(GameObject GO)
+    public static bool IsGameObjectSafeToPlace(GameObject GO)
     {
         var verticles = GO.GetComponent<MeshFilter>().mesh.vertices;
         var obstacles = GameObject.FindObjectsOfType<UnityEngine.AI.NavMeshObstacle>();
@@ -115,7 +110,7 @@ public class GameUtils
         return returnPoint;
     }
 
-    static public void MoveRect(RectTransform rect, float x, float y)
+    public static void MoveRect(RectTransform rect, float x, float y)
     {
         var ix = Mathf.FloorToInt(x + 0.5f);
         var iy = Mathf.FloorToInt(y + 0.5f);
@@ -154,14 +149,9 @@ public class GameUtils
         return (point0 - point1).sqrMagnitude >= range * range;
     }
 
-    public static bool IsDistanceLow(Vector2 point0, Vector2 point1, float range) => (point0 - point1).sqrMagnitude < range * range;
-
-    public static bool IsDistanceHigh(Vector2 point0, Vector2 point1, float range) => (point0 - point1).sqrMagnitude >= range * range;
-
-
     public static int RoundToInt(float arg) => (int)(arg + 0.5);
 
-    static public float SpringLerp(float strength, float deltaTime)
+    public static float SpringLerp(float strength, float deltaTime)
     {
         if (deltaTime > 1f)
             deltaTime = 1f;
