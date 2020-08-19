@@ -1,7 +1,7 @@
 ﻿#if UNITY_EDITOR
 
-using System.Reflection;
 using System.Linq;
+using System.Reflection;
 using UnityEditor;
 
 namespace UnityEditorExtensions
@@ -11,8 +11,8 @@ namespace UnityEditorExtensions
         public static T GetObjectValueFromSerializedProperty<T>(this SerializedProperty property) where T : class
         {
             object obj = property.serializedObject.targetObject;
-
             FieldInfo field = null;
+
             foreach (var path in property.propertyPath.Split('.'))
             {
                 var type = obj.GetType();

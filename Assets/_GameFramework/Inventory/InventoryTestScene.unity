@@ -550,6 +550,40 @@ Transform:
   m_Father: {fileID: 676020239}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &694702991 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 7774141038379917867, guid: cc7735c8c60c6164d9e6044f37c0dc0e,
+    type: 3}
+  m_PrefabInstance: {fileID: 7774141037804436128}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &694702992
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 694702991}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 37519f426c84161498f87ecf014840c9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  BaseItemState:
+    Data: {fileID: 11400000, guid: 519f92561dca0f84caf98aa34fe9c795, type: 2}
+    ItemsCount: 4
+  Inventory: {fileID: 694702995}
+--- !u!114 &694702995 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 7774141038379917873, guid: cc7735c8c60c6164d9e6044f37c0dc0e,
+    type: 3}
+  m_PrefabInstance: {fileID: 7774141037804436128}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 694702991}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 081363eca4cb43d4e8da7e16f0c1baf3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!224 &737561148 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 146907803307360001, guid: cc7735c8c60c6164d9e6044f37c0dc0e,
@@ -3743,6 +3777,66 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Pivot.y
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7774141038379917873, guid: cc7735c8c60c6164d9e6044f37c0dc0e,
+        type: 3}
+      propertyPath: _items.Array.data[2].Data
+      value: 
+      objectReference: {fileID: 11400000, guid: e4e26bf3be1632e439801653851c7d21,
+        type: 2}
+    - target: {fileID: 7774141038379917873, guid: cc7735c8c60c6164d9e6044f37c0dc0e,
+        type: 3}
+      propertyPath: _items.Array.data[2].ItemsCount
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7774141038379917873, guid: cc7735c8c60c6164d9e6044f37c0dc0e,
+        type: 3}
+      propertyPath: _items.Array.data[3].Data
+      value: 
+      objectReference: {fileID: 11400000, guid: e4e26bf3be1632e439801653851c7d21,
+        type: 2}
+    - target: {fileID: 7774141038379917873, guid: cc7735c8c60c6164d9e6044f37c0dc0e,
+        type: 3}
+      propertyPath: _items.Array.data[3].ItemsCount
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7774141038379917873, guid: cc7735c8c60c6164d9e6044f37c0dc0e,
+        type: 3}
+      propertyPath: _items.Array.data[4].Data
+      value: 
+      objectReference: {fileID: 11400000, guid: e4e26bf3be1632e439801653851c7d21,
+        type: 2}
+    - target: {fileID: 7774141038379917873, guid: cc7735c8c60c6164d9e6044f37c0dc0e,
+        type: 3}
+      propertyPath: _items.Array.data[4].ItemsCount
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7774141038379917873, guid: cc7735c8c60c6164d9e6044f37c0dc0e,
+        type: 3}
+      propertyPath: _items.Array.data[5].Data
+      value: 
+      objectReference: {fileID: 11400000, guid: e4e26bf3be1632e439801653851c7d21,
+        type: 2}
+    - target: {fileID: 7774141038379917873, guid: cc7735c8c60c6164d9e6044f37c0dc0e,
+        type: 3}
+      propertyPath: _items.Array.data[5].ItemsCount
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7774141038379917873, guid: cc7735c8c60c6164d9e6044f37c0dc0e,
+        type: 3}
+      propertyPath: _items.Array.data[6].Data
+      value: 
+      objectReference: {fileID: 11400000, guid: e4e26bf3be1632e439801653851c7d21,
+        type: 2}
+    - target: {fileID: 7774141038379917873, guid: cc7735c8c60c6164d9e6044f37c0dc0e,
+        type: 3}
+      propertyPath: _items.Array.data[6].ItemsCount
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7774141038379917873, guid: cc7735c8c60c6164d9e6044f37c0dc0e,
+        type: 3}
+      propertyPath: _items.Array.data[1].ItemsCount
+      value: 15
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: cc7735c8c60c6164d9e6044f37c0dc0e, type: 3}

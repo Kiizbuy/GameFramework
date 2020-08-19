@@ -80,7 +80,7 @@ namespace GameFramework.Events
                     if (item.MonobehaviourReference == null)
                     {
                         Debug.LogError($"Monobehaviour reference is null. Can't subscribe it");
-                        return;
+                        continue;
                     }
 
 

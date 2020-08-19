@@ -70,7 +70,7 @@ namespace GameFramework.Components.Pooling
         public Transform ReuseTransform(GameObject prefab, Vector3 position, Quaternion rotation)
             => ReuseGameObject(prefab).transform;
 
-        public void DestroyObject(GameObject prefab)
+        public void DestroyPoolObject(GameObject prefab)
         {
             var poolKey = prefab.GetInstanceID();
 

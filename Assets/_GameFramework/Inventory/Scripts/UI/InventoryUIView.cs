@@ -1,5 +1,4 @@
-﻿using GameFramework.Inventory;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.UI;
 
 namespace GameFramework.Inventory.UI
@@ -50,10 +49,10 @@ namespace GameFramework.Inventory.UI
         private void Awake()
         {
             if (_inventoryOwner != null)
-                RedrawUI();
+                Init();
         }
 
-        public void RedrawUI()
+        private void Init()
         {
             CurrentlyDragged = null;
             DragCanvasScaler = DragCanvas.GetComponentInParent<CanvasScaler>();
@@ -98,7 +97,7 @@ namespace GameFramework.Inventory.UI
                 {
                     if (_itemEntriesCells[i] != CurrentlyDragged.DraggedEntry)
                     {
-                        _inventoryOwner.ShuffleItems(CurrentlyDragged.DraggedEntry.InventoryEntryIndex, i);
+                        _inventoryOwner.SwapItems(CurrentlyDragged.DraggedEntry.InventoryEntryIndex, i);
                         _itemEntriesCells[i].UpdateEntry();
 
                         CurrentlyDragged.DraggedEntry.UpdateEntry();

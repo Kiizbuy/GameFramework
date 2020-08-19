@@ -1,6 +1,7 @@
 ﻿using System;
 using GameFramework.Events;
 using UnityEngine;
+using NaughtyAttributes;
 
 namespace GameFramework.Components
 {
@@ -10,18 +11,20 @@ namespace GameFramework.Components
         public event Action<EventParameter> OnCollisionStayed;
         public event Action<EventParameter> OnCollisionGone;
 
+        [InfoBox("Works only with 'TaggableObject' Component")]
         [EventName(nameof(OnCollisionEntered))]
-        public MethodToEventSubscribeContainer OnCollisionEnterSubscriber = new MethodToEventSubscribeContainer();
+        public EventToMethodSubscribeСontainer OnCollisionEnterSubscriber = new EventToMethodSubscribeСontainer();
         [EventName(nameof(OnCollisionStayed))]
-        public MethodToEventSubscribeContainer OnCollisionStaySubscriber = new MethodToEventSubscribeContainer();
+        public EventToMethodSubscribeСontainer OnCollisionStaySubscriber = new EventToMethodSubscribeСontainer();
         [EventName(nameof(OnCollisionGone))]
-        public MethodToEventSubscribeContainer OnCollisionExitSubscriber = new MethodToEventSubscribeContainer();
+        public EventToMethodSubscribeСontainer OnCollisionExitSubscriber = new EventToMethodSubscribeСontainer();
 
+        [Space(20f)]
         public bool UseOnCollisionEnter = true;
         public bool UseOnCollisionStay = false;
         public bool UseOnCollisionExit = false;
 
-        [SerializeField] private string _objectTag;
+        [SerializeField, Tag] private string _objectTag;
 
         private void Start()
         {
