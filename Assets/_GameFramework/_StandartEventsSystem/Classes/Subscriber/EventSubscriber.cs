@@ -65,7 +65,7 @@ namespace GameFramework.Events
 
             foreach (var item in eventToMethodSubscriberField.MethodsTemplateData)
             {
-                if (item.eventObject == null)
+                if (item.EventObject == null)
                     continue;
 
                 if (item.IsGlobalEvent)
@@ -77,12 +77,14 @@ namespace GameFramework.Events
                 }
                 else
                 {
+                    if (item.EventObject == null)
+                        continue;
+
                     if (item.MonobehaviourReference == null)
                     {
                         Debug.LogError($"Monobehaviour reference is null. Can't subscribe it");
                         continue;
                     }
-
 
                     var newEventDelegate = (Action<EventParameter>)Delegate.CreateDelegate(
                         type: typeof(Action<EventParameter>),
@@ -111,12 +113,9 @@ namespace GameFramework.Events
                 return;
             }
 
-            if (methodToEventSubscriberField.EventsTemplateData.Count == 0)
-                Debug.Log($"Nothing to subscribe in {methodNameAttribute.MethodName} method");
-
             foreach (var item in methodToEventSubscriberField.EventsTemplateData)
             {
-                if (item.eventObject == null)
+                if (item.EventObject == null)
                     continue;
 
                 if (item.IsGlobalEvent)

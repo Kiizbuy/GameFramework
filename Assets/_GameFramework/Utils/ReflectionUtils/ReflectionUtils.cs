@@ -45,7 +45,7 @@ namespace GameFramework.Utils.Reflection
         }
 #endif
 
-        public static List<Type> TryGetConcreteStrategyImplementations(Type concreteImplementationType)
+        public static List<Type> TryGetStrategyImplementationsFromType(Type concreteImplementationType)
         {
             if (_allInterfaceTypeImplementations.TryGetValue(concreteImplementationType, out var strategyList))
                 return strategyList;

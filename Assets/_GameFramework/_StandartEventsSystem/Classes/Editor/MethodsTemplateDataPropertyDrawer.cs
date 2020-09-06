@@ -1,182 +1,12 @@
-﻿using System.Collections.Generic;
-using UnityEngine;
+﻿using System.Collections;
+using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using System;
-#if UNITY_EDITOR
-using UnityEditorInternal;
-using UnityEditorExtensions;
 using UnityEditor;
-#endif
+using UnityEngine;
 
 namespace GameFramework.Events
 {
-    [Serializable]
-    public class EventToMethodSubscribeСontainer
-    {
-        public List<MethodsTemplateData> MethodsTemplateData;
-    }
-
-    [Serializable]
-    public class MethodsTemplateData
-    {
-        public UnityMonobehaviourEventInfo UnityMonobehaviourEventInfo;
-        public GameObject eventObject;
-        public bool IsGlobalEvent;
-        public string GlobalEventName;
-        public string MonobehaviourMethodName = "None";
-        public MonoBehaviour MonobehaviourReference;
-    }
-#if UNITY_EDITOR
-    [CustomPropertyDrawer(typeof(EventToMethodSubscribeСontainer))]
-    public class EventToMethodSubscribeСontainerPropertyDrawer : PropertyDrawer
-    {
-        private ReorderableList methodsTemplateDataReorderableList;
-        private EventToMethodSubscribeСontainer propertyObjectInstance;
-
-        private SerializedProperty methodsTemplateDataProperty;
-
-        private Rect reordableListRect;
-        private Rect foldoutButtonRect;
-        private Rect foldoutLabelRect;
-        private Rect foldinBoxRect;
-
-        private GUIStyle GetHeaderGUIStyle(Color labelColor)
-        {
-            var labelGUIStyle = new GUIStyle(GUI.skin.label)
-            {
-                alignment = TextAnchor.MiddleLeft,
-                fontStyle = FontStyle.Bold,
-            };
-
-            labelGUIStyle.normal.textColor = labelColor;
-
-            return labelGUIStyle;
-        }
-
-
-        private void InitializeRects(Rect propertyRect)
-        {
-            reordableListRect = propertyRect;
-            foldoutButtonRect = propertyRect;
-            foldoutLabelRect = propertyRect;
-            foldinBoxRect = propertyRect;
-
-            foldinBoxRect.xMin = propertyRect.x + 2;
-
-            foldoutButtonRect.width = 100;
-            foldoutButtonRect.height = 20;
-
-            foldoutLabelRect.x += 6;
-            foldoutLabelRect.width = 400;
-        }
-
-        public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
-        {
-            var objectWhoUseProperty = property.GetObjectWhoUseTheProperty();
-            var eventNameAttribute = (EventNameAttribute)fieldInfo.GetCustomAttribute(typeof(EventNameAttribute), false);
-            var eventName = string.Empty;
-
-            if (eventNameAttribute == null)
-            {
-                Debug.LogError("Event name attribute is not found. Mark it");
-                GUI.Box(position, GUIContent.none);
-                GUI.Label(position, "Event name attribute is not found. Mark it", GetHeaderGUIStyle(Color.red));
-                return;
-            }
-
-            eventName = eventNameAttribute.EventName;
-            methodsTemplateDataProperty = property.FindPropertyRelative("MethodsTemplateData");
-            propertyObjectInstance = property.GetObjectValueFromSerializedProperty<EventToMethodSubscribeСontainer>();
-
-            if (ObjectDoesntHaveEvent(objectWhoUseProperty, eventName))
-            {
-                Debug.LogError($"{eventName} event doesn't exsist on object, Please, use an existing eventName on object if you have it");
-                GUI.Box(position, GUIContent.none);
-                GUI.Label(position, $"''{eventName}'' event doesn't exsist on object", GetHeaderGUIStyle(Color.red));
-                return;
-            }
-
-            InitializeRects(position);
-
-            property.isExpanded = EditorGUI.Foldout(foldoutButtonRect, property.isExpanded, GUIContent.none, true);
-
-            if (methodsTemplateDataReorderableList == null)
-                methodsTemplateDataReorderableList = BuildReorderableListFromProperty(methodsTemplateDataProperty, eventName);
-
-            EditorGUI.BeginProperty(position, label, property);
-
-
-            var indent = EditorGUI.indentLevel;
-            EditorGUI.indentLevel = 0;
-
-            if (property.isExpanded)
-            {
-                methodsTemplateDataReorderableList.DoList(reordableListRect);
-            }
-            else
-            {
-                var headerGUIContent = new GUIContent(eventName);
-                GUI.Box(foldinBoxRect, GUIContent.none);
-                GUI.Label(foldoutLabelRect, headerGUIContent, GetHeaderGUIStyle(Color.blue));
-            }
-
-            EditorGUI.indentLevel = indent;
-            EditorGUI.EndProperty();
-        }
-
-        private bool ObjectDoesntHaveEvent(object eventableObject, string eventName)
-        {
-            return eventableObject.GetType().GetEvent(eventName) == null;
-        }
-
-        public override float GetPropertyHeight(SerializedProperty property, GUIContent label)
-        {
-            if (property.isExpanded)
-                return GetPropertyHeightFromReorderableList(methodsTemplateDataReorderableList);
-
-            return EditorGUIUtility.singleLineHeight;
-        }
-
-        private float GetPropertyHeightFromReorderableList(ReorderableList list)
-        {
-            return (list != null ?
-                    list.headerHeight + list.footerHeight + (list.elementHeight * Mathf.Max(list.count, 1) + 10f) :
-                    80);
-        }
-
-        private ReorderableList BuildReorderableListFromProperty(SerializedProperty property, string headerName)
-        {
-            var newReordableList = new ReorderableList(property.serializedObject, property, true, false, true, true)
-            {
-                drawElementCallback = (Rect rect, int index, bool isActive, bool isFocused) =>
-                {
-                    EditorGUI.PropertyField(rect, property.GetArrayElementAtIndex(index), true);
-                },
-
-            };
-
-            newReordableList.drawHeaderCallback += (rect) =>
-            {
-                //var headerGUIContent = new GUIContent(property.FindPropertyRelative("EventName").stringValue);
-                var headerGUIContent = new GUIContent(headerName);
-                GUI.Label(rect, headerGUIContent, GetHeaderGUIStyle(Color.blue));
-            };
-
-            newReordableList.onRemoveCallback += (list) =>
-            {
-                property.DeleteArrayElementAtIndex(list.index);
-            };
-
-            newReordableList.elementHeight = 40f;
-
-            return newReordableList;
-        }
-    }
-
-#endif
-
-#if UNITY_EDITOR
     [CustomPropertyDrawer(typeof(MethodsTemplateData))]
     public class MethodsTemplateDataPropertyDrawer : PropertyDrawer
     {
@@ -187,7 +17,6 @@ namespace GameFramework.Events
         private SerializedProperty eventObjectProperty;
         private SerializedProperty isGlobalEventProperty;
         private SerializedProperty globalEventNameProperty;
-        private SerializedProperty unityMonobehaviourEventInfo;
 
         private Rect eventObjectRect;
         private Rect isGlobalEventRect;
@@ -213,12 +42,11 @@ namespace GameFramework.Events
 
         private void InitializeProperties(SerializedProperty propertyFromRootPropertyObject)
         {
-            monobehaviourMethodNameProperty = propertyFromRootPropertyObject.FindPropertyRelative("MonobehaviourMethodName");
-            monobehaviourReferenceProperty = propertyFromRootPropertyObject.FindPropertyRelative("MonobehaviourReference");
-            eventObjectProperty = propertyFromRootPropertyObject.FindPropertyRelative("eventObject");
-            isGlobalEventProperty = propertyFromRootPropertyObject.FindPropertyRelative("IsGlobalEvent");
-            globalEventNameProperty = propertyFromRootPropertyObject.FindPropertyRelative("GlobalEventName");
-            unityMonobehaviourEventInfo = propertyFromRootPropertyObject.FindPropertyRelative("UnityMonobehaviourEventInfo").FindPropertyRelative("MonobehaviourReference");
+            monobehaviourMethodNameProperty = propertyFromRootPropertyObject.FindPropertyRelative("_monobehaviourMethodName");
+            monobehaviourReferenceProperty = propertyFromRootPropertyObject.FindPropertyRelative("_monobehaviourReference");
+            eventObjectProperty = propertyFromRootPropertyObject.FindPropertyRelative("_eventObject");
+            isGlobalEventProperty = propertyFromRootPropertyObject.FindPropertyRelative("_isGlobalEvent");
+            globalEventNameProperty = propertyFromRootPropertyObject.FindPropertyRelative("_globalEventName");
         }
 
         private void InitializePropertyRects(Rect propertyRect)
@@ -359,5 +187,5 @@ namespace GameFramework.Events
             return base.GetPropertyHeight(property, label) * 5f;
         }
     }
-#endif
 }
+

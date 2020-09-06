@@ -14,9 +14,9 @@ namespace GameFramework.Strategy
         private SerializedProperty _serializedProperty;
         private IStrategyContainer _strategyFieldValue;
         private FieldInfo _propertyField;
-        private List<Type> _interfaceTypes;
+        private List<Type> _strategyImplementationTypes;
         private int _strategyImplementationIndex;
-        private string[] _interfaceNames;
+        private string[] _strategyImplementationNames;
 
         private void InitProperty(SerializedProperty property)
         {
@@ -30,15 +30,15 @@ namespace GameFramework.Strategy
 
         private void InitializeStrategyContainerImplementations()
         {
-            if (_interfaceTypes == null)
-                _interfaceTypes = ReflectionUtils.TryGetConcreteStrategyImplementations(_propertyField.FieldType);
+            if (_strategyImplementationTypes == null)
+                _strategyImplementationTypes = ReflectionUtils.TryGetStrategyImplementationsFromType(_propertyField.FieldType);
         }
 
         private void InitializeInterfacesNames()
         {
-            _interfaceNames = new string[1];
-            _interfaceNames[0] = "(None)";
-            _interfaceNames = _interfaceNames.Concat(_interfaceTypes.Select(x => x.Name)).ToArray();
+            _strategyImplementationNames = new string[1];
+            _strategyImplementationNames[0] = "(None)";
+            _strategyImplementationNames = _strategyImplementationNames.Concat(_strategyImplementationTypes.Select(x => x.Name)).ToArray();
         }
 
 
@@ -96,23 +96,23 @@ namespace GameFramework.Strategy
             if (_propertyField == null)
                 return;
 
-            if (_interfaceTypes == null)
+            if (_strategyImplementationTypes == null)
                 InitializeStrategyContainerImplementations();
 
 
-            if (_interfaceTypes == null)
+            if (_strategyImplementationTypes == null)
             {
                 EditorGUILayout.HelpBox("Not found strategy implementations", MessageType.Warning);
                 return;
             }
 
-            if (_interfaceNames == null)
+            if (_strategyImplementationNames == null)
                 InitializeInterfacesNames();
 
             _strategyImplementationIndex = 0;
 
             if (_strategyFieldValue != null)
-                _strategyImplementationIndex = 1 + _interfaceTypes.FindIndex(0, type => type == _strategyFieldValue.GetType());
+                _strategyImplementationIndex = 1 + _strategyImplementationTypes.FindIndex(0, type => type == _strategyFieldValue.GetType());
 
             var defaultLabelWidth = EditorGUIUtility.labelWidth;
 
@@ -120,7 +120,7 @@ namespace GameFramework.Strategy
             EditorGUILayout.BeginHorizontal();
             EditorGUILayout.LabelField(label, GetLabelGUIStyle());
 
-            _strategyImplementationIndex = EditorGUILayout.Popup(_strategyImplementationIndex, _interfaceNames);
+            _strategyImplementationIndex = EditorGUILayout.Popup(_strategyImplementationIndex, _strategyImplementationNames);
 
             EditorGUILayout.EndHorizontal();
             EditorGUIUtility.labelWidth = defaultLabelWidth;
@@ -153,8 +153,8 @@ namespace GameFramework.Strategy
                 return;
             }
 
-            if (_strategyFieldValue == null || _strategyFieldValue.GetType() != _interfaceTypes[_strategyImplementationIndex - 1])
-                CreateStrategy(_interfaceTypes[_strategyImplementationIndex - 1]);
+            if (_strategyFieldValue == null || _strategyFieldValue.GetType() != _strategyImplementationTypes[_strategyImplementationIndex - 1])
+                CreateStrategy(_strategyImplementationTypes[_strategyImplementationIndex - 1]);
         }
 
         private void ClearStrategy()
