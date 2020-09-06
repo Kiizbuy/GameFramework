@@ -9,7 +9,6 @@ namespace GameFramework.Events
     [CustomPropertyDrawer(typeof(EventToMethodSubscribeСontainer))]
     public class EventToMethodSubscribeСontainerPropertyDrawer : PropertyDrawer
     {
-        private const string _eventWarrningMessage = "Event name attribute is not found. Mark it";
         private ReorderableList methodsTemplateDataReorderableList;
         private EventToMethodSubscribeСontainer propertyObjectInstance;
 
@@ -19,6 +18,9 @@ namespace GameFramework.Events
         private Rect foldoutButtonRect;
         private Rect foldoutLabelRect;
         private Rect foldinBoxRect;
+
+        private readonly string _methodsTemplateDataLabel = "_methodsTemplateData";
+        private readonly string _eventWarrningMessageLabel = "Event name attribute is not found. Mark it";
 
         private GUIStyle GetHeaderGUIStyle(Color labelColor)
         {
@@ -58,14 +60,14 @@ namespace GameFramework.Events
 
             if (eventNameAttribute == null)
             {
-                Debug.LogError(_eventWarrningMessage);
+                Debug.LogError(_eventWarrningMessageLabel);
                 GUI.Box(position, GUIContent.none);
-                GUI.Label(position, _eventWarrningMessage, GetHeaderGUIStyle(Color.red));
+                GUI.Label(position, _eventWarrningMessageLabel, GetHeaderGUIStyle(Color.red));
                 return;
             }
 
             eventName = eventNameAttribute.EventName;
-            methodsTemplateDataProperty = property.FindPropertyRelative("_methodsTemplateData");
+            methodsTemplateDataProperty = property.FindPropertyRelative(_methodsTemplateDataLabel);
             propertyObjectInstance = property.GetObjectValueFromSerializedProperty<EventToMethodSubscribeСontainer>();
 
             if (ObjectDoesntHaveEvent(objectWhoUseProperty, eventName))

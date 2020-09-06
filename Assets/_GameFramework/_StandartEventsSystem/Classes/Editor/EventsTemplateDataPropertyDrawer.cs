@@ -153,15 +153,17 @@ namespace GameFramework.Events
 
                     }
 
-                    menu.AddItem(new GUIContent(_noneLabel), false, ClearAllEventInfo, property);
+                    menu.AddItem(new GUIContent("None"), false, ClearAllEventInfo, property);
                     menu.ShowAsContext();
 
                     property.serializedObject.ApplyModifiedProperties();
                 }
-            }
 
+            }
             EditorGUI.EndDisabledGroup();
+
             EditorGUI.indentLevel = indent;
+
             EditorGUI.EndProperty();
         }
 
