@@ -109,6 +109,8 @@ namespace GameFramework.Strategy
             if (_interfaceNames == null)
                 InitializeInterfacesNames();
 
+            _strategyImplementationIndex = 0;
+
             if (_strategyFieldValue != null)
                 _strategyImplementationIndex = 1 + _interfaceTypes.FindIndex(0, type => type == _strategyFieldValue.GetType());
 
