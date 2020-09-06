@@ -4,6 +4,7 @@ using System.Linq;
 using System.Reflection;
 using UnityEditor;
 using UnityEngine;
+using GameFramework.Utils.Reflection;
 
 namespace GameFramework.Strategy
 {
@@ -13,8 +14,8 @@ namespace GameFramework.Strategy
         private SerializedProperty _serializedProperty;
         private IStrategyContainer _strategyFieldValue;
         private FieldInfo _propertyField;
-        private int _strategyImplementationIndex;
         private List<Type> _interfaceTypes;
+        private int _strategyImplementationIndex;
         private string[] _interfaceNames;
 
         private void InitProperty(SerializedProperty property)
@@ -27,12 +28,19 @@ namespace GameFramework.Strategy
             _serializedProperty = property;
         }
 
+        private void InitializeStrategyContainerImplementations()
+        {
+            if (_interfaceTypes == null)
+                _interfaceTypes = ReflectionUtils.TryGetConcreteStrategyImplementations(_propertyField.FieldType);
+        }
+
         private void InitializeInterfacesNames()
         {
             _interfaceNames = new string[1];
             _interfaceNames[0] = "(None)";
-            _interfaceNames = _interfaceNames.Concat(EditorUtils.GetAllOfInterfaceNames(_propertyField.FieldType)).ToArray();
+            _interfaceNames = _interfaceNames.Concat(_interfaceTypes.Select(x => x.Name)).ToArray();
         }
+
 
         private GUIStyle GetLabelGUIStyle()
         {
@@ -50,20 +58,18 @@ namespace GameFramework.Strategy
             InitProperty(property);
 
             EditorGUI.BeginProperty(position, label, property);
-
             EditorGUILayout.BeginVertical("Box");
             EditorGUILayout.BeginVertical("Toolbar");
+
             DrawpopupStrategyImplementations(property, label);
+
             EditorGUILayout.EndVertical();
 
-            if (_strategyFieldValue != null)
-                DrawStrategyImplementationFields(position, property);
-
+            DrawStrategyImplementationFields(position, property);
 
             CheckAndChangeStrategyTypeState();
 
             EditorGUILayout.EndVertical();
-
             EditorGUI.EndProperty();
         }
 
@@ -72,15 +78,27 @@ namespace GameFramework.Strategy
             return 0f;
         }
 
+        private void DrawStrategyImplementationFields(Rect position, SerializedProperty property)
+        {
+            if (_strategyFieldValue == null)
+                return;
+
+            EditorGUI.indentLevel++;
+
+            ForeachChildProperty(property, (prop) =>
+                EditorGUILayout.PropertyField(prop, new GUIContent(prop.name), true, null));
+
+            EditorGUI.indentLevel--;
+        }
+
         private void DrawpopupStrategyImplementations(SerializedProperty property, GUIContent label)
         {
             if (_propertyField == null)
                 return;
 
             if (_interfaceTypes == null)
-            {
-                _interfaceTypes = EditorUtils.GetAllOfInterface(_propertyField.FieldType);
-            }
+                InitializeStrategyContainerImplementations();
+
 
             if (_interfaceTypes == null)
             {
@@ -89,9 +107,7 @@ namespace GameFramework.Strategy
             }
 
             if (_interfaceNames == null)
-            {
                 InitializeInterfacesNames();
-            }
 
             if (_strategyFieldValue != null)
                 _strategyImplementationIndex = 1 + _interfaceTypes.FindIndex(0, type => type == _strategyFieldValue.GetType());
@@ -109,16 +125,6 @@ namespace GameFramework.Strategy
 
         }
 
-
-        private void DrawStrategyImplementationFields(Rect position, SerializedProperty property)
-        {
-            EditorGUI.indentLevel++;
-
-            ForeachChildProperty(property, (prop) =>
-                EditorGUILayout.PropertyField(prop, new GUIContent(prop.name), true, null));
-
-            EditorGUI.indentLevel--;
-        }
 
         private void ForeachChildProperty(SerializedProperty property, Action<SerializedProperty> action)
         {
@@ -155,6 +161,8 @@ namespace GameFramework.Strategy
             {
                 _serializedProperty.managedReferenceValue = null;
                 _serializedProperty.serializedObject.ApplyModifiedProperties();
+                Debug.Log("Clear");
+                _strategyImplementationIndex = 0;
             }
         }
 
@@ -165,6 +173,7 @@ namespace GameFramework.Strategy
             _strategyFieldValue = strategyImplementation;
             _serializedProperty.managedReferenceValue = _strategyFieldValue;
             _serializedProperty.serializedObject.ApplyModifiedProperties();
+
         }
     }
 }

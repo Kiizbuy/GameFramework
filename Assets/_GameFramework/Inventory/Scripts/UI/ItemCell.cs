@@ -12,7 +12,7 @@ namespace GameFramework.Inventory.UI
         public int ItemIndex;
 
         public int InventoryEntryIndex { get; set; } = -1;
-        public InventoryUIView Owner { get; set; }
+        public InventoryUIController Owner { get; set; }
         public int Index { get; set; }
         public ItemState EquipmentItemState { get; private set; }
 
@@ -40,7 +40,7 @@ namespace GameFramework.Inventory.UI
             if (EquipmentItemState != null)
                 return;
 
-            Owner.CurrentlyDragged = new InventoryUIView.DragItemCellState(this, (RectTransform)transform.parent);
+            Owner.CurrentlyDragged = new DragItemCellState(this, (RectTransform)transform.parent);
             transform.SetParent(Owner.DragCanvas.transform, true);
         }
 

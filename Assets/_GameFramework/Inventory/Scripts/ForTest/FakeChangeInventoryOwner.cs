@@ -6,14 +6,14 @@ namespace GameFramework.Inventory.UI
 {
     public class FakeChangeInventoryOwner : MonoBehaviour
     {
-        public InventoryUIView InventoryUIView;
+        public InventoryUIController InventoryUIController;
         public Inventory Inventory;
 
         // Update is called once per frame
         private void Update()
         {
             if (Input.GetKeyDown(KeyCode.A))
-                InventoryUIView.ChangeInventoryOwner(Inventory);
+                InventoryUIController.ChangeInventoryOwner(Inventory);
         }
     }
 }

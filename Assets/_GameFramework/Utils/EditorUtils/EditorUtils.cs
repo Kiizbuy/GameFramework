@@ -8,21 +8,14 @@ using UnityEngine;
 
 public static class EditorUtils 
 {
-    public static string[] GetAllOfInterfaceNames(Type interfaceType)
-    {
-        return GetAllOfInterface(interfaceType)
-            .Select(x => x.Name)
-            .ToArray();
-    }
-
-    public static List<Type> GetAllOfInterface(Type interfaceType)
-    {
-        return AppDomain.CurrentDomain.GetAssemblies()
-              .SelectMany(s => s.GetTypes())
-              .Where(x => interfaceType.IsAssignableFrom(x) && x != interfaceType && !x.IsAbstract && !typeof(MonoBehaviour).IsAssignableFrom(x))
-              .OrderBy(x => x.Name)
-              .ToList();
-    }
+    //public static List<Type> GetAllOfInterface(Type interfaceType)
+    //{
+    //    return AppDomain.CurrentDomain.GetAssemblies()
+    //          .SelectMany(s => s.GetTypes())
+    //          .Where(x => interfaceType.IsAssignableFrom(x) && x != interfaceType && !x.IsAbstract && !typeof(MonoBehaviour).IsAssignableFrom(x))
+    //          .OrderBy(x => x.Name)
+    //          .ToList();
+    //}
 
     public static string GetMonoScriptPathFor(Type type)
     {

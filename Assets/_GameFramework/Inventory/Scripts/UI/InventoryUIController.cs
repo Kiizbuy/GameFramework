@@ -3,20 +3,20 @@ using UnityEngine.UI;
 
 namespace GameFramework.Inventory.UI
 {
-    public sealed class InventoryUIView : MonoBehaviour
+    public class DragItemCellState
     {
-        public class DragItemCellState
+        public readonly ItemCell DraggedEntry;
+        public readonly RectTransform OriginalParent;
+
+        public DragItemCellState(ItemCell draggedEntry, RectTransform originalParent)
         {
-            public readonly ItemCell DraggedEntry;
-            public readonly RectTransform OriginalParent;
-
-            public DragItemCellState(ItemCell draggedEntry, RectTransform originalParent)
-            {
-                DraggedEntry = draggedEntry;
-                OriginalParent = originalParent;
-            }
+            DraggedEntry = draggedEntry;
+            OriginalParent = originalParent;
         }
+    }
 
+    public sealed class InventoryUIController : MonoBehaviour
+    {
         [SerializeField]
         private Inventory _inventoryOwner;
         [SerializeField]
@@ -48,8 +48,7 @@ namespace GameFramework.Inventory.UI
 
         private void Awake()
         {
-            if (_inventoryOwner != null)
-                Init();
+            Init();
         }
 
         private void Init()
