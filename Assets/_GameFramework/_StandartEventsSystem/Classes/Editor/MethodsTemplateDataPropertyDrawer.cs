@@ -12,6 +12,7 @@ namespace GameFramework.Events
     {
         private GUIContent selectedMonobehaviourMethodInfoTitle = new GUIContent("None");
 
+        private SerializedProperty _mainProperty;
         private SerializedProperty monobehaviourMethodNameProperty;
         private SerializedProperty monobehaviourReferenceProperty;
         private SerializedProperty eventObjectProperty;
@@ -42,6 +43,8 @@ namespace GameFramework.Events
 
         private void InitializeProperties(SerializedProperty propertyFromRootPropertyObject)
         {
+            _mainProperty = propertyFromRootPropertyObject;
+
             monobehaviourMethodNameProperty = propertyFromRootPropertyObject.FindPropertyRelative("_monobehaviourMethodName");
             monobehaviourReferenceProperty = propertyFromRootPropertyObject.FindPropertyRelative("_monobehaviourReference");
             eventObjectProperty = propertyFromRootPropertyObject.FindPropertyRelative("_eventObject");
@@ -130,10 +133,14 @@ namespace GameFramework.Events
                                          monobehaviourMethodNameProperty.stringValue == componentMethodInfo.MonobehaviourMethodInfo.Name,
                                          (x) =>
                                          {
-                                             monobehaviourMethodNameProperty.stringValue = componentMethodInfo.MonobehaviourMethodInfo.Name;
-                                             monobehaviourReferenceProperty.objectReferenceValue = componentMethodInfo.MonobehaviourReference;
-                                             property.serializedObject.ApplyModifiedProperties();
-                                             selectedMonobehaviourMethodInfoTitle.text = $"{currentComponent.GetType().Name}/{currentMethod.Name}";
+                                             var monobehaviourMethodNamePropertyInternal = property.FindPropertyRelative("_monobehaviourMethodName");
+                                             var monobehaviorReferencePropertyInternal = property.FindPropertyRelative("_monobehaviourReference");
+
+                                             monobehaviourMethodNamePropertyInternal.stringValue = componentMethodInfo.MonobehaviourMethodInfo.Name;
+                                             monobehaviorReferencePropertyInternal.objectReferenceValue = componentMethodInfo.MonobehaviourReference;
+
+                                             selectedMonobehaviourMethodInfoTitle = new GUIContent($"{currentComponent.GetType().Name}/{currentMethod.Name}");
+                                             _mainProperty.serializedObject.ApplyModifiedProperties();
                                          },
                                          componentMethodInfo);
                         }
@@ -179,7 +186,7 @@ namespace GameFramework.Events
         {
             selectedMonobehaviourMethodInfoTitle.text = "None";
             monobehaviourMethodNameProperty.stringValue = "None";
-            monobehaviourMethodNameProperty.serializedObject.ApplyModifiedProperties();
+            _mainProperty.serializedObject.ApplyModifiedProperties();
         }
 
         public override float GetPropertyHeight(SerializedProperty property, GUIContent label)

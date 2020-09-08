@@ -13,7 +13,7 @@ namespace GameFramework.Inventory.Items
         void Use(IEntity entity, Inventory inventory);
     }
 
-    public abstract class BaseItemData : ScriptableObject
+    public class BaseItemData : ScriptableObject
     {
         [SerializeField] private Sprite _icon;
         [SerializeField] private string _title;

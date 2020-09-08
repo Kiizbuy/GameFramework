@@ -316,6 +316,7 @@ GameObject:
   - component: {fileID: 191941843}
   - component: {fileID: 191941842}
   - component: {fileID: 191941844}
+  - component: {fileID: 191941845}
   m_Layer: 0
   m_Name: StrategyTest
   m_TagString: Untagged
@@ -350,14 +351,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   OnKeyDownSubscriber:
-    MethodsTemplateData:
-    - UnityMonobehaviourEventInfo:
-        MonobehaviourReference: {fileID: 0}
-      eventObject: {fileID: 191941840}
-      IsGlobalEvent: 0
-      GlobalEventName: 
-      MonobehaviourMethodName: SpawnTrigger
-      MonobehaviourReference: {fileID: 191941843}
+    _methodsTemplateData: []
   keyCode: 115
 --- !u!114 &191941843
 MonoBehaviour:
@@ -372,9 +366,24 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   OnSpawnedSubscriber:
-    MethodsTemplateData: []
+    _methodsTemplateData:
+    - _eventObject: {fileID: 191941840}
+      _isGlobalEvent: 1
+      _globalEventName: Somebody once told me
+      _monobehaviourMethodName: None
+      _monobehaviourReference: {fileID: 0}
   SpawnTriggerSubscriber:
-    EventsTemplateData: []
+    _eventsTemplateData:
+    - _eventObject: {fileID: 191941840}
+      _isGlobalEvent: 0
+      _globalEventName: trtrt
+      _monobehaviourEventName: OnKeyDown
+      _monobehaviourReference: {fileID: 191941842}
+    - _eventObject: {fileID: 191941840}
+      _isGlobalEvent: 0
+      _globalEventName: vcfdf
+      _monobehaviourEventName: OnTimerHasReached
+      _monobehaviourReference: {fileID: 191941844}
   SpawnerType:
     id: 0
   ObjectPlaceType:
@@ -406,22 +415,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   OnTimerHasReachedSubscriber:
-    MethodsTemplateData:
-    - UnityMonobehaviourEventInfo:
-        MonobehaviourReference: {fileID: 0}
-      eventObject: {fileID: 191941840}
-      IsGlobalEvent: 0
-      GlobalEventName: 
-      MonobehaviourMethodName: None
-      MonobehaviourReference: {fileID: 0}
+    _methodsTemplateData: []
   OnTimerHasStartedSubscriber:
-    MethodsTemplateData: []
+    _methodsTemplateData: []
   OnTimerHasStoppedSubscriber:
-    MethodsTemplateData: []
+    _methodsTemplateData: []
   StartTimerActSubscriber:
-    EventsTemplateData: []
+    _eventsTemplateData: []
   StopTimerActSubscriber:
-    EventsTemplateData: []
+    _eventsTemplateData: []
   UseRandomIntervalValue: 0
   IntervalTimer: 5
   MinInterval: 5
@@ -429,6 +431,31 @@ MonoBehaviour:
   _loop: 1
   _canProcessTimer: 0
   _currentTimer: 0
+--- !u!114 &191941845
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 191941840}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b488cd1363021a443ac55313abe28539, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  SomeInt: 0
+  SomeString: 
+  SomeBool: 0
+  SomeStrategy:
+    id: 0
+  SomeArray: []
+  references:
+    version: 1
+    00000000:
+      type: {class: CapsuleShape, ns: GameFramework.Strategy, asm: Assembly-CSharp}
+      data:
+        _capsuleContCount: 0
+        _someStringArray: []
 --- !u!1 &278092965
 GameObject:
   m_ObjectHideFlags: 0
@@ -704,7 +731,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 683748314}
-  - component: {fileID: 683748313}
   m_Layer: 0
   m_Name: Runtime
   m_TagString: Untagged
@@ -712,22 +738,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &683748313
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 683748312}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 220dd049e49e7ed4d9eaa6b5d19c392c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  Chlen:
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
 --- !u!4 &683748314
 Transform:
   m_ObjectHideFlags: 0

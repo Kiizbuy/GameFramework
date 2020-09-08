@@ -22,6 +22,8 @@ namespace GameFramework.Events
         private readonly string _methodsTemplateDataLabel = "_methodsTemplateData";
         private readonly string _eventWarrningMessageLabel = "Event name attribute is not found. Mark it";
 
+        private static int _CurrentCallCount;
+
         private GUIStyle GetHeaderGUIStyle(Color labelColor)
         {
             var labelGUIStyle = new GUIStyle(GUI.skin.label)
@@ -133,20 +135,39 @@ namespace GameFramework.Events
                 drawElementCallback = (Rect rect, int index, bool isActive, bool isFocused) =>
                 {
                     EditorGUI.PropertyField(rect, property.GetArrayElementAtIndex(index), true);
-                },
-
+                }
             };
 
             newReordableList.drawHeaderCallback += (rect) =>
             {
-            //var headerGUIContent = new GUIContent(property.FindPropertyRelative("EventName").stringValue);
-            var headerGUIContent = new GUIContent(headerName);
+                var headerGUIContent = new GUIContent(headerName);
                 GUI.Label(rect, headerGUIContent, GetHeaderGUIStyle(Color.blue));
             };
 
-            newReordableList.onRemoveCallback += (list) =>
+            //newReordableList.onRemoveCallback += (list) =>
+            //{
+            //    list.serializedProperty.DeleteArrayElementAtIndex(list.index);
+            //    list.serializedProperty.serializedObject.ApplyModifiedProperties();
+            //};
+
+            newReordableList.onAddCallback += (list) =>
             {
-                property.DeleteArrayElementAtIndex(list.index);
+                var index = list.index;
+                if (index >= 0 && index < _CurrentCallCount)
+                {
+                    index++;
+                    list.index = index;
+                }
+                else
+                {
+                    index = _CurrentCallCount;
+                }
+
+                list.serializedProperty.InsertArrayElementAtIndex(index);
+
+                list.serializedProperty.serializedObject.ApplyModifiedProperties();
+
+                var callProperty = list.serializedProperty.GetArrayElementAtIndex(index);
             };
 
             newReordableList.elementHeight = 40f;
