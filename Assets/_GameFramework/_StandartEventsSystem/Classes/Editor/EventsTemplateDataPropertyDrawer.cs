@@ -13,6 +13,7 @@ namespace GameFramework.Events
     {
         private GUIContent _selectedMonobehaviourEventInfoTitle = new GUIContent("None");
 
+        private SerializedProperty _mainProperty;
         private SerializedProperty _monobehaviourEventNameProperty;
         private SerializedProperty _monobehaviourReferenceProperty;
         private SerializedProperty _eventObjectProperty;
@@ -54,8 +55,33 @@ namespace GameFramework.Events
             return style;
         }
 
+
+        public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
+        {
+            InitializeProperties(property);
+            position.y += 20f;
+
+            EditorGUI.BeginProperty(position, label, property);
+
+            InitializePropertyRects(position);
+
+            var indent = EditorGUI.indentLevel;
+            EditorGUI.indentLevel = 0;
+
+            DrawGUI(property);
+            CheckEventTypeChange(property);
+
+            EditorGUI.indentLevel = indent;
+            EditorGUI.EndProperty();
+        }
+
+        public override float GetPropertyHeight(SerializedProperty property, GUIContent label) 
+            => base.GetPropertyHeight(property, label) * 5f;
+
         private void InitializeProperties(SerializedProperty propertyFromRootPropertyObject)
         {
+            _mainProperty = propertyFromRootPropertyObject;
+
             _monobehaviourEventNameProperty = propertyFromRootPropertyObject.FindPropertyRelative(_monobehaviourEventNamePropertyName);
             _monobehaviourReferenceProperty = propertyFromRootPropertyObject.FindPropertyRelative(_monobehaviourReferencePropertyName);
             _eventObjectProperty = propertyFromRootPropertyObject.FindPropertyRelative(_eventObjectPropertyName);
@@ -79,17 +105,9 @@ namespace GameFramework.Events
             _globalEventNameTitleRect.y -= 15;
         }
 
-        public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
+
+        private void DrawGUI(SerializedProperty property)
         {
-            InitializeProperties(property);
-            position.y += 20f;
-
-            EditorGUI.BeginProperty(position, label, property);
-
-            InitializePropertyRects(position);
-            var indent = EditorGUI.indentLevel;
-            EditorGUI.indentLevel = 0;
-
 
             if (_eventObjectProperty.objectReferenceValue == null)
             {
@@ -107,6 +125,11 @@ namespace GameFramework.Events
             EditorGUI.LabelField(_isGlobalEventRectTitle, _globalEventLabel, GetSlowTextStyle());
             EditorGUI.PropertyField(_isGlobalEventRect, _isGlobalEventProperty, GUIContent.none, true);
 
+            //CheckEventTypeChange(property);
+        }
+
+        private void CheckEventTypeChange(SerializedProperty property)
+        {
             if (_isGlobalEventProperty.boolValue)
             {
                 EditorGUI.LabelField(_globalEventNameTitleRect, _globalEventNameLabel, GetSlowTextStyle());
@@ -141,12 +164,17 @@ namespace GameFramework.Events
 
                             menu.AddItem(componentMethodIndoGUIContent,
                                          _monobehaviourEventNameProperty.stringValue == componentMethodInfo.MonobehaviourEventInfo.Name,
-                                         (x) =>
+                                         (_) =>
                                          {
-                                             _monobehaviourEventNameProperty.stringValue = componentMethodInfo.MonobehaviourEventInfo.Name;
-                                             _monobehaviourReferenceProperty.objectReferenceValue = componentMethodInfo.MonobehaviourReference;
-                                             property.serializedObject.ApplyModifiedProperties();
-                                             _selectedMonobehaviourEventInfoTitle.text = $"{currentComponent.GetType().Name}/{currentEvent.Name}";
+                                             //Dirty hack - need refactoring
+                                             var monobehaviourEventNamePropertyInternal = property.FindPropertyRelative(_monobehaviourEventNamePropertyName);
+                                             var monobehaviourReferencePropertyInternal = property.FindPropertyRelative(_monobehaviourReferencePropertyName);
+
+                                             monobehaviourEventNamePropertyInternal.stringValue = componentMethodInfo.MonobehaviourEventInfo.Name;
+                                             monobehaviourReferencePropertyInternal.objectReferenceValue = componentMethodInfo.MonobehaviourReference;
+
+                                             _selectedMonobehaviourEventInfoTitle = new GUIContent($"{currentComponent.GetType().Name}/{currentEvent.Name}");
+                                             _mainProperty.serializedObject.ApplyModifiedProperties();
                                          },
                                          componentMethodInfo);
                         }
@@ -161,35 +189,19 @@ namespace GameFramework.Events
 
             }
             EditorGUI.EndDisabledGroup();
-
-            EditorGUI.indentLevel = indent;
-
-            EditorGUI.EndProperty();
         }
 
         private IEnumerable<EventInfo> GetFillteredMethods(EventInfo[] allMonobehaviourMethods)
              => allMonobehaviourMethods.Where(x => x.EventHandlerType == typeof(Action<EventParameter>));
-
-        private void SelectMethodFromMonobehaviour(object obj)
-        {
-            if (obj is UnityMonobehaviourEventInfo unityEventInfo)
-            {
-                _selectedMonobehaviourEventInfoTitle.text = $"{unityEventInfo.MonobehaviourReference.GetType().Name}/{unityEventInfo.MonobehaviourEventInfo.Name}";
-                _monobehaviourEventNameProperty.stringValue = unityEventInfo.MonobehaviourEventInfo.Name;
-                _monobehaviourEventNameProperty.serializedObject.ApplyModifiedProperties();
-            }
-        }
 
         private void ClearAllEventInfo(object obj)
         {
             _monobehaviourEventNameProperty.stringValue = "None";
             _selectedMonobehaviourEventInfoTitle.text = "None";
             _monobehaviourEventNameProperty.serializedObject.ApplyModifiedProperties();
+
+            _mainProperty.serializedObject.ApplyModifiedProperties();
         }
 
-        public override float GetPropertyHeight(SerializedProperty property, GUIContent label)
-        {
-            return base.GetPropertyHeight(property, label) * 5f;
-        }
     }
 }

@@ -27,6 +27,19 @@ namespace GameFramework.Events
         private Rect methodsDropdownButtonRectTitle;
         private Rect globalEventNameTitleRect;
 
+        private readonly string _monobehaviourMethodPropertyName = "_monobehaviourMethodName";
+        private readonly string _monobehaviourReferencePropertyName = "_monobehaviourReference";
+        private readonly string _eventObjectPropertyName = "_eventObject";
+        private readonly string _isGlobalEventPropertyName = "_isGlobalEvent";
+        private readonly string _globalEventPropertyName = "_globalEventName";
+        private readonly string _eventObjectLabel = "Event Object";
+        private readonly string _isGlobalEventLabel = "Global event?";
+        private readonly string _globalEventNameLabel = "Global event name";
+        private readonly string _avaliableMethodsLabel = "Avaliable methods";
+        private readonly string _warningTitle = "Warning";
+        private readonly string _nothingFoundMessage = "Nothing found";
+        private readonly string _okLabel = "OK";
+        private readonly string _noneLabel = "None";
 
         private GUIStyle GetSlowTextStyle()
         {
@@ -45,11 +58,11 @@ namespace GameFramework.Events
         {
             _mainProperty = propertyFromRootPropertyObject;
 
-            monobehaviourMethodNameProperty = propertyFromRootPropertyObject.FindPropertyRelative("_monobehaviourMethodName");
-            monobehaviourReferenceProperty = propertyFromRootPropertyObject.FindPropertyRelative("_monobehaviourReference");
-            eventObjectProperty = propertyFromRootPropertyObject.FindPropertyRelative("_eventObject");
-            isGlobalEventProperty = propertyFromRootPropertyObject.FindPropertyRelative("_isGlobalEvent");
-            globalEventNameProperty = propertyFromRootPropertyObject.FindPropertyRelative("_globalEventName");
+            monobehaviourMethodNameProperty = propertyFromRootPropertyObject.FindPropertyRelative(_monobehaviourMethodPropertyName);
+            monobehaviourReferenceProperty = propertyFromRootPropertyObject.FindPropertyRelative(_monobehaviourReferencePropertyName);
+            eventObjectProperty = propertyFromRootPropertyObject.FindPropertyRelative(_eventObjectPropertyName);
+            isGlobalEventProperty = propertyFromRootPropertyObject.FindPropertyRelative(_isGlobalEventPropertyName);
+            globalEventNameProperty = propertyFromRootPropertyObject.FindPropertyRelative(_globalEventPropertyName);
         }
 
         private void InitializePropertyRects(Rect propertyRect)
@@ -83,29 +96,30 @@ namespace GameFramework.Events
 
             if (eventObjectProperty.objectReferenceValue == null)
             {
-                monobehaviourMethodNameProperty.stringValue = "None";
+                monobehaviourMethodNameProperty.stringValue = _noneLabel;
                 monobehaviourReferenceProperty.objectReferenceValue = null;
                 isGlobalEventProperty.boolValue = false;
                 globalEventNameProperty.stringValue = string.Empty;
             }
 
-            EditorGUI.LabelField(eventObjectRectTitle, "Event Object", GetSlowTextStyle());
+            EditorGUI.LabelField(eventObjectRectTitle, _eventObjectLabel, GetSlowTextStyle());
             EditorGUI.PropertyField(eventObjectRect, eventObjectProperty, GUIContent.none, true);
 
             EditorGUI.BeginDisabledGroup(eventObjectProperty.objectReferenceValue == null);
 
-            EditorGUI.LabelField(isGlobalEventRectTitle, "Global event?", GetSlowTextStyle());
+            EditorGUI.LabelField(isGlobalEventRectTitle, _isGlobalEventLabel, GetSlowTextStyle());
             EditorGUI.PropertyField(isGlobalEventRect, isGlobalEventProperty, GUIContent.none, true);
 
             if (isGlobalEventProperty.boolValue)
             {
-                EditorGUI.LabelField(globalEventNameTitleRect, "Global event name", GetSlowTextStyle());
+                EditorGUI.LabelField(globalEventNameTitleRect, _globalEventNameLabel, GetSlowTextStyle());
                 EditorGUI.PropertyField(methodsDropdownButtonRect, globalEventNameProperty, GUIContent.none, true);
             }
             else
             {
-                EditorGUI.LabelField(methodsDropdownButtonRectTitle, "Avaliable methods", GetSlowTextStyle());
+                EditorGUI.LabelField(methodsDropdownButtonRectTitle, _avaliableMethodsLabel, GetSlowTextStyle());
                 selectedMonobehaviourMethodInfoTitle.text = monobehaviourMethodNameProperty.stringValue;
+
                 if (EditorGUI.DropdownButton(methodsDropdownButtonRect, selectedMonobehaviourMethodInfoTitle, FocusType.Passive))
                 {
                     var menu = new GenericMenu();
@@ -114,8 +128,8 @@ namespace GameFramework.Events
 
                     if (allComponents.Count == 0)
                     {
-                        EditorUtility.DisplayDialog("Warning", "НИЧЕГО НЕ НАШЕЛ", "OK");
-                        selectedMonobehaviourMethodInfoTitle.text = "None";
+                        EditorUtility.DisplayDialog(_warningTitle, _nothingFoundMessage, _okLabel);
+                        selectedMonobehaviourMethodInfoTitle.text = _noneLabel;
                         return;
                     }
 
@@ -131,10 +145,11 @@ namespace GameFramework.Events
 
                             menu.AddItem(componentMethodIndoGUIContent,
                                          monobehaviourMethodNameProperty.stringValue == componentMethodInfo.MonobehaviourMethodInfo.Name,
-                                         (x) =>
+                                         (_) =>
                                          {
-                                             var monobehaviourMethodNamePropertyInternal = property.FindPropertyRelative("_monobehaviourMethodName");
-                                             var monobehaviorReferencePropertyInternal = property.FindPropertyRelative("_monobehaviourReference");
+                                             //Dirty hack - need refactoring
+                                             var monobehaviourMethodNamePropertyInternal = property.FindPropertyRelative(_monobehaviourMethodPropertyName);
+                                             var monobehaviorReferencePropertyInternal = property.FindPropertyRelative(_monobehaviourReferencePropertyName);
 
                                              monobehaviourMethodNamePropertyInternal.stringValue = componentMethodInfo.MonobehaviourMethodInfo.Name;
                                              monobehaviorReferencePropertyInternal.objectReferenceValue = componentMethodInfo.MonobehaviourReference;
@@ -147,7 +162,7 @@ namespace GameFramework.Events
 
                     }
 
-                    menu.AddItem(new GUIContent("None"), false, ClearAllMethodInfo, null);
+                    menu.AddItem(new GUIContent(_noneLabel), false, ClearAllMethodInfo, null);
                     menu.ShowAsContext();
 
                     property.serializedObject.ApplyModifiedProperties();
@@ -172,20 +187,10 @@ namespace GameFramework.Events
                                                 );
         }
 
-        private void SelectMethodFromMonobehaviour(object obj)
-        {
-            if (obj is UnityMonobehaviourMethodInfo unityMethodInfo)
-            {
-                selectedMonobehaviourMethodInfoTitle.text = $"{unityMethodInfo.MonobehaviourReference.GetType().Name}/{unityMethodInfo.MonobehaviourMethodInfo.Name}";
-                monobehaviourMethodNameProperty.stringValue = unityMethodInfo.MonobehaviourMethodInfo.Name;
-                monobehaviourMethodNameProperty.serializedObject.ApplyModifiedProperties();
-            }
-        }
-
         private void ClearAllMethodInfo(object obj)
         {
-            selectedMonobehaviourMethodInfoTitle.text = "None";
-            monobehaviourMethodNameProperty.stringValue = "None";
+            selectedMonobehaviourMethodInfoTitle.text = _noneLabel;
+            monobehaviourMethodNameProperty.stringValue = _noneLabel;
             _mainProperty.serializedObject.ApplyModifiedProperties();
         }
 
