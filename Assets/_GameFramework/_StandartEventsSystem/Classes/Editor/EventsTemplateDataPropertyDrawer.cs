@@ -68,7 +68,7 @@ namespace GameFramework.Events
             var indent = EditorGUI.indentLevel;
             EditorGUI.indentLevel = 0;
 
-            DrawGUI(property);
+            DrawMainGUI();
             CheckEventTypeChange(property);
 
             EditorGUI.indentLevel = indent;
@@ -106,9 +106,8 @@ namespace GameFramework.Events
         }
 
 
-        private void DrawGUI(SerializedProperty property)
+        private void DrawMainGUI()
         {
-
             if (_eventObjectProperty.objectReferenceValue == null)
             {
                 _monobehaviourEventNameProperty.stringValue = _noneLabel;
@@ -124,8 +123,6 @@ namespace GameFramework.Events
 
             EditorGUI.LabelField(_isGlobalEventRectTitle, _globalEventLabel, GetSlowTextStyle());
             EditorGUI.PropertyField(_isGlobalEventRect, _isGlobalEventProperty, GUIContent.none, true);
-
-            //CheckEventTypeChange(property);
         }
 
         private void CheckEventTypeChange(SerializedProperty property)

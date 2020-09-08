@@ -9,15 +9,15 @@ namespace GameFramework.Events
     [CustomPropertyDrawer(typeof(EventToMethodSubscribeСontainer))]
     public class EventToMethodSubscribeСontainerPropertyDrawer : PropertyDrawer
     {
-        private ReorderableList methodsTemplateDataReorderableList;
-        private EventToMethodSubscribeСontainer propertyObjectInstance;
+        private ReorderableList _methodsTemplateDataReorderableList;
+        private EventToMethodSubscribeСontainer _propertyObjectInstance;
 
-        private SerializedProperty methodsTemplateDataProperty;
+        private SerializedProperty _methodsTemplateDataProperty;
 
-        private Rect reordableListRect;
-        private Rect foldoutButtonRect;
-        private Rect foldoutLabelRect;
-        private Rect foldinBoxRect;
+        private Rect _reordableListRect;
+        private Rect _foldoutButtonRect;
+        private Rect _foldoutLabelRect;
+        private Rect _foldinBoxRect;
 
         private readonly string _methodsTemplateDataLabel = "_methodsTemplateData";
         private readonly string _eventWarrningMessageLabel = "Event name attribute is not found. Mark it";
@@ -40,18 +40,18 @@ namespace GameFramework.Events
 
         private void InitializeRects(Rect propertyRect)
         {
-            reordableListRect = propertyRect;
-            foldoutButtonRect = propertyRect;
-            foldoutLabelRect = propertyRect;
-            foldinBoxRect = propertyRect;
+            _reordableListRect = propertyRect;
+            _foldoutButtonRect = propertyRect;
+            _foldoutLabelRect = propertyRect;
+            _foldinBoxRect = propertyRect;
 
-            foldinBoxRect.xMin = propertyRect.x + 2;
+            _foldinBoxRect.xMin = propertyRect.x + 2;
 
-            foldoutButtonRect.width = 100;
-            foldoutButtonRect.height = 20;
+            _foldoutButtonRect.width = 100;
+            _foldoutButtonRect.height = 20;
 
-            foldoutLabelRect.x += 6;
-            foldoutLabelRect.width = 400;
+            _foldoutLabelRect.x += 6;
+            _foldoutLabelRect.width = 400;
         }
 
         public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
@@ -69,8 +69,8 @@ namespace GameFramework.Events
             }
 
             eventName = eventNameAttribute.EventName;
-            methodsTemplateDataProperty = property.FindPropertyRelative(_methodsTemplateDataLabel);
-            propertyObjectInstance = property.GetObjectValueFromSerializedProperty<EventToMethodSubscribeСontainer>();
+            _methodsTemplateDataProperty = property.FindPropertyRelative(_methodsTemplateDataLabel);
+            _propertyObjectInstance = property.GetObjectValueFromSerializedProperty<EventToMethodSubscribeСontainer>();
 
             if (ObjectDoesntHaveEvent(objectWhoUseProperty, eventName))
             {
@@ -82,10 +82,10 @@ namespace GameFramework.Events
 
             InitializeRects(position);
 
-            property.isExpanded = EditorGUI.Foldout(foldoutButtonRect, property.isExpanded, GUIContent.none, true);
+            property.isExpanded = EditorGUI.Foldout(_foldoutButtonRect, property.isExpanded, GUIContent.none, true);
 
-            if (methodsTemplateDataReorderableList == null)
-                methodsTemplateDataReorderableList = BuildReorderableListFromProperty(methodsTemplateDataProperty, eventName);
+            if (_methodsTemplateDataReorderableList == null)
+                _methodsTemplateDataReorderableList = BuildReorderableListFromProperty(_methodsTemplateDataProperty, eventName);
 
             EditorGUI.BeginProperty(position, label, property);
 
@@ -95,13 +95,13 @@ namespace GameFramework.Events
 
             if (property.isExpanded)
             {
-                methodsTemplateDataReorderableList.DoList(reordableListRect);
+                _methodsTemplateDataReorderableList.DoList(_reordableListRect);
             }
             else
             {
                 var headerGUIContent = new GUIContent(eventName);
-                GUI.Box(foldinBoxRect, GUIContent.none);
-                GUI.Label(foldoutLabelRect, headerGUIContent, GetHeaderGUIStyle(Color.blue));
+                GUI.Box(_foldinBoxRect, GUIContent.none);
+                GUI.Label(_foldoutLabelRect, headerGUIContent, GetHeaderGUIStyle(Color.cyan));
             }
 
             EditorGUI.indentLevel = indent;
@@ -116,7 +116,7 @@ namespace GameFramework.Events
         public override float GetPropertyHeight(SerializedProperty property, GUIContent label)
         {
             if (property.isExpanded)
-                return GetPropertyHeightFromReorderableList(methodsTemplateDataReorderableList);
+                return GetPropertyHeightFromReorderableList(_methodsTemplateDataReorderableList);
 
             return EditorGUIUtility.singleLineHeight;
         }
@@ -141,33 +141,7 @@ namespace GameFramework.Events
             newReordableList.drawHeaderCallback += (rect) =>
             {
                 var headerGUIContent = new GUIContent(headerName);
-                GUI.Label(rect, headerGUIContent, GetHeaderGUIStyle(Color.blue));
-            };
-
-            //newReordableList.onRemoveCallback += (list) =>
-            //{
-            //    list.serializedProperty.DeleteArrayElementAtIndex(list.index);
-            //    list.serializedProperty.serializedObject.ApplyModifiedProperties();
-            //};
-
-            newReordableList.onAddCallback += (list) =>
-            {
-                var index = list.index;
-                if (index >= 0 && index < _CurrentCallCount)
-                {
-                    index++;
-                    list.index = index;
-                }
-                else
-                {
-                    index = _CurrentCallCount;
-                }
-
-                list.serializedProperty.InsertArrayElementAtIndex(index);
-
-                list.serializedProperty.serializedObject.ApplyModifiedProperties();
-
-                var callProperty = list.serializedProperty.GetArrayElementAtIndex(index);
+                GUI.Label(rect, headerGUIContent, GetHeaderGUIStyle(Color.cyan));
             };
 
             newReordableList.elementHeight = 40f;
