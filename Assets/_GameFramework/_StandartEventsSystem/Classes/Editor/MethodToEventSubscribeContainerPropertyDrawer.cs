@@ -140,11 +140,6 @@ namespace GameFramework.Events
                 GUI.Label(rect, headerGUIContent, GetHeaderGUIStyle(headerColor));
             };
 
-            newReordableList.onRemoveCallback += (list) =>
-            {
-                property.DeleteArrayElementAtIndex(list.index);
-            };
-
             newReordableList.elementHeight = 40f;
 
             return newReordableList;

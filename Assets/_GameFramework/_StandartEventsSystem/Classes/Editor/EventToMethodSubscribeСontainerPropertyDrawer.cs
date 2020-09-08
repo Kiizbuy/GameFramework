@@ -22,8 +22,6 @@ namespace GameFramework.Events
         private readonly string _methodsTemplateDataLabel = "_methodsTemplateData";
         private readonly string _eventWarrningMessageLabel = "Event name attribute is not found. Mark it";
 
-        private static int _CurrentCallCount;
-
         private GUIStyle GetHeaderGUIStyle(Color labelColor)
         {
             var labelGUIStyle = new GUIStyle(GUI.skin.label)
