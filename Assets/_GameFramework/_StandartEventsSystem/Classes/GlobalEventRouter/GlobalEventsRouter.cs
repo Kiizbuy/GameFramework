@@ -6,86 +6,46 @@ using UnityEngine.SceneManagement;
 
 namespace GameFramework.Events
 {
-    public class GlobalEventsRouter : SingletonBehaviour<GlobalEventsRouter>
+    public class GlobalEventsRouter : MonoBehaviour
     {
-        private Dictionary<string, Action<EventParameter>> eventDictionary;
+        private Dictionary<string, Action<EventParameter>> _eventDictionary;
 
-        protected override bool OrderDontDestroyOnLoad => true;
-
-        protected override void OnAwake()
-            => Init();
-
-        protected override void OnSceneLoaded(Scene arg0, LoadSceneMode arg1)
+        private void Awake()
             => Init();
 
         private void Init()
-        {
-            if (!HasInstance)
-                instance = GetOrCreateInstance;
-            else
-                eventDictionary = new Dictionary<string, Action<EventParameter>>();
-        }
+            => _eventDictionary = new Dictionary<string, Action<EventParameter>>();
 
-        public static void StartListeningGlobalEvent(string eventName, Action<EventParameter> listener)
+        public void StartListeningGlobalEvent(string eventName, Action<EventParameter> listener)
         {
-            if (!HasInstance)
-            {
-                instance = GetOrCreateInstance;
-                if (!HasInstance)
-                {
-                    Debug.LogError("No instance of GlobalEventsRouter");
-                    return;
-                }
-            }
-
-            if (instance.eventDictionary.TryGetValue(eventName, out var thisEvent))
+            if (_eventDictionary.TryGetValue(eventName, out var thisEvent))
             {
                 thisEvent += listener;
-                instance.eventDictionary[eventName] = thisEvent;
+                _eventDictionary[eventName] = thisEvent;
             }
             else
             {
                 thisEvent += listener;
-                instance.eventDictionary.Add(eventName, thisEvent);
+                _eventDictionary.Add(eventName, thisEvent);
             }
 
             Debug.Log($"GLOBAL EVENT:{eventName} is listening");
         }
 
-        public static void StopListeningGlobalEvent(string eventName, Action<EventParameter> listener)
+        public void StopListeningGlobalEvent(string eventName, Action<EventParameter> listener)
         {
-            if (!HasInstance)
-            {
-                instance = GetOrCreateInstance;
-                if (!HasInstance)
-                {
-                    Debug.LogError("No instance of GlobalEventsRouter");
-                    return;
-                }
-            }
-
-            if (instance.eventDictionary.TryGetValue(eventName, out var thisEvent))
+            if (_eventDictionary.TryGetValue(eventName, out var thisEvent))
             {
                 thisEvent -= listener;
-                instance.eventDictionary[eventName] = thisEvent;
+                _eventDictionary[eventName] = thisEvent;
             }
         }
 
-        public static void RaiseGlobalEvent(string eventName, EventParameter param)
+        public void RaiseGlobalEvent(string eventName, EventParameter param)
         {
-            if (!HasInstance)
-            {
-                instance = GetOrCreateInstance;
-                if (!HasInstance)
-                {
-                    Debug.LogError("No instance of GlobalEventsRouter");
-                    return;
-                }
-            }
-
             Debug.Log($"RAISE GLOBAL EVENT: {eventName}");
 
-            if (instance.eventDictionary.TryGetValue(eventName, out var thisEvent))
+            if (_eventDictionary.TryGetValue(eventName, out var thisEvent))
                 thisEvent.Invoke(param);
         }
     }

@@ -3,13 +3,16 @@ using UnityEditor;
 using UnityEditor.SceneManagement;
 using UnityEngine.SceneManagement;
 using UnityEngine.EventSystems;
+using System;
 
 namespace GameFramework.Editor.Utils
 {
     [InitializeOnLoad]
     public class NewCreatedSceneSetuper
     {
-        private static readonly string debugConsolePath = "Assets/_GameFramework/Prefabs/DebugConsole/IngameDebugConsolePlaceholder.prefab";
+        private static readonly string _debugConsolePath = "Assets/_GameFramework/Prefabs/DebugConsole/IngameDebugConsolePlaceholder.prefab";
+        private static readonly string _sceneContextConsolePath = "Assets/_GameFramework/Prefabs/SceneContextPrefab/SceneContext.prefab";
+
 
         static NewCreatedSceneSetuper()
         {
@@ -18,7 +21,7 @@ namespace GameFramework.Editor.Utils
 
         private static void SetupNewScene(Scene scene, NewSceneSetup setup, NewSceneMode mode)
         {
-            if (setup == NewSceneSetup.EmptyScene)
+            if (setup == NewSceneSetup.EmptyScene || mode == NewSceneMode.Additive)
                 return;
 
             var mainCamera = Camera.main?.transform;
@@ -43,7 +46,7 @@ namespace GameFramework.Editor.Utils
 
             lighting.SetParent(environment.transform);
             mainCamera?.SetParent(cameras.transform);
-
+             
             debug.SetParent(logic);
 
             cameras.SetParent(environment.transform);
@@ -63,31 +66,43 @@ namespace GameFramework.Editor.Utils
 
             staticObjects.gameObject.isStatic = true;
             CreateSceneLogicPrefabs(logic);
+
+            Debug.Log("Setup Scene has been complete");
         }
 
         private static void CreateSceneLogicPrefabs(Transform logicObject)
         {
-            var debugConsoleAsset = AssetDatabase.LoadAssetAtPath<GameObject>(debugConsolePath);
-
-            if (debugConsoleAsset != null)
+            СreateGameObjectFromAssetAtPath(_debugConsolePath, logicObject, (debugConsoleObject) =>
             {
-                var debugConsoleObject = PrefabUtility.InstantiatePrefab(debugConsoleAsset) as GameObject;
                 var debugPlaceholder = logicObject.Find("Debug");
                 debugConsoleObject.transform.SetParent(debugPlaceholder);
-            }
-            else
-            {
-                Debug.LogError($"Debug console is not found on path: {debugConsolePath}");
-            }
+            });
 
-            var globalEventsRouter = new GameObject("Global Events").AddComponent<Events.GlobalEventsRouter>();
+            СreateGameObjectFromAssetAtPath(_sceneContextConsolePath, logicObject, (sceneContextObject) =>
+            {
+                sceneContextObject.transform.SetParent(logicObject);
+            });
+
             var singletonsPlaceholder = logicObject.Find("Singletons");
             var uiEventSystem = new GameObject("EventSystem").AddComponent<EventSystem>().transform;
 
             uiEventSystem.gameObject.AddComponent<StandaloneInputModule>();
             uiEventSystem.SetParent(logicObject);
+        }
 
-            globalEventsRouter.transform.SetParent(singletonsPlaceholder);
+        public static void СreateGameObjectFromAssetAtPath(string path, Transform logicObject, Action<GameObject> OnObjectExist)
+        {
+            var loadableObjectAsset = AssetDatabase.LoadAssetAtPath<GameObject>(path);
+
+            if (loadableObjectAsset != null)
+            {
+                var loadableObject = PrefabUtility.InstantiatePrefab(loadableObjectAsset) as GameObject;
+                OnObjectExist?.Invoke(loadableObject);
+            }
+            else
+            {
+                Debug.LogError($"Scene context prefab is not found on path: {_debugConsolePath}");
+            }
         }
     }
 }

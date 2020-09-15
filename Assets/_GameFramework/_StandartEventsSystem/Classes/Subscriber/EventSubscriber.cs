@@ -3,13 +3,20 @@ using System.Linq;
 using System.Collections.Generic;
 using System.Reflection;
 using UnityEngine;
+using Zenject;
+using Object = UnityEngine.Object;
 
 namespace GameFramework.Events
 {
     public static class EventSubscriber
     {
+        private static GlobalEventsRouter _globalEventsRouter;
+
         public static void Subscribe(object eventObject)
         {
+            ///TODO: Refactor to Zenject Bind
+            _globalEventsRouter = Object.FindObjectOfType<GlobalEventsRouter>();
+
             var eventObjectFields = GetEventsAndMethodsFields(eventObject);
 
             foreach (var field in eventObjectFields)
@@ -72,7 +79,7 @@ namespace GameFramework.Events
                 {
                     Action<EventParameter> globalEventAction = null;
 
-                    globalEventAction += eventParameter => GlobalEventsRouter.RaiseGlobalEvent(item.GlobalEventName, eventParameter);
+                    globalEventAction += eventParameter => _globalEventsRouter.RaiseGlobalEvent(item.GlobalEventName, eventParameter);
                     eventInfo.AddEventHandler(eventObject, globalEventAction);
                 }
                 else
@@ -125,7 +132,7 @@ namespace GameFramework.Events
                         target: eventObject,
                         method: methodInfo.Name);
 
-                    GlobalEventsRouter.StartListeningGlobalEvent(item.GlobalEventName, globalAction);
+                    _globalEventsRouter.StartListeningGlobalEvent(item.GlobalEventName, globalAction);
                 }
                 else
                 {
