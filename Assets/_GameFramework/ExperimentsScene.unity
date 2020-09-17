@@ -715,6 +715,11 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 7442232693168490692, guid: 09b528dc31fad8446b2765badf07759c,
+        type: 3}
+      propertyPath: _useSoundSettings
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 09b528dc31fad8446b2765badf07759c, type: 3}
 --- !u!1 &1421108621
@@ -897,6 +902,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 34497c2e3a4ba1643b2354de253ec22b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _soundsVolumeSettings: {fileID: 0}
+  _difficultSettings: {fileID: 0}
 --- !u!4 &1627468877
 Transform:
   m_ObjectHideFlags: 0

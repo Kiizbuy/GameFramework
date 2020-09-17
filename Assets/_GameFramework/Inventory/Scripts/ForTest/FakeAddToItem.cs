@@ -1,7 +1,5 @@
 ﻿using GameFramework.Inventory;
 using GameFramework.Inventory.Items;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class FakeAddToItem : MonoBehaviour

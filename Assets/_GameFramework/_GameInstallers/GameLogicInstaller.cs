@@ -1,18 +1,31 @@
 ﻿using GameFramework.Events;
-using UnityEngine;
+using GameFramework.Settings;
 using Zenject;
+using UnityEngine;
 
 namespace GameFramework.Installers
 {
     public class GameLogicInstaller : MonoInstaller
     {
-        [SerializeField] private GameObject _globalEventsRouterPrefab;
+        [SerializeField]
+        private bool _useSoundSettings = false;
 
         public override void InstallBindings()
         {
-            Container.Bind<GlobalEventsRouter>().FromComponentInNewPrefab(_globalEventsRouterPrefab)
-                .AsSingle();
+            Container.Bind<GlobalEventsRouter>()
+                .FromNewComponentOnNewGameObject()
+                .AsSingle()
+                .NonLazy();
+
+            if (_useSoundSettings)
+            {
+                Container.Bind<SoundVolumeChanger>()
+                    .FromNewComponentOnNewGameObject()
+                    .AsSingle()
+                    .NonLazy();
+            }
+
         }
-    } 
+    }
 }
 

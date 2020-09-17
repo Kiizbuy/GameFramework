@@ -1,21 +1,16 @@
 ﻿using GameFramework.Events;
 using UnityEngine;
 using Zenject;
-using GameFramework.CustomCollections;
+using GameFramework.Settings;
 
 namespace GameFramework.Debugging
 {
     public class ZenjectBindTest : MonoBehaviour
     {
-        [SerializeField] public SerializableDictionaryBase<string, Vector3> _huyDictionary = new SerializableDictionaryBase<string, Vector3>();
-
-        //[Inject]
-        //private GlobalEventsRouter globalEventsRouter;
-
-        void Start()
-        {
-            //Debug.Log(globalEventsRouter.gameObject.name);
-        }
+        [SerializeField, Inject]
+        private SoundsVolumeSettings _soundsVolumeSettings;
+        [SerializeField, Inject]
+        private GameDifficultSettings _difficultSettings;
     }
 }
 

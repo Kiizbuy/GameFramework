@@ -52,23 +52,6 @@ namespace UnityEditorExtensions
         public static GameObject GetPrefabGameObject(this Editor editor) 
             => (GameObject)GetPrefab(editor, (MonoBehaviour)editor.target);
 
-        /// TODO: Move to ReflectionExtension class
-        public static List<Type> GetAllDerivedTypes(this AppDomain appDomain, Type baseType)
-        {
-            var cSharpAssembly = appDomain.GetAssemblies().FirstOrDefault(assembly => assembly.GetName().Name == "Assembly-CSharp");
-
-            if(cSharpAssembly == null)
-            {
-                Debug.LogError("Main Assembly doesn't exsist on this project");
-                return null;
-            }
-
-            /// TODO: Add Fillter by type
-            return cSharpAssembly.GetTypes()
-                   //.Where(x => interfaceType.IsAssignableFrom(x) && x != interfaceType && !x.IsAbstract && !typeof(MonoBehaviour).IsAssignableFrom(x))
-                   .OrderBy(x => x.Name)
-                   .ToList();
-        }
 
         public static T GetObjectValueFromSerializedProperty<T>(this SerializedProperty property) where T : class
         {
