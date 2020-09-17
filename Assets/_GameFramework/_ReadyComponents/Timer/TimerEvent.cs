@@ -83,6 +83,8 @@ namespace GameFramework.Components
         {
             _currentTimer = UseRandomIntervalValue ? RandomIntervalValue : IntervalTimer;
             _canProcessTimer = true;
+
+            OnTimerHasStarted?.Invoke(eventParameter);
         }
     }
 }

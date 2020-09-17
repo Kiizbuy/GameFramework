@@ -10,9 +10,12 @@
         Weapon
     }
 
-    public class EquipableItemData : BaseItemData
+    public class EquipableItemData : BaseItemData, IEquipable
     {
         public EquipmentType EquipmentType;
+
+        public void EquipBy(IEntity entity) { }
+        public void UnequipBy(IEntity entity) { }
     }
 }
 

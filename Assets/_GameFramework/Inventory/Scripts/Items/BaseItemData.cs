@@ -13,6 +13,12 @@ namespace GameFramework.Inventory.Items
         void Use(IEntity entity, Inventory inventory);
     }
 
+    public interface IEquipable
+    {
+        void EquipBy(IEntity entity);
+        void UnequipBy(IEntity entity);
+    }
+
     public class BaseItemData : ScriptableObject
     {
         [SerializeField] private Sprite _icon;
