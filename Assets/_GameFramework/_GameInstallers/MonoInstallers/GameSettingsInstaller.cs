@@ -22,6 +22,7 @@ namespace GameFramework.Installers
 
             foreach (var currentGameSettings in allGameSettings)
             {
+
                 currentGameSettings.InitDefaultSettings();
 
                 var gameSettingsInheritanceTree = currentGameSettings.GetType()

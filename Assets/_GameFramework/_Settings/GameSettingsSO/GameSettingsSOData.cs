@@ -1,36 +1,40 @@
 ﻿using NaughtyAttributes;
 using System.IO;
 using UnityEngine;
+using Zenject;
 
 namespace GameFramework.Settings
 {
     public class GameSettingsSOData : ScriptableObject
     {
-        [SerializeField]
+        [SerializeField, Header("Base Data Settings")]
         private string _fileNameExtension = ".json";
         [SerializeField, ReadOnly]
         private string _defaultSettings = _noneSaveInfo;
         [SerializeField, ReadOnly]
         private string _saveFileDataSettings = _noneSaveInfo;
-        [SerializeField, HideInInspector]
+      
         private bool _defaultSettingsHasInitialized = false;
-
+        [Inject]
         private ISerializationProvider _serializationProvider;
 
         protected const string _noneSaveInfo = "(None)";
 
         public GameSettingsSOData InitDefaultSettings()
         {
-            return this;
+            //return this;
 
             if (_defaultSettingsHasInitialized)
                 return this;
+            //_serializationProvider = new UnityJsonSerialization();
 
-            _defaultSettings = JsonUtility.ToJson(this);
+            //_defaultSettings = _serializationProvider.SerializeObject(this);
             _defaultSettingsHasInitialized = true;
 
-            Load();
+            //Load();
             OnInitializationHasComplete();
+
+            //Debug.LogError(_serializationProvider.GetType().Name);
 
             return this;
         }
@@ -44,7 +48,7 @@ namespace GameFramework.Settings
         protected bool FileDoesntExsist(FileInfo saveFile)
             => saveFile.Directory != null && !saveFile.Directory.Exists;
         protected bool CanLoadData()
-            => _saveFileDataSettings != string.Empty || _saveFileDataSettings == _noneSaveInfo;
+            => _saveFileDataSettings != string.Empty || _saveFileDataSettings != _noneSaveInfo;
 
         public virtual void OnInitializationHasComplete() { }
 
@@ -53,8 +57,7 @@ namespace GameFramework.Settings
             var fullSaveFilePath = GetFullPath(GetFullFileName());
             var saveFile = new FileInfo(fullSaveFilePath);
 
-            _saveFileDataSettings = JsonUtility.ToJson(this);
-            //_saveFileDataSettings = _serializationProvider.SerializeObject(this);
+            _saveFileDataSettings = _serializationProvider.SerializeObject(this);
 
             if (FileDoesntExsist(saveFile))
                 saveFile.Directory.Create();
@@ -67,8 +70,10 @@ namespace GameFramework.Settings
         {
             if (CanLoadData())
             {
-                JsonUtility.FromJsonOverwrite(_saveFileDataSettings, this);
-                //_serializationProvider.DeserializeObject(_saveFileDataSettings, this);
+                _serializationProvider.DeserializeObject(_saveFileDataSettings, this);
+#if UNITY_EDITOR
+                UnityEditor.EditorUtility.SetDirty(this);
+#endif
             }
         }
 
@@ -77,8 +82,10 @@ namespace GameFramework.Settings
         {
             if (_defaultSettingsHasInitialized)
             {
-                JsonUtility.FromJsonOverwrite(_defaultSettings, this);
-                //_serializationProvider.DeserializeObject(_defaultSettings, this);
+                _serializationProvider.DeserializeObject(_defaultSettings, this);
+#if UNITY_EDITOR
+                UnityEditor.EditorUtility.SetDirty(this);
+#endif
             }
         }
 

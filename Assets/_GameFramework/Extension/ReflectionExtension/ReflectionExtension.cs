@@ -27,7 +27,7 @@ namespace GameFramework.Extension
 
             /// TODO: Add Fillter by type
             return cSharpAssembly.GetTypes()
-                   //.Where(x => interfaceType.IsAssignableFrom(x) && x != interfaceType && !x.IsAbstract && !typeof(MonoBehaviour).IsAssignableFrom(x))
+                   .Where(x => baseType.IsAssignableFrom(x) && x != baseType && !x.IsAbstract && !typeof(MonoBehaviour).IsAssignableFrom(x))
                    .OrderBy(x => x.Name)
                    .ToList();
         }
