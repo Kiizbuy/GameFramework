@@ -20,11 +20,14 @@ namespace GameFramework.Installers
         {
             var allGameSettings = Resources.LoadAll<GameSettingsSOData>(string.Empty);
 
+            if(allGameSettings.Length == 0)
+            {
+                Debug.LogError("Can't inject all game settings data");
+                return;
+            }
+
             foreach (var currentGameSettings in allGameSettings)
             {
-
-                currentGameSettings.InitDefaultSettings();
-
                 var gameSettingsInheritanceTree = currentGameSettings.GetType()
                                                     .GetInheritanceHierarchy()
                                                     .Where(x => x.IsSubclassOf(typeof(GameSettingsSOData)) || x == typeof(GameSettingsSOData));
@@ -33,6 +36,8 @@ namespace GameFramework.Installers
                     .FromInstance(currentGameSettings)
                     .AsCached()
                     .NonLazy();
+
+                currentGameSettings.InitDefaultSettings();
             }
         }
     }

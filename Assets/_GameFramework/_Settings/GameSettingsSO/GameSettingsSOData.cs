@@ -15,28 +15,26 @@ namespace GameFramework.Settings
         private string _saveFileDataSettings = _noneSaveInfo;
       
         private bool _defaultSettingsHasInitialized = false;
-        [Inject]
+
+        /// <summary>
+        /// I Don't know, how to inject interface implementation into scriptable object
+        /// </summary>
+        //[Inject]
         private ISerializationProvider _serializationProvider;
 
         protected const string _noneSaveInfo = "(None)";
 
-        public GameSettingsSOData InitDefaultSettings()
+        public void InitDefaultSettings()
         {
-            //return this;
-
             if (_defaultSettingsHasInitialized)
-                return this;
-            //_serializationProvider = new UnityJsonSerialization();
+                return;
 
-            //_defaultSettings = _serializationProvider.SerializeObject(this);
+            _serializationProvider = new UnityJsonSerialization();
+            _defaultSettings = _serializationProvider.SerializeObject(this);
             _defaultSettingsHasInitialized = true;
 
-            //Load();
+            TryLoad();
             OnInitializationHasComplete();
-
-            //Debug.LogError(_serializationProvider.GetType().Name);
-
-            return this;
         }
 
         protected virtual string GetSavePath
@@ -54,19 +52,18 @@ namespace GameFramework.Settings
 
         public virtual void Save()
         {
-            var fullSaveFilePath = GetFullPath(GetFullFileName());
-            var saveFile = new FileInfo(fullSaveFilePath);
+            var saveFile = new FileInfo(GetFullPath(GetFullFileName()));
 
             _saveFileDataSettings = _serializationProvider.SerializeObject(this);
 
             if (FileDoesntExsist(saveFile))
                 saveFile.Directory.Create();
 
-            File.WriteAllText(fullSaveFilePath, _saveFileDataSettings);
+            File.WriteAllText(GetFullPath(GetFullFileName()), _saveFileDataSettings);
         }
 
 
-        public virtual void Load()
+        public virtual void TryLoad()
         {
             if (CanLoadData())
             {
@@ -75,8 +72,19 @@ namespace GameFramework.Settings
                 UnityEditor.EditorUtility.SetDirty(this);
 #endif
             }
-        }
+            else
+            {
+                var saveData = new FileInfo(GetFullPath(GetFullFileName()));
 
+                if (FileDoesntExsist(saveData))
+                    return;
+
+                _serializationProvider.DeserializeObject(File.ReadAllText(GetFullPath(GetFullFileName())), this);
+#if UNITY_EDITOR
+                UnityEditor.EditorUtility.SetDirty(this);
+#endif
+            }
+        }
 
         public virtual void ResetSettings()
         {
