@@ -26,15 +26,13 @@ namespace GameFramework.Settings
 
         public void InitDefaultSettings()
         {
-            //if (_defaultSettingsHasInitialized)
-            //    return;
+            if (_defaultSettingsHasInitialized)
+                return;
 
-            //_defaultSettings = _serializationProvider.SerializeObject(this);
+            _defaultSettings = _serializationProvider.SerializeObject(this);
             _defaultSettingsHasInitialized = true;
 
-            Debug.Log(_serializationProvider.GetType().Name);
-
-            //TryLoad();
+            TryLoad();
             OnInitializationHasComplete();
         }
 
