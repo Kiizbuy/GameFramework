@@ -660,6 +660,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: SceneContext
       objectReference: {fileID: 0}
+    - target: {fileID: 2703325605729357264, guid: 09b528dc31fad8446b2765badf07759c,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 4943832378433877978, guid: 09b528dc31fad8446b2765badf07759c,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -714,6 +719,26 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5549046184253333927, guid: 09b528dc31fad8446b2765badf07759c,
+        type: 3}
+      propertyPath: _scriptableObjectInstallers.Array.size
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5549046184253333927, guid: 09b528dc31fad8446b2765badf07759c,
+        type: 3}
+      propertyPath: _monoInstallers.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5549046184253333927, guid: 09b528dc31fad8446b2765badf07759c,
+        type: 3}
+      propertyPath: _scriptableObjectInstallers.Array.data[0]
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 5549046184253333927, guid: 09b528dc31fad8446b2765badf07759c,
+        type: 3}
+      propertyPath: _monoInstallers.Array.data[1]
+      value: 
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 09b528dc31fad8446b2765badf07759c, type: 3}

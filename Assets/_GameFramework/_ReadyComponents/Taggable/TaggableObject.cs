@@ -6,7 +6,7 @@ namespace GameFramework.Components
 {
     public class TaggableObject : MonoBehaviour
     {
-        [SerializeField, Tag, ReorderableList]
+        [SerializeField, Tag]
         private List<string> _tags = new List<string>();
 
         public bool HaveTag(string tagName) => _tags.Contains(tagName);

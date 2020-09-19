@@ -1,8 +1,8 @@
-﻿using System;
+﻿using GameFramework.Extension;
+using GameFramework.Strategy;
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Reflection;
-using GameFramework.Strategy;
 using UnityEngine;
 
 namespace GameFramework.Utils.Reflection
@@ -52,34 +52,6 @@ namespace GameFramework.Utils.Reflection
 
             Debug.LogError($"{concreteImplementationType.Name} doesn't exsist");
             return null;
-        }
-
-        public static List<Type> GetAllDerivedTypes(this AppDomain appDomain, Type type)
-        {
-            var cSharpAssembly = appDomain.GetAssemblies().FirstOrDefault(assembly => assembly.GetName().Name == _mainAssemblyName);
-
-            if (cSharpAssembly == null)
-            {
-                Debug.LogError("Main Assembly doesn't exsist on this project");
-                return null;
-            }
-
-            return cSharpAssembly.GetAllDerivedTypes(type);
-        }
-
-        public static List<Type> GetAllDerivedTypes(this Assembly appAssembly, Type type, string assemblyName = "Assembly-CSharp")
-        {
-
-            if (appAssembly.GetName().Name != assemblyName)
-            {
-                Debug.LogError($"Assembly with '{assemblyName}' name doesn't exsist on this project");
-                return null;
-            }
-
-            return appAssembly.GetTypes()
-                  .Where(x => type.IsAssignableFrom(x) && x != type && !x.IsAbstract && !typeof(MonoBehaviour).IsAssignableFrom(x))
-                  .OrderBy(x => x.Name)
-                  .ToList();
         }
     }
 }

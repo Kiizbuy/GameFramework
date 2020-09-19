@@ -5,22 +5,19 @@ using UnityEngine;
 using Zenject;
 
 namespace GameFramework.Installers
-{
-    public class GameSettingsInstaller : MonoInstaller
+{ 
+    public class GameSettingsInstaller : Installer
     {
-        [SerializeField] private bool _bindGameSettings = false;
-
         public override void InstallBindings()
         {
-            if (_bindGameSettings)
-                BindGameSettings();
+            BindGameSettings();
         }
 
         private void BindGameSettings()
         {
             var allGameSettings = Resources.LoadAll<GameSettingsSOData>(string.Empty);
 
-            if(allGameSettings.Length == 0)
+            if (allGameSettings.Length == 0)
             {
                 Debug.LogError("Can't inject all game settings data");
                 return;

@@ -19,21 +19,22 @@ namespace GameFramework.Settings
         /// <summary>
         /// I Don't know, how to inject interface implementation into scriptable object
         /// </summary>
-        //[Inject]
-        private ISerializationProvider _serializationProvider;
+        [Inject]
+        protected ISerializationProvider _serializationProvider = new UnityJsonSerialization();
 
         protected const string _noneSaveInfo = "(None)";
 
         public void InitDefaultSettings()
         {
-            if (_defaultSettingsHasInitialized)
-                return;
+            //if (_defaultSettingsHasInitialized)
+            //    return;
 
-            _serializationProvider = new UnityJsonSerialization();
-            _defaultSettings = _serializationProvider.SerializeObject(this);
+            //_defaultSettings = _serializationProvider.SerializeObject(this);
             _defaultSettingsHasInitialized = true;
 
-            TryLoad();
+            Debug.Log(_serializationProvider.GetType().Name);
+
+            //TryLoad();
             OnInitializationHasComplete();
         }
 

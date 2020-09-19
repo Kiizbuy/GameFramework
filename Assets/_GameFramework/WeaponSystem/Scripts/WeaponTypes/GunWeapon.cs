@@ -8,12 +8,6 @@ using System.Collections;
 
 namespace GameFramework.WeaponSystem
 {
-    public enum FireType
-    {
-        Semi,
-        Automatic
-    }
-
     [RequireComponent(typeof(AudioSource))]
     public class GunWeapon : MonoBehaviour, IWeapon, IAttackable
     {
@@ -34,26 +28,18 @@ namespace GameFramework.WeaponSystem
         [SerializeField] [BoxGroup("Visual Settings")]
         private ParticleSystem _muzzleFlash;
 
-        [SerializeField] [BoxGroup("Model Settings")]
-        private FireType _fireType;
-        [SerializeField] [BoxGroup("Model Settings")]
-        private float _fireDelay;
-        [SerializeField] [BoxGroup("Model Settings")]
-        private int _currentAmmoClipCount = 120;
-        [SerializeField] [BoxGroup("Model Settings")]
-        private int _maxAmmoClipCount = 120;
-        [SerializeField] [BoxGroup("Model Settings")]
-        private int _currentAmmoCount = 120;
-        [SerializeField] [BoxGroup("Model Settings")]
-        private int _reloadAmmoCount = 5;
-        [SerializeField, MinMaxSlider(0f, 100f)] [BoxGroup("Model Settings")]
-        private Vector2 _minMaxdamage;
-        [SerializeField] [BoxGroup("Model Settings")]
-        private float _reloadTime = 2f;
+        [SerializeField] [BoxGroup("WeaponData")]
+        private GunWeaponData _currentGunWeaponDataInfo;
 
-        public int Damage => (int)Random.Range(_minMaxdamage.x, _minMaxdamage.y);
-        public bool CanReload => (_currentAmmoCount < _currentAmmoClipCount && _maxAmmoClipCount > 0) && _isReloading == false;
-        public bool CanAttack() => _currentAmmoCount > 0;
+        [SerializeField] [BoxGroup("info")]
+        private int _currentAmmoClipCount = 120;
+        [SerializeField] [BoxGroup("info")]
+        private int _currentAmmoCount = 120;
+
+
+        public int Damage => _currentGunWeaponDataInfo.Damage;
+        public bool CanReload => (_currentAmmoCount < _currentAmmoClipCount && _currentGunWeaponDataInfo.MaxAmmoReloadCount > 0) && _isReloading == false;
+        public bool CanAttack() => _currentAmmoCount > 0 && _isReloading == false;
 
         private AudioSource _audioSource;
         private bool _isReloading;
@@ -63,6 +49,8 @@ namespace GameFramework.WeaponSystem
         {
             _audioSource = GetComponent<AudioSource>();
         }
+
+        public void ChangeWeaponDataInfo(GunWeaponData value) => _currentGunWeaponDataInfo = value;
 
         public void Attack()
         {
@@ -86,12 +74,12 @@ namespace GameFramework.WeaponSystem
             if (!CanReload)
                 return;
 
-            while(_currentReloadTimer < _reloadTime)
+            while(_currentReloadTimer < _currentGunWeaponDataInfo.ReloadTime)
             {
                 _currentReloadTimer += Time.deltaTime;
                 OnReloading?.Invoke(_currentReloadTimer);
 
-                if(_currentReloadTimer >= _reloadTime)
+                if(_currentReloadTimer >= _currentGunWeaponDataInfo.ReloadTime)
                 {
 
                 }
