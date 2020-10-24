@@ -21,7 +21,6 @@ namespace GameFramework.Components
         [SerializeReference, StrategyContainer]
         public IObjectPlacer ObjectPlaceType;
 
-
         private void Start()
         {
             if (SpawnerType == null)
@@ -38,9 +37,17 @@ namespace GameFramework.Components
             EventSubscriber.Subscribe(this);
         }
 
+        private void OnDrawGizmosSelected()
+        {
+            var selected = ObjectPlaceType as IStrategyDrawGizmosSelected;
+
+            if (ObjectPlaceType != null)
+                selected?.DrawGizmosSelected();
+        }
+
         public void SpawnTrigger(EventParameter parameter)
         {
-            if(SpawnerType.TrySpawn(out var spawnedGameObject))
+            if (SpawnerType.TrySpawn(out var spawnedGameObject))
             {
                 ObjectPlaceType.Place(spawnedGameObject);
                 OnSpawned?.Invoke(new EventParameter_GameObject(spawnedGameObject));
@@ -49,4 +56,3 @@ namespace GameFramework.Components
     }
 
 }
-

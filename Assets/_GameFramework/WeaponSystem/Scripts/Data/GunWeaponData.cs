@@ -27,4 +27,3 @@ namespace GameFramework.WeaponSystem
         public int Damage => (int)Random.Range(_minMaxDamage.x, _minMaxDamage.y);
     }
 }
-

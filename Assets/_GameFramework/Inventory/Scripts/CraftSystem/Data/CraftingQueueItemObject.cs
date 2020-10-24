@@ -17,4 +17,3 @@ namespace GameFramework.Inventory.Items
         }
     }
 }
-

@@ -10,8 +10,7 @@ namespace GameFramework.WeaponSystem
         [SerializeField] private float _shootRange = 3f;
         [SerializeField] private ProjectileViewMover _projectileViewMover;
 
-
-        public void TryTakeDamageOnTarget(int damage, IAttackable attackable)
+        public bool TryShoot(int damage, IAttackable attackable)
         {
             if (Physics.Raycast(_raycastOrigin.position, _raycastOrigin.forward, out var hit, _shootRange, _shootMask, QueryTriggerInteraction.Collide))
             {
@@ -23,8 +22,11 @@ namespace GameFramework.WeaponSystem
 
                 if (hit.collider.TryGetComponent(out IHealth healthComponent))
                     healthComponent.TakeDamage(damage, attackable);
+
+                return true;
             }
+
+            return false;
         }
     }
 }
-

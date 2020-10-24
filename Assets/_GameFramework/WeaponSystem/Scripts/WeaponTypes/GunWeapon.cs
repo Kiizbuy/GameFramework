@@ -41,7 +41,6 @@ namespace GameFramework.WeaponSystem
         [BoxGroup("info")]
         private int _currentAmmoCount = 120;
 
-
         public int Damage => _currentGunWeaponDataInfo.Damage;
         public bool CanReload => (_currentAmmoCount < _currentAmmoClipCount && _currentGunWeaponDataInfo.MaxAmmoReloadCount > 0) && _isReloading == false;
         public bool CanAttack() => _currentAmmoCount > 0 && _isReloading == false;
@@ -55,7 +54,15 @@ namespace GameFramework.WeaponSystem
             _audioSource = GetComponent<AudioSource>();
         }
 
-        public void ChangeWeaponDataInfo(GunWeaponData value) => _currentGunWeaponDataInfo = value;
+        private void OnDrawGizmos()
+        {
+            var gizmos = ShootType as IStrategyDrawGizmos;
+            if (ShootType != null)
+                gizmos?.DrawGizmos();
+        }
+
+        public void ChangeWeaponDataInfo(GunWeaponData value)
+            => _currentGunWeaponDataInfo = value;
 
         public void Attack()
         {
@@ -65,7 +72,7 @@ namespace GameFramework.WeaponSystem
                 _audioSource.PlayOneShot(_shootSound);
                 _muzzleFlash?.Play();
 
-                ShootType.TryTakeDamageOnTarget(Damage, this);
+                ShootType.TryShoot(Damage, this);
             }
             else
             {
