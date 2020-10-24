@@ -80,7 +80,7 @@ namespace GameFramework.Extension
         }
 
         public static IEnumerable<T> GetRandomSequence<T>(this IReadOnlyCollection<T> list, int count)
-            => list.OrderBy(x => _random.Next()).Take(count);
+            => list.OrderBy(x => _random.Next()).Distinct().Take(count);
 
         public static Vector3 GetRandomCirclePoint(this Vector3 point, float range)
         {
@@ -89,6 +89,11 @@ namespace GameFramework.Extension
 
             return randomPoint;
         }
+
+        public static Quaternion GetRandomConeQuaternionRotation(this Quaternion quaternion, float coneRotationAngle) 
+            => Quaternion.Euler(Random.Range(-coneRotationAngle, coneRotationAngle),
+                                Random.Range(-coneRotationAngle, coneRotationAngle),
+                                0);
 
         public static Vector3 Append2(this Transform transformObject, float zOffset = 0.0f)
         {

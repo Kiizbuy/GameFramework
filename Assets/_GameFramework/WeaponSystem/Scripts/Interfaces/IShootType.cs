@@ -5,6 +5,6 @@ namespace GameFramework.WeaponSystem
 {
     public interface IShootType : IStrategyContainer
     {
-        bool HitInTarget(out IHealth healthTarget);
+        void TryTakeDamageOnTarget(int Damage, IAttackable attackable);
     }
 }

@@ -1,10 +1,9 @@
-﻿using UnityEngine;
+﻿using GameFramework.Components;
 using GameFramework.Strategy;
-using GameFramework.Components;
-using UnityEngine.Events;
 using GameFramework.UnityEngine.EventsExtension;
 using NaughtyAttributes;
-using System.Collections;
+using UnityEngine;
+using UnityEngine.Events;
 
 namespace GameFramework.WeaponSystem
 {
@@ -20,20 +19,26 @@ namespace GameFramework.WeaponSystem
 
         [SerializeReference, StrategyContainer]
         public IShootType ShootType;
-        
-        [SerializeField] [BoxGroup("Visual Settings")]
+
+        [SerializeField]
+        [BoxGroup("Visual Settings")]
         private AudioClip _shootSound;
-        [SerializeField] [BoxGroup("Visual Settings")]
+        [SerializeField]
+        [BoxGroup("Visual Settings")]
         private AudioClip _emptyShootSound;
-        [SerializeField] [BoxGroup("Visual Settings")]
+        [SerializeField]
+        [BoxGroup("Visual Settings")]
         private ParticleSystem _muzzleFlash;
 
-        [SerializeField] [BoxGroup("WeaponData")]
+        [SerializeField]
+        [BoxGroup("WeaponData")]
         private GunWeaponData _currentGunWeaponDataInfo;
 
-        [SerializeField] [BoxGroup("info")]
+        [SerializeField]
+        [BoxGroup("info")]
         private int _currentAmmoClipCount = 120;
-        [SerializeField] [BoxGroup("info")]
+        [SerializeField]
+        [BoxGroup("info")]
         private int _currentAmmoCount = 120;
 
 
@@ -60,8 +65,7 @@ namespace GameFramework.WeaponSystem
                 _audioSource.PlayOneShot(_shootSound);
                 _muzzleFlash?.Play();
 
-                if (ShootType.HitInTarget(out var healthTarget))
-                    healthTarget.TakeDamage(Damage, this);
+                ShootType.TryTakeDamageOnTarget(Damage, this);
             }
             else
             {
@@ -74,47 +78,16 @@ namespace GameFramework.WeaponSystem
             if (!CanReload)
                 return;
 
-            while(_currentReloadTimer < _currentGunWeaponDataInfo.ReloadTime)
+            while (_currentReloadTimer < _currentGunWeaponDataInfo.ReloadTime)
             {
                 _currentReloadTimer += Time.deltaTime;
                 OnReloading?.Invoke(_currentReloadTimer);
 
-                if(_currentReloadTimer >= _currentGunWeaponDataInfo.ReloadTime)
+                if (_currentReloadTimer >= _currentGunWeaponDataInfo.ReloadTime)
                 {
-
+                    Debug.LogError("Хуй тебе на воротник");
                 }
             }
         }
-
-        //private IEnumerator ReloadCoroutine()
-        //{
-        //    var currentReloadingTime = 0f;
-        //    var currentReloadAmmoValue = currentReloadAmmoCount - ammoPerClip;
-
-        //    if (currentReloadAmmoCount > currentReloadAmmoValue)
-        //    {
-        //        var ammoToLoad = currentAmmoCount - ammoPerClip;
-        //        currentReloadAmmoCount -= currentReloadAmmoValue;
-        //        currentAmmoCount = currentReloadAmmoValue;
-        //    }
-        //    else
-        //    {
-        //        canShoot = false;
-        //        OnCantReload?.Invoke();
-        //        yield break;
-        //    }
-
-        //    while (currentReloadingTime < reloadDelay)
-        //    {
-        //        yield return new WaitForFixedUpdate();
-        //        var normalizedReloadTime = currentReloadingTime / reloadDelay;
-
-        //        Debug.Log(normalizedReloadTime);
-        //        currentReloadingTime += Time.deltaTime;
-        //        OnReloading?.Invoke(currentReloadingTime);
-        //    }
-
-        //    canShoot = true;
-        //}
     }
 }

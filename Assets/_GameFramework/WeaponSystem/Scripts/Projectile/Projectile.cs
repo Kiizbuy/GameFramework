@@ -1,6 +1,7 @@
 ﻿using GameFramework.Components;
 using System;
 using UnityEngine;
+using UnityEngine.Events;
 
 namespace GameFramework.WeaponSystem
 {
@@ -27,39 +28,46 @@ namespace GameFramework.WeaponSystem
     }
 
     [RequireComponent(typeof(Rigidbody))]
-    public class Projectile : MonoBehaviour, IWeapon, IAttackable
+    public class Projectile : MonoBehaviour, IAttackable
     {
-        public event Func<IHealth> OnTargetHasDamaged;
-        public event Action OnProjectileLiveEnd;
+        public UnityEvent OnProjectileHasDead;
 
         private Rigidbody _rigidbody;
         private PhysicInteractionType _physicInteractionType;
+        private int _damage;
 
-        public int Damage { get; private set; }
+        public void PushProjectile(ProjectileDataInfo projectileInfo)
+        {
+            _damage = projectileInfo.Damage;
+            _physicInteractionType = projectileInfo.PhysicInteractionType;
+            _rigidbody.AddForce(projectileInfo.Direction * projectileInfo.Force, ForceMode.Impulse);
+        }
 
         private void Awake()
         {
             _rigidbody = GetComponent<Rigidbody>();
         }
 
-        public void PushProjectile(ProjectileDataInfo projectileInfo, Action projectileDeadAction, Func<IHealth> targetHasDamagedAction)
+        private void OnTriggerEnter(Collider other)
         {
-            Damage = projectileInfo.Damage;
-            _physicInteractionType = projectileInfo.PhysicInteractionType;
-            _rigidbody.AddForce(projectileInfo.Direction * projectileInfo.Force, ForceMode.Impulse);
-
-            OnTargetHasDamaged += targetHasDamagedAction;
-            OnProjectileLiveEnd += projectileDeadAction;
+            if(_physicInteractionType == PhysicInteractionType.Collider)
+                TryTakeDamage(other.GetComponent<IHealth>());
         }
 
-
-        public void Attack()
+        private void OnCollisionEnter(Collision collision)
         {
-            return;
+            if (_physicInteractionType == PhysicInteractionType.Trigger)
+                TryTakeDamage(collision.transform.GetComponent<IHealth>());
         }
 
-        public bool CanAttack() => true;
-
+        private void TryTakeDamage(IHealth damagable)
+        {
+            if(damagable != null)
+            {
+                damagable.TakeDamage(_damage, this);
+                OnProjectileHasDead?.Invoke();
+            }
+        }
     }
 
 }

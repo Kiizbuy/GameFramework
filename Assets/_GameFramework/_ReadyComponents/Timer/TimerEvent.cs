@@ -52,7 +52,7 @@ namespace GameFramework.Components
         {
             if (!_canProcessTimer)
                 return;
-            /// Ехал иф черз иф, сунул в иф иф-иф
+
             if (_currentTimer > 0)
             {
                 _currentTimer -= Time.deltaTime;

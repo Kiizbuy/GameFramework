@@ -55,35 +55,6 @@ public class GameUtils
         return results.Count > 0;
     }
 
-    public static bool IsGameObjectSafeToPlace(GameObject GO)
-    {
-        var verticles = GO.GetComponent<MeshFilter>().mesh.vertices;
-        var obstacles = GameObject.FindObjectsOfType<UnityEngine.AI.NavMeshObstacle>();
-        var colls = new List<Collider>();
-
-        for (int i = 0; i < obstacles.Length; i++)
-        {
-            if (obstacles[i].gameObject != GO)
-                colls.Add(obstacles[i].GetComponent<Collider>());
-        }
-
-        for (int i = 0; i < verticles.Length; i++)
-        {
-            var vReal = GO.transform.TransformPoint(verticles[i]);
-
-            UnityEngine.AI.NavMesh.SamplePosition(vReal, out var hit, 20, UnityEngine.AI.NavMesh.AllAreas);
-
-            var OnXAsis = Mathf.Abs(hit.position.x - vReal.x) < 0.5f;
-            var OnZAsis = Mathf.Abs(hit.position.x - vReal.z) < 0.5f;
-            var hitCollider = colls.Any(c => c.bounds.Contains(vReal));
-
-            if (OnXAsis || !OnZAsis || hitCollider)
-                return false;
-        }
-
-        return true;
-    }
-
     public static Vector3 CastFromCursor() => CastFromCursor(Mathf.Infinity, 1 << 9);
 
     public static Vector3 CastFromCursor(float distance) => CastFromCursor(distance, 1 << 9);

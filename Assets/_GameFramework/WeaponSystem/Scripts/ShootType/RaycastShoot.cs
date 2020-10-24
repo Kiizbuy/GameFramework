@@ -8,21 +8,22 @@ namespace GameFramework.WeaponSystem
         [SerializeField] private Transform _raycastOrigin;
         [SerializeField] private LayerMask _shootMask = ~0;
         [SerializeField] private float _shootRange = 3f;
+        [SerializeField] private ProjectileViewMover _projectileViewMover;
 
-        public bool HitInTarget(out IHealth healthTarget)
+
+        public void TryTakeDamageOnTarget(int damage, IAttackable attackable)
         {
-            // Пример плохой спроектированной системы рейкаста - ебал я в рот столько параметров
-            if(Physics.Raycast(_raycastOrigin.position, _raycastOrigin.forward, out var hit, _shootRange ,_shootMask, QueryTriggerInteraction.Collide))
+            if (Physics.Raycast(_raycastOrigin.position, _raycastOrigin.forward, out var hit, _shootRange, _shootMask, QueryTriggerInteraction.Collide))
             {
-                if(hit.collider.TryGetComponent(out IHealth healthComponent))
-                {
-                    healthTarget = healthComponent;
-                    return true;
-                }
-            }
+                var projectileViewInfo = new ProjectileViewMoverInfo(hit.distance, 5f);
+                var projectileMover = Object.Instantiate(_projectileViewMover, _raycastOrigin.position,
+                    _raycastOrigin.rotation);
 
-            healthTarget = default;
-            return false;
+                projectileMover.PushProjectileView(projectileViewInfo);
+
+                if (hit.collider.TryGetComponent(out IHealth healthComponent))
+                    healthComponent.TakeDamage(damage, attackable);
+            }
         }
     }
 }
