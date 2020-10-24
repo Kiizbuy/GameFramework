@@ -20,5 +20,9 @@ namespace GameFramework.WeaponSystem
 
             return true;
         }
+
+        public void DrawGizmos()
+        {
+        }
     }
 }

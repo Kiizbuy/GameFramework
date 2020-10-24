@@ -316,7 +316,6 @@ GameObject:
   - component: {fileID: 191941843}
   - component: {fileID: 191941842}
   - component: {fileID: 191941844}
-  - component: {fileID: 191941845}
   m_Layer: 0
   m_Name: StrategyTest
   m_TagString: Untagged
@@ -431,31 +430,6 @@ MonoBehaviour:
   _loop: 1
   _canProcessTimer: 0
   _currentTimer: 0
---- !u!114 &191941845
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 191941840}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b488cd1363021a443ac55313abe28539, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  SomeInt: 0
-  SomeString: 
-  SomeBool: 0
-  SomeStrategy:
-    id: 0
-  SomeArray: []
-  references:
-    version: 1
-    00000000:
-      type: {class: CapsuleShape, ns: GameFramework.Strategy, asm: Assembly-CSharp}
-      data:
-        _capsuleContCount: 0
-        _someStringArray: []
 --- !u!1 &278092965
 GameObject:
   m_ObjectHideFlags: 0
@@ -470,8 +444,9 @@ GameObject:
   - component: {fileID: 278092966}
   - component: {fileID: 278092971}
   - component: {fileID: 278092970}
+  - component: {fileID: 278092972}
   m_Layer: 0
-  m_Name: Capsule
+  m_Name: Gun
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -486,7 +461,7 @@ CapsuleCollider:
   m_GameObject: {fileID: 278092965}
   m_Material: {fileID: 0}
   m_IsTrigger: 0
-  m_Enabled: 1
+  m_Enabled: 0
   m_Radius: 0.5
   m_Height: 2
   m_Direction: 1
@@ -545,13 +520,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 278092965}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 2.14, y: 0, z: -14.09}
+  m_LocalRotation: {x: -0, y: 0.022034928, z: -0, w: 0.99975723}
+  m_LocalPosition: {x: -0.07, y: 0, z: -17.78}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 7
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 2.525, z: 0}
 --- !u!114 &278092970
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -564,7 +539,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9841e271a582b8b4f942f271d927f63f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  OnShoot:
+  OnAmmoCountHasChanged:
     m_PersistentCalls:
       m_Calls: []
   OnReloading:
@@ -578,24 +553,20 @@ MonoBehaviour:
   _shootSound: {fileID: 0}
   _emptyShootSound: {fileID: 0}
   _muzzleFlash: {fileID: 0}
-  _fireType: 0
-  _fireDelay: 0
-  _currentAmmoClipCount: 120
-  _maxAmmoClipCount: 120
-  _currentAmmoCount: 120
-  _reloadAmmoCount: 5
-  _minMaxdamage: {x: 40.17577, y: 59.62547}
-  _reloadTime: 2
+  _gunWeaponData: {fileID: 11400000, guid: 8bfdd4605010add4bbb890d4277dee49, type: 2}
+  _ammoClipCapacity: 120
+  _ammoCount: 120
   references:
     version: 1
     00000000:
       type: {class: RaycastShoot, ns: GameFramework.WeaponSystem, asm: Assembly-CSharp}
       data:
-        _raycastOrigin: {fileID: 0}
+        _raycastOrigin: {fileID: 278092969}
         _shootMask:
           serializedVersion: 2
           m_Bits: 4294967295
-        _shootRange: 3
+        _shootRange: 3.91
+        _projectileViewMover: {fileID: 0}
 --- !u!82 &278092971
 AudioSource:
   m_ObjectHideFlags: 0
@@ -692,6 +663,19 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+--- !u!114 &278092972
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 278092965}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8d5571fa04cee644c8ff5ee1f3383d7a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Weapon: {fileID: 278092970}
 --- !u!1 &415013204
 GameObject:
   m_ObjectHideFlags: 0
