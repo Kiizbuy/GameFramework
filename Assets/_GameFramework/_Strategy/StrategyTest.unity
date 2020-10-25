@@ -430,252 +430,18 @@ MonoBehaviour:
   _loop: 1
   _canProcessTimer: 0
   _currentTimer: 0
---- !u!1 &278092965
+--- !u!1 &278092965 stripped
 GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
+  m_CorrespondingSourceObject: {fileID: 8768709827192520725, guid: 9b35563b9d19ad04bb4ed23542e9bc7a,
+    type: 3}
+  m_PrefabInstance: {fileID: 8768709826933611696}
   m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 278092969}
-  - component: {fileID: 278092968}
-  - component: {fileID: 278092967}
-  - component: {fileID: 278092966}
-  - component: {fileID: 278092971}
-  - component: {fileID: 278092970}
-  - component: {fileID: 278092972}
-  m_Layer: 0
-  m_Name: Gun
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!136 &278092966
-CapsuleCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 278092965}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 0
-  m_Radius: 0.5
-  m_Height: 2
-  m_Direction: 1
-  m_Center: {x: 0, y: 0, z: 0}
---- !u!23 &278092967
-MeshRenderer:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 278092965}
-  m_Enabled: 1
-  m_CastShadows: 1
-  m_ReceiveShadows: 1
-  m_DynamicOccludee: 1
-  m_MotionVectors: 1
-  m_LightProbeUsage: 1
-  m_ReflectionProbeUsage: 1
-  m_RayTracingMode: 2
-  m_RenderingLayerMask: 1
-  m_RendererPriority: 0
-  m_Materials:
-  - {fileID: 10303, guid: 0000000000000000f000000000000000, type: 0}
-  m_StaticBatchInfo:
-    firstSubMesh: 0
-    subMeshCount: 0
-  m_StaticBatchRoot: {fileID: 0}
-  m_ProbeAnchor: {fileID: 0}
-  m_LightProbeVolumeOverride: {fileID: 0}
-  m_ScaleInLightmap: 1
-  m_ReceiveGI: 1
-  m_PreserveUVs: 0
-  m_IgnoreNormalsForChartDetection: 0
-  m_ImportantGI: 0
-  m_StitchLightmapSeams: 1
-  m_SelectedEditorRenderState: 3
-  m_MinimumChartSize: 4
-  m_AutoUVMaxDistance: 0.5
-  m_AutoUVMaxAngle: 89
-  m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
-  m_SortingOrder: 0
---- !u!33 &278092968
-MeshFilter:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 278092965}
-  m_Mesh: {fileID: 10208, guid: 0000000000000000e000000000000000, type: 0}
---- !u!4 &278092969
+--- !u!4 &278092969 stripped
 Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
+  m_CorrespondingSourceObject: {fileID: 8768709827192520729, guid: 9b35563b9d19ad04bb4ed23542e9bc7a,
+    type: 3}
+  m_PrefabInstance: {fileID: 8768709826933611696}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 278092965}
-  m_LocalRotation: {x: -0, y: 0.022034928, z: -0, w: 0.99975723}
-  m_LocalPosition: {x: -0.07, y: 0, z: -17.78}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_RootOrder: 7
-  m_LocalEulerAnglesHint: {x: 0, y: 2.525, z: 0}
---- !u!114 &278092970
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 278092965}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9841e271a582b8b4f942f271d927f63f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  OnAmmoCountHasChanged:
-    m_PersistentCalls:
-      m_Calls: []
-  OnReloading:
-    m_PersistentCalls:
-      m_Calls: []
-  OnShootHasEmpty:
-    m_PersistentCalls:
-      m_Calls: []
-  ShootType:
-    id: 0
-  _shootSound: {fileID: 0}
-  _emptyShootSound: {fileID: 0}
-  _muzzleFlash: {fileID: 0}
-  _gunWeaponData: {fileID: 11400000, guid: 8bfdd4605010add4bbb890d4277dee49, type: 2}
-  _ammoClipCapacity: 120
-  _ammoCount: 120
-  references:
-    version: 1
-    00000000:
-      type: {class: RaycastShoot, ns: GameFramework.WeaponSystem, asm: Assembly-CSharp}
-      data:
-        _raycastOrigin: {fileID: 278092969}
-        _shootMask:
-          serializedVersion: 2
-          m_Bits: 4294967295
-        _shootRange: 3.91
-        _projectileViewMover: {fileID: 0}
---- !u!82 &278092971
-AudioSource:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 278092965}
-  m_Enabled: 1
-  serializedVersion: 4
-  OutputAudioMixerGroup: {fileID: 0}
-  m_audioClip: {fileID: 0}
-  m_PlayOnAwake: 1
-  m_Volume: 1
-  m_Pitch: 1
-  Loop: 0
-  Mute: 0
-  Spatialize: 0
-  SpatializePostEffects: 0
-  Priority: 128
-  DopplerLevel: 1
-  MinDistance: 1
-  MaxDistance: 500
-  Pan2D: 0
-  rolloffMode: 0
-  BypassEffects: 0
-  BypassListenerEffects: 0
-  BypassReverbZones: 0
-  rolloffCustomCurve:
-    serializedVersion: 2
-    m_Curve:
-    - serializedVersion: 3
-      time: 0
-      value: 1
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0.33333334
-      outWeight: 0.33333334
-    - serializedVersion: 3
-      time: 1
-      value: 0
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0.33333334
-      outWeight: 0.33333334
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 4
-  panLevelCustomCurve:
-    serializedVersion: 2
-    m_Curve:
-    - serializedVersion: 3
-      time: 0
-      value: 0
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0.33333334
-      outWeight: 0.33333334
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 4
-  spreadCustomCurve:
-    serializedVersion: 2
-    m_Curve:
-    - serializedVersion: 3
-      time: 0
-      value: 0
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0.33333334
-      outWeight: 0.33333334
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 4
-  reverbZoneMixCustomCurve:
-    serializedVersion: 2
-    m_Curve:
-    - serializedVersion: 3
-      time: 0
-      value: 1
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0.33333334
-      outWeight: 0.33333334
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 4
---- !u!114 &278092972
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 278092965}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8d5571fa04cee644c8ff5ee1f3383d7a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  Weapon: {fileID: 278092970}
 --- !u!1 &415013204
 GameObject:
   m_ObjectHideFlags: 0
@@ -1018,6 +784,7 @@ GameObject:
   - component: {fileID: 1144082506}
   - component: {fileID: 1144082505}
   - component: {fileID: 1144082504}
+  - component: {fileID: 1144082508}
   m_Layer: 0
   m_Name: Cube
   m_TagString: Untagged
@@ -1094,11 +861,46 @@ Transform:
   m_GameObject: {fileID: 1144082503}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: -14.09}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 2.4456, y: 2.4456, z: 2.4456}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1144082508
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1144082503}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8a9363e8c6b7a5548ba56819a0daa4ec, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  OnTakenDamage:
+    m_PersistentCalls:
+      m_Calls: []
+  OnDie:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 1144082503}
+        m_MethodName: SetActive
+        m_Mode: 6
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+  OnHealthChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  isImmortal: 0
+  currentHealth: 10
+  maxHealth: 10
 --- !u!1 &1169800766
 GameObject:
   m_ObjectHideFlags: 0
@@ -1753,8 +1555,8 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2060565739}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 1, z: -10}
+  m_LocalRotation: {x: -0.33988953, y: -0.3044901, z: 0.11733506, w: -0.88203937}
+  m_LocalPosition: {x: -6.765811, y: 5.8940687, z: -29.54047}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 794744424}
@@ -1812,3 +1614,98 @@ Camera:
   m_OcclusionCulling: 1
   m_StereoConvergence: 10
   m_StereoSeparation: 0.022
+--- !u!1001 &8768709826933611696
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 8768709827192520725, guid: 9b35563b9d19ad04bb4ed23542e9bc7a,
+        type: 3}
+      propertyPath: m_Name
+      value: Gun
+      objectReference: {fileID: 0}
+    - target: {fileID: 8768709827192520729, guid: 9b35563b9d19ad04bb4ed23542e9bc7a,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -0.63
+      objectReference: {fileID: 0}
+    - target: {fileID: 8768709827192520729, guid: 9b35563b9d19ad04bb4ed23542e9bc7a,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0.19
+      objectReference: {fileID: 0}
+    - target: {fileID: 8768709827192520729, guid: 9b35563b9d19ad04bb4ed23542e9bc7a,
+        type: 3}
+      propertyPath: m_LocalPosition.z
+      value: -28.53
+      objectReference: {fileID: 0}
+    - target: {fileID: 8768709827192520729, guid: 9b35563b9d19ad04bb4ed23542e9bc7a,
+        type: 3}
+      propertyPath: m_LocalRotation.x
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8768709827192520729, guid: 9b35563b9d19ad04bb4ed23542e9bc7a,
+        type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0.022034928
+      objectReference: {fileID: 0}
+    - target: {fileID: 8768709827192520729, guid: 9b35563b9d19ad04bb4ed23542e9bc7a,
+        type: 3}
+      propertyPath: m_LocalRotation.z
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8768709827192520729, guid: 9b35563b9d19ad04bb4ed23542e9bc7a,
+        type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 0.99975723
+      objectReference: {fileID: 0}
+    - target: {fileID: 8768709827192520729, guid: 9b35563b9d19ad04bb4ed23542e9bc7a,
+        type: 3}
+      propertyPath: m_RootOrder
+      value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: 8768709827192520729, guid: 9b35563b9d19ad04bb4ed23542e9bc7a,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8768709827192520729, guid: 9b35563b9d19ad04bb4ed23542e9bc7a,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 2.525
+      objectReference: {fileID: 0}
+    - target: {fileID: 8768709827192520729, guid: 9b35563b9d19ad04bb4ed23542e9bc7a,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8768709827192520730, guid: 9b35563b9d19ad04bb4ed23542e9bc7a,
+        type: 3}
+      propertyPath: ShootType
+      value: Assembly-CSharp GameFramework.WeaponSystem.ProjectileShoot
+      objectReference: {fileID: 0}
+    - target: {fileID: 8768709827192520730, guid: 9b35563b9d19ad04bb4ed23542e9bc7a,
+        type: 3}
+      propertyPath: ShootType._projectileSpawnPoint
+      value: 
+      objectReference: {fileID: 278092969}
+    - target: {fileID: 8768709827192520730, guid: 9b35563b9d19ad04bb4ed23542e9bc7a,
+        type: 3}
+      propertyPath: ShootType._projectileModel
+      value: 
+      objectReference: {fileID: 1082153708928649160, guid: b27edbf2aa172664fadc7ae2a33eb50d,
+        type: 3}
+    - target: {fileID: 8768709827192520730, guid: 9b35563b9d19ad04bb4ed23542e9bc7a,
+        type: 3}
+      propertyPath: ShootType._physicInteractionType
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8768709827192520730, guid: 9b35563b9d19ad04bb4ed23542e9bc7a,
+        type: 3}
+      propertyPath: ShootType._shootForce
+      value: 25
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 9b35563b9d19ad04bb4ed23542e9bc7a, type: 3}

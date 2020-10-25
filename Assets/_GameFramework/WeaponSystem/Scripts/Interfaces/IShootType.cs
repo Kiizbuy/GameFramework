@@ -5,6 +5,6 @@ namespace GameFramework.WeaponSystem
 {
     public interface IShootType : IStrategyContainer, IStrategyDrawGizmos
     {
-        bool TryShoot(int damage, IAttackable attackable);
+        void ShootAndTryTakeDamage(int damage, IAttackable attackable);
     }
 }

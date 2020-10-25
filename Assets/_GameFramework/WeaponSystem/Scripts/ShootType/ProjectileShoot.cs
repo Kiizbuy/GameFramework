@@ -11,18 +11,22 @@ namespace GameFramework.WeaponSystem
         [SerializeField] private PhysicInteractionType _physicInteractionType;
         [SerializeField] private float _shootForce = 5f;
 
-        public bool TryShoot(int damage, IAttackable attackable)
+        public void ShootAndTryTakeDamage(int damage, IAttackable attackable)
         {
+
             var projectileParameters = new ProjectileDataInfo(_physicInteractionType, _projectileSpawnPoint.TransformDirection(_projectileSpawnPoint.forward), _shootForce, damage);
             var projectile = Object.Instantiate(_projectileModel, _projectileSpawnPoint.position, _projectileSpawnPoint.rotation);
 
             projectile.PushProjectile(projectileParameters);
-
-            return true;
         }
 
         public void DrawGizmos()
         {
+            if (_projectileSpawnPoint == null)
+                return;
+
+            Gizmos.color = Color.blue;
+            Gizmos.DrawLine(_projectileSpawnPoint.position, _projectileSpawnPoint.position + _projectileSpawnPoint.forward * _shootForce);
         }
     }
 }

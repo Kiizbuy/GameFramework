@@ -1,5 +1,4 @@
 ﻿using GameFramework.Components;
-using System;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -32,9 +31,12 @@ namespace GameFramework.WeaponSystem
     {
         public UnityEvent OnProjectileHasDead;
 
+        [SerializeField] private float _liveTime = 5f;
+
         private Rigidbody _rigidbody;
         private PhysicInteractionType _physicInteractionType;
         private int _damage;
+        private float _spawnTime;
 
         public void PushProjectile(ProjectileDataInfo projectileInfo)
         {
@@ -43,32 +45,48 @@ namespace GameFramework.WeaponSystem
             _rigidbody.AddForce(projectileInfo.Direction * projectileInfo.Force, ForceMode.Impulse);
         }
 
+        private void OnEnable()
+        {
+            _spawnTime = Time.time;
+        }
+
         private void Awake()
         {
             _rigidbody = GetComponent<Rigidbody>();
         }
 
+        private void FixedUpdate()
+        {
+            if (Time.time > _spawnTime + _liveTime)
+                DestroyProjectile();
+        }
+
         private void OnTriggerEnter(Collider other)
         {
-            if(_physicInteractionType == PhysicInteractionType.Collider)
+            if (_physicInteractionType == PhysicInteractionType.Trigger)
                 TryTakeDamage(other.GetComponent<IHealth>());
         }
 
         private void OnCollisionEnter(Collision collision)
         {
-            if (_physicInteractionType == PhysicInteractionType.Trigger)
+            if (_physicInteractionType == PhysicInteractionType.Collider)
                 TryTakeDamage(collision.transform.GetComponent<IHealth>());
         }
 
         private void TryTakeDamage(IHealth damagable)
         {
-            if(damagable != null)
+            if (damagable != null)
             {
                 damagable.TakeDamage(_damage, this);
-                OnProjectileHasDead?.Invoke();
+                DestroyProjectile();
             }
+        }
+
+        private void DestroyProjectile()
+        {
+            OnProjectileHasDead?.Invoke();
+            Destroy(gameObject);
         }
     }
 
 }
-

@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _fireType: 1
   _fireDelay: 0.5
-  _reloadTime: 1
+  _reloadTime: 3
   _maxAmmoCapacity: 250
-  _reloadAmmoCapacity: 30
-  _minMaxDamage: {x: 1, y: 5}
+  _reloadAmmoPerClipCapacity: 120
+  _minMaxDamage: {x: 1, y: 1}

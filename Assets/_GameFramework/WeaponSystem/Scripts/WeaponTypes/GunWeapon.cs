@@ -25,12 +25,14 @@ namespace GameFramework.WeaponSystem
     public class AmmoChangedEvent : UnityEvent<AmmoInfoState> { }
 
     [RequireComponent(typeof(AudioSource))]
-    public class GunWeapon : MonoBehaviour, IWeapon, IAttackable
+    public class GunWeapon : MonoBehaviour, IGunWeapon, IAttackable
     {
         [BoxGroup("UI Events")]
         public AmmoChangedEvent OnAmmoCountHasChanged;
         [BoxGroup("UI Events")]
         public UnityEventFloat OnReloading;
+        [BoxGroup("UI Events")]
+        public UnityEvent OnCantReload;
         [BoxGroup("UI Events")]
         public UnityEvent OnShootHasEmpty;
 
@@ -58,8 +60,11 @@ namespace GameFramework.WeaponSystem
         [BoxGroup("Info")]
         private int _ammoCount = 120;
 
+        public Coroutine ReloadCoroutineInstance { get; private set; }
+
+        public AmmoInfoState CurrentAmmoInfoState => new AmmoInfoState(_ammoCount, _ammoClipCapacity);
         public int Damage => _gunWeaponData.Damage;
-        public bool CanReload => _isReloading == false && (_ammoCount < _ammoClipCapacity && _ammoClipCapacity > 0);
+        public bool CanReload => _isReloading == false && (_ammoCount < _gunWeaponData.ReloadAmmoPerClipCapacity && _ammoClipCapacity > 0);
         public bool CanAttack() => _ammoCount > 0 && _isReloading == false;
 
         private readonly WaitForFixedUpdate _waitForFixedUpdate = new WaitForFixedUpdate();
@@ -86,6 +91,12 @@ namespace GameFramework.WeaponSystem
             _ammoClipCapacity = value.ReloadAmmoPerClipCapacity;
         }
 
+        public void BreakReload()
+        {
+            if (ReloadCoroutineInstance != null)
+                StopCoroutine(ReloadCoroutineInstance);
+        }
+
         public void AddClipAmmoCapacity(int ammo)
         {
             _ammoClipCapacity = Mathf.Clamp(_ammoClipCapacity + ammo, 0, _gunWeaponData.MaxAmmoCapacity);
@@ -95,23 +106,21 @@ namespace GameFramework.WeaponSystem
         {
             if (CanAttack())
             {
-                if (!(_shootSound is null))
+                if (_shootSound != null)
                     _audioSource.PlayOneShot(_shootSound);
 
                 if (_muzzleFlash != null)
                     _muzzleFlash.Play();
 
-                if (!ShootType.TryShoot(Damage, this))
-                    return;
-
+                ShootType.ShootAndTryTakeDamage(Damage, this);
                 _ammoCount--;
-                OnAmmoCountHasChanged?.Invoke(new AmmoInfoState(_ammoCount, _ammoClipCapacity));
+                OnAmmoCountHasChanged?.Invoke(CurrentAmmoInfoState);
 
                 Debug.Log("Fire");
             }
             else
             {
-                if (!(_emptyShootSound is null))
+                if (_emptyShootSound != null)
                     _audioSource.PlayOneShot(_emptyShootSound);
 
                 OnShootHasEmpty?.Invoke();
@@ -120,13 +129,16 @@ namespace GameFramework.WeaponSystem
 
         public void ReloadWeapon()
         {
-            StartCoroutine(ReloadCoroutine());
+            ReloadCoroutineInstance = StartCoroutine(ReloadCoroutine());
         }
 
-        private IEnumerator ReloadCoroutine()
+        public IEnumerator ReloadCoroutine()
         {
             if (!CanReload)
+            {
+                OnCantReload?.Invoke();
                 yield break;
+            }
 
             _isReloading = true;
             _currentReloadTimer = 0f;
@@ -136,11 +148,14 @@ namespace GameFramework.WeaponSystem
             {
                 yield return _waitForFixedUpdate;
                 _currentReloadTimer += Time.deltaTime;
-                OnReloading?.Invoke(_currentReloadTimer);
+
+                var normalizedReloadTime = _currentReloadTimer / _gunWeaponData.ReloadTime;
+
+                OnReloading?.Invoke(normalizedReloadTime);
 
                 Debug.Log($"Reload timer {_currentReloadTimer}");
 
-                if (_currentReloadTimer >= _gunWeaponData.ReloadTime)
+                if (_currentReloadTimer > _gunWeaponData.ReloadTime)
                 {
                     var countToReload = _gunWeaponData.ReloadAmmoPerClipCapacity - _ammoCount;
 
@@ -157,7 +172,7 @@ namespace GameFramework.WeaponSystem
 
                     _isReloading = false;
                     Debug.Log("Reload has been ended");
-                    OnAmmoCountHasChanged?.Invoke(new AmmoInfoState(_ammoCount, _ammoClipCapacity));
+                    OnAmmoCountHasChanged?.Invoke(CurrentAmmoInfoState);
                 }
             }
         }
