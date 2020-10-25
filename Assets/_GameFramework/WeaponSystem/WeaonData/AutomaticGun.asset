@@ -10,11 +10,11 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: bb0e3a59341500146a63c0abb1b98bd9, type: 3}
-  m_Name: Gun
+  m_Name: AutomaticGun
   m_EditorClassIdentifier: 
   _fireType: 1
-  _fireDelay: 0.5
-  _reloadTime: 3
-  _maxAmmoCapacity: 250
-  _reloadAmmoPerClipCapacity: 120
-  _minMaxDamage: {x: 1, y: 1}
+  _fireDelay: 0.1
+  _reloadTime: 1
+  _maxAmmoCapacity: 99999999
+  _reloadAmmoPerClipCapacity: 99999999
+  _minMaxDamage: {x: 0, y: 0}

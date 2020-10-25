@@ -53,6 +53,8 @@ namespace GameFramework.WeaponSystem
         [BoxGroup("WeaponData")]
         private GunWeaponData _gunWeaponData;
 
+        [SerializeField] [BoxGroup("Info")] private bool _infinityAmmo;
+
         [SerializeField]
         [BoxGroup("Info")]
         private int _ammoClipCapacity = 120;
@@ -72,6 +74,7 @@ namespace GameFramework.WeaponSystem
         private AudioSource _audioSource;
         private bool _isReloading;
         private float _currentReloadTimer;
+        private float _currentFireTimer;
 
         private void Awake()
         {
@@ -106,17 +109,20 @@ namespace GameFramework.WeaponSystem
         {
             if (CanAttack())
             {
-                if (_shootSound != null)
-                    _audioSource.PlayOneShot(_shootSound);
+                if (_gunWeaponData.FireType == FireType.Automatic)
+                {
+                    _currentFireTimer += Time.deltaTime;
 
-                if (_muzzleFlash != null)
-                    _muzzleFlash.Play();
+                    if (_currentFireTimer < _gunWeaponData.FireDelay)
+                        return;
 
-                ShootType.ShootAndTryTakeDamage(Damage, this);
-                _ammoCount--;
-                OnAmmoHasChanged?.Invoke(CurrentAmmoInfoState);
-
-                Debug.Log("Fire");
+                    Fire();
+                    _currentFireTimer = 0f;
+                }
+                else
+                {
+                    Fire();
+                }
             }
             else
             {
@@ -125,6 +131,28 @@ namespace GameFramework.WeaponSystem
 
                 OnShootHasEmpty?.Invoke();
             }
+        }
+
+        public void StopAttack()
+        {
+            _currentFireTimer = 0f;
+            ShootType.StopShoot();
+        }
+
+        private void Fire()
+        {
+            if (_shootSound != null)
+                _audioSource.PlayOneShot(_shootSound);
+
+            if (_muzzleFlash != null)
+                _muzzleFlash.Play();
+
+            ShootType.ShootAndTryTakeDamage(Damage, this);
+
+            if (_infinityAmmo == false)
+                _ammoCount--;
+
+            OnAmmoHasChanged?.Invoke(CurrentAmmoInfoState);
         }
 
         public void ReloadWeapon()
@@ -142,7 +170,6 @@ namespace GameFramework.WeaponSystem
 
             _isReloading = true;
             _currentReloadTimer = 0f;
-            Debug.Log("Begin reload");
 
             while (_currentReloadTimer < _gunWeaponData.ReloadTime)
             {
@@ -153,7 +180,6 @@ namespace GameFramework.WeaponSystem
 
                 OnReloading?.Invoke(normalizedReloadTime);
 
-                Debug.Log($"Reload timer {_currentReloadTimer}");
 
                 if (_currentReloadTimer > _gunWeaponData.ReloadTime)
                 {
@@ -171,7 +197,6 @@ namespace GameFramework.WeaponSystem
                     }
 
                     _isReloading = false;
-                    Debug.Log("Reload has been ended");
                     OnAmmoHasChanged?.Invoke(CurrentAmmoInfoState);
                 }
             }

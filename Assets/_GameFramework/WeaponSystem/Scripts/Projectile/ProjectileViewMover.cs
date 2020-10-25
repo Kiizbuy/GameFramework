@@ -2,7 +2,7 @@
 
 namespace GameFramework.WeaponSystem
 {
-    public struct ProjectileViewMoverInfo
+    public readonly struct ProjectileViewMoverInfo
     {
         public readonly float DistanceToDestroy;
         public readonly float FlySpeed;
@@ -16,7 +16,6 @@ namespace GameFramework.WeaponSystem
 
     public class ProjectileViewMover : MonoBehaviour
     {
-        [SerializeField] private Transform _viewTransform;
         [SerializeField] private float _liveTime = 5f;
 
         private Transform _transform;
@@ -34,7 +33,7 @@ namespace GameFramework.WeaponSystem
 
         private void Awake()
         {
-            _transform = transform;    
+            _transform = transform;
         }
 
         private void OnEnable()

@@ -14,10 +14,14 @@ namespace GameFramework.WeaponSystem
         public void ShootAndTryTakeDamage(int damage, IAttackable attackable)
         {
 
-            var projectileParameters = new ProjectileDataInfo(_physicInteractionType, _projectileSpawnPoint.TransformDirection(_projectileSpawnPoint.forward), _shootForce, damage);
+            var projectileParameters = new ProjectileDataInfo(_physicInteractionType, _projectileSpawnPoint.forward, _shootForce, damage);
             var projectile = Object.Instantiate(_projectileModel, _projectileSpawnPoint.position, _projectileSpawnPoint.rotation);
 
             projectile.PushProjectile(projectileParameters);
+        }
+
+        public void StopShoot()
+        {
         }
 
         public void DrawGizmos()

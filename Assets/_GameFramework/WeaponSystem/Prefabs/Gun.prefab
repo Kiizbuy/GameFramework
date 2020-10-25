@@ -222,23 +222,23 @@ MonoBehaviour:
   _shootSound: {fileID: 0}
   _emptyShootSound: {fileID: 0}
   _muzzleFlash: {fileID: 0}
-  _gunWeaponData: {fileID: 11400000, guid: 8bfdd4605010add4bbb890d4277dee49, type: 2}
+  _gunWeaponData: {fileID: 11400000, guid: 75378a0241479ad4aa9987b95eb57a15, type: 2}
+  _infinityAmmo: 0
   _ammoClipCapacity: 120
   _ammoCount: 120
   references:
     version: 1
     00000000:
-      type: {class: RaycastSpreadShoot, ns: GameFramework.WeaponSystem, asm: Assembly-CSharp}
+      type: {class: RaycastShoot, ns: GameFramework.WeaponSystem, asm: Assembly-CSharp}
       data:
         _raycastOrigin: {fileID: 8768709827192520729}
-        _projectileViewMover: {fileID: 1004826341815496526, guid: 9c805a4a333d4784aa2d0af6c6051728,
-          type: 3}
         _shootMask:
           serializedVersion: 2
           m_Bits: 4294967295
-        _shootRange: 12.24
-        _minMaxConeProjectileRotationOffset: 11.64
-        _maxSpreadRange: 21
+        _projectileViewMover: {fileID: 1004826341815496526, guid: 9c805a4a333d4784aa2d0af6c6051728,
+          type: 3}
+        _shootRange: 3
+        _minMaxConeProjectileRotationOffset: 5
 --- !u!114 &8768709827192520732
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -9,8 +9,10 @@ public class FireWeapon : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.A))
+        if (Input.GetKey(KeyCode.A))
             Weapon?.Attack();
+        else
+            Weapon?.StopAttack();
 
         if (Input.GetKeyDown(KeyCode.R))
             Weapon?.ReloadWeapon();

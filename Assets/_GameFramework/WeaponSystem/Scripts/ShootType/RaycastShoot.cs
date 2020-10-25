@@ -30,6 +30,10 @@ namespace GameFramework.WeaponSystem
             CreateProjectileView(hit);
         }
 
+        public void StopShoot()
+        {
+        }
+
         private void CreateProjectileView(RaycastHit hit)
         {
             var rotationAdditional = Quaternion.Euler(
@@ -61,6 +65,7 @@ namespace GameFramework.WeaponSystem
             var upRayDirection = upRayRotation * _raycastOrigin.forward;
             var downRayDirection = downRayRotation * _raycastOrigin.forward;
 
+            Gizmos.color = Color.green;
             Gizmos.DrawRay(_raycastOrigin.position, leftRayDirection * _shootRange);
             Gizmos.DrawRay(_raycastOrigin.position, rightRayDirection * _shootRange);
             Gizmos.DrawRay(_raycastOrigin.position, upRayDirection * _shootRange);
