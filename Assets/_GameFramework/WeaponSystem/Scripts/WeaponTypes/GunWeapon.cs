@@ -28,7 +28,7 @@ namespace GameFramework.WeaponSystem
     public class GunWeapon : MonoBehaviour, IGunWeapon, IAttackable
     {
         [BoxGroup("UI Events")]
-        public AmmoChangedEvent OnAmmoCountHasChanged;
+        public AmmoChangedEvent OnAmmoHasChanged;
         [BoxGroup("UI Events")]
         public UnityEventFloat OnReloading;
         [BoxGroup("UI Events")]
@@ -114,7 +114,7 @@ namespace GameFramework.WeaponSystem
 
                 ShootType.ShootAndTryTakeDamage(Damage, this);
                 _ammoCount--;
-                OnAmmoCountHasChanged?.Invoke(CurrentAmmoInfoState);
+                OnAmmoHasChanged?.Invoke(CurrentAmmoInfoState);
 
                 Debug.Log("Fire");
             }
@@ -172,7 +172,7 @@ namespace GameFramework.WeaponSystem
 
                     _isReloading = false;
                     Debug.Log("Reload has been ended");
-                    OnAmmoCountHasChanged?.Invoke(CurrentAmmoInfoState);
+                    OnAmmoHasChanged?.Invoke(CurrentAmmoInfoState);
                 }
             }
         }

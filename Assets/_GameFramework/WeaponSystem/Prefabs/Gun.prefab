@@ -29,7 +29,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8768709827192520725}
-  m_LocalRotation: {x: -0, y: 0.022034928, z: -0, w: 0.99975723}
+  m_LocalRotation: {x: 0, y: 0.022032993, z: 0, w: 0.99975723}
   m_LocalPosition: {x: -0.63, y: 0.19, z: -28.53}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
@@ -205,7 +205,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9841e271a582b8b4f942f271d927f63f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  OnAmmoCountHasChanged:
+  OnAmmoHasChanged:
     m_PersistentCalls:
       m_Calls: []
   OnReloading:
@@ -228,16 +228,17 @@ MonoBehaviour:
   references:
     version: 1
     00000000:
-      type: {class: RaycastShoot, ns: GameFramework.WeaponSystem, asm: Assembly-CSharp}
+      type: {class: RaycastSpreadShoot, ns: GameFramework.WeaponSystem, asm: Assembly-CSharp}
       data:
         _raycastOrigin: {fileID: 8768709827192520729}
+        _projectileViewMover: {fileID: 1004826341815496526, guid: 9c805a4a333d4784aa2d0af6c6051728,
+          type: 3}
         _shootMask:
           serializedVersion: 2
           m_Bits: 4294967295
-        _shootRange: 21.17
-        _projectileViewMover: {fileID: 1004826341815496526, guid: 9c805a4a333d4784aa2d0af6c6051728,
-          type: 3}
-        _minMaxConeProjectileRotationOffset: 0
+        _shootRange: 12.24
+        _minMaxConeProjectileRotationOffset: 11.64
+        _maxSpreadRange: 21
 --- !u!114 &8768709827192520732
 MonoBehaviour:
   m_ObjectHideFlags: 0
