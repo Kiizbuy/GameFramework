@@ -16,6 +16,7 @@ GameObject:
   - component: {fileID: 3871316165885690214}
   - component: {fileID: 3871316165885690208}
   - component: {fileID: 5478939746175648065}
+  - component: {fileID: 8768709827944181833}
   m_Layer: 0
   m_Name: GunLazer
   m_TagString: Untagged
@@ -30,7 +31,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3871316165885690217}
-  m_LocalRotation: {x: -0.012667607, y: 0.36696756, z: -0.012767869, w: 0.9300599}
+  m_LocalRotation: {x: -0.012666125, y: 0.36696604, z: -0.012768624, w: 0.9300605}
   m_LocalPosition: {x: -8.954, y: 0.134, z: -23.642}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
@@ -224,9 +225,9 @@ MonoBehaviour:
   _emptyShootSound: {fileID: 0}
   _muzzleFlash: {fileID: 0}
   _gunWeaponData: {fileID: 11400000, guid: 8bfdd4605010add4bbb890d4277dee49, type: 2}
-  _infinityAmmo: 0
-  _ammoClipCapacity: 120
-  _ammoCount: 120
+  _infinityAmmo: 1
+  _ammoClipCapacity: 99999999
+  _ammoCount: 99999999
   references:
     version: 1
     00000000:
@@ -234,11 +235,12 @@ MonoBehaviour:
       data:
         _beamStartPoint: {fileID: 3871316165885690213}
         _laserLine: {fileID: 5478939746175648065}
-        _lazerBeamRange: 25.02
-        _minBeamWidth: 2
-        _maxBeamWidth: 2
+        _damageTimeReceiver: 0.086
+        _lazerBeamRange: 35.04
+        _minBeamWidth: 0.1
+        _maxBeamWidth: 0.3
         _useReflect: 1
-        _maxReflectionsCount: 5
+        _maxReflectionsCount: 4
 --- !u!114 &3871316165885690208
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -270,7 +272,7 @@ LineRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 209ea2f17ebe64e85a177a9bbad10476, type: 2}
+  - {fileID: 0}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -343,9 +345,21 @@ LineRenderer:
       m_NumAlphaKeys: 2
     numCornerVertices: 0
     numCapVertices: 0
-    alignment: 1
+    alignment: 0
     textureMode: 1
     shadowBias: 0.5
     generateLightingData: 0
   m_UseWorldSpace: 1
   m_Loop: 0
+--- !u!114 &8768709827944181833
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3871316165885690217}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d76fec7fd0b34534481cdf9856c14f5e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

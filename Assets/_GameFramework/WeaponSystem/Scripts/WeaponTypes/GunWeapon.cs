@@ -49,7 +49,7 @@ namespace GameFramework.WeaponSystem
         [BoxGroup("Visual Settings")]
         private ParticleSystem _muzzleFlash;
 
-        [SerializeField]
+        [SerializeField, Required]
         [BoxGroup("WeaponData")]
         private GunWeaponData _gunWeaponData;
 
@@ -79,6 +79,9 @@ namespace GameFramework.WeaponSystem
         private void Awake()
         {
             _audioSource = GetComponent<AudioSource>();
+
+            if (_gunWeaponData == null)
+                Debug.LogError("Gun weapon data is null", this);
         }
 
         private void OnDrawGizmos()
@@ -109,19 +112,41 @@ namespace GameFramework.WeaponSystem
         {
             if (CanAttack())
             {
-                if (_gunWeaponData.FireType == FireType.Automatic)
+                switch (_gunWeaponData.FireType)
                 {
-                    _currentFireTimer += Time.deltaTime;
+                    case FireType.Semi:
+                        {
+                            TryDecrementAmmoCount();
+                            Fire();
+                        }
+                        break;
+                    case FireType.Automatic:
+                        {
+                            _currentFireTimer += Time.deltaTime;
 
-                    if (_currentFireTimer < _gunWeaponData.FireDelay)
-                        return;
+                            if (_currentFireTimer < _gunWeaponData.FireDelay)
+                                return;
+                            TryDecrementAmmoCount();
+                            _currentFireTimer = 0f;
+                            Fire();
 
-                    Fire();
-                    _currentFireTimer = 0f;
-                }
-                else
-                {
-                    Fire();
+
+                        }
+                        break;
+                    case FireType.LaserBeam:
+                        {
+                            Fire();
+                            _currentFireTimer += Time.deltaTime;
+
+                            if (_currentFireTimer < _gunWeaponData.FireDelay)
+                                return;
+
+                            TryDecrementAmmoCount();
+                            _currentFireTimer = 0f;
+                        }
+                        break;
+                    default:
+                        throw new ArgumentOutOfRangeException();
                 }
             }
             else
@@ -131,6 +156,12 @@ namespace GameFramework.WeaponSystem
 
                 OnShootHasEmpty?.Invoke();
             }
+        }
+
+        private void TryDecrementAmmoCount()
+        {
+            if (!_infinityAmmo)
+                _ammoCount--;
         }
 
         public void StopAttack()
@@ -149,8 +180,8 @@ namespace GameFramework.WeaponSystem
 
             ShootType.ShootAndTryTakeDamage(Damage, this);
 
-            if (_infinityAmmo == false)
-                _ammoCount--;
+            //if (_infinityAmmo == false)
+            //    _ammoCount--;
 
             OnAmmoHasChanged?.Invoke(CurrentAmmoInfoState);
         }
@@ -158,6 +189,12 @@ namespace GameFramework.WeaponSystem
         public void ReloadWeapon()
         {
             ReloadCoroutineInstance = StartCoroutine(ReloadCoroutine());
+        }
+
+        public void BreakReloadWeapon()
+        {
+            StopCoroutine(ReloadCoroutineInstance);
+            _currentReloadTimer = 0f;
         }
 
         public IEnumerator ReloadCoroutine()

@@ -1,10 +1,10 @@
-﻿using System;
+﻿using GameFramework.Utils.Reflection;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using UnityEditor;
 using UnityEngine;
-using GameFramework.Utils.Reflection;
 
 namespace GameFramework.Strategy
 {
@@ -21,7 +21,6 @@ namespace GameFramework.Strategy
         private void InitProperty(SerializedProperty property)
         {
             var objectType = property.serializedObject.targetObject.GetType();
-
             _serializedProperty = property;
             _propertyField = objectType.GetField(property.name);
             _strategyFieldValue = (IStrategyContainer)_propertyField.GetValue(property.serializedObject.targetObject);
@@ -179,4 +178,3 @@ namespace GameFramework.Strategy
         }
     }
 }
-

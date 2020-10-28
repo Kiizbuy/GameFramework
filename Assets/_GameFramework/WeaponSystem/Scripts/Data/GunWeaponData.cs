@@ -6,7 +6,8 @@ namespace GameFramework.WeaponSystem
     public enum FireType
     {
         Semi,
-        Automatic
+        Automatic,
+        LaserBeam,
     }
 
     [CreateAssetMenu(menuName = "Weapon/Gun/Create weapon data", fileName = "GunWeaponData")]

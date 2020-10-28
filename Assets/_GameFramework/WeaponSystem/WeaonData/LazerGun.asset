@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bb0e3a59341500146a63c0abb1b98bd9, type: 3}
   m_Name: LazerGun
   m_EditorClassIdentifier: 
-  _fireType: 0
+  _fireType: 2
   _fireDelay: 5
   _reloadTime: 3
   _maxAmmoCapacity: 250

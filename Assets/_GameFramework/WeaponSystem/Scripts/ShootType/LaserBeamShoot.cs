@@ -8,11 +8,16 @@ namespace GameFramework.WeaponSystem
     {
         [SerializeField] private Transform _beamStartPoint;
         [SerializeField] private LineRenderer _laserLine;
+        [SerializeField, Range(0.01f, 2f)] private float _damageTimeReceiver = 1f;
         [SerializeField] private float _lazerBeamRange;
         [SerializeField] private float _minBeamWidth = 2f;
         [SerializeField] private float _maxBeamWidth = 2f;
         [SerializeField] private bool _useReflect;
         [SerializeField] private int _maxReflectionsCount = 2;
+
+        private const float NoHitLaserRange = 200;
+        private float _currentDamageTimer;
+
 
         public void ShootAndTryTakeDamage(int damage, IAttackable attackable)
         {
@@ -20,67 +25,76 @@ namespace GameFramework.WeaponSystem
             _laserLine.endWidth = _maxBeamWidth;
 
             var reflections = 0;
-            var reflectionPoints = new List<Vector3>();
-
-            reflectionPoints.Add(_beamStartPoint.position);
-
+            var damageableObjects = new List<IHealth>();
+            var reflectionPoints = new List<Vector3> { _beamStartPoint.position };
             var lastPoint = _beamStartPoint.position;
             var keepReflecting = true;
 
-            Vector3 incomingDirection;
-            Vector3 reflectDirection;
             var ray = new Ray(lastPoint, _beamStartPoint.forward);
 
             do
             {
-                // Initialize the next point.  If a raycast hit is not returned, this will be the forward direction * range
                 var nextPoint = ray.direction * _lazerBeamRange;
 
                 if (Physics.Raycast(ray, out var hit, _lazerBeamRange))
                 {
                     nextPoint = hit.point;
-                    incomingDirection = nextPoint - lastPoint;
-                    reflectDirection = Vector3.Reflect(incomingDirection, hit.normal);
+
+                    var incomingDirection = nextPoint - lastPoint;
+                    var reflectDirection = Vector3.Reflect(incomingDirection, hit.normal);
+
                     ray = new Ray(nextPoint, reflectDirection);
 
                     lastPoint = hit.point;
 
-                    //// Hit Effects
-                    //if (makeHitEffects)
-                    //{
-                    //    foreach (GameObject hitEffect in hitEffects)
-                    //    {
-                    //        if (hitEffect != null)
-                    //            Instantiate(hitEffect, hit.point, Quaternion.FromToRotation(Vector3.up, hit.normal));
-                    //    }
-                    //}
+                    if (hit.collider.TryGetComponent<IHealth>(out var health))
+                    {
+                        if (!damageableObjects.Contains(health))
+                            damageableObjects.Add(health);
+                    }
 
-                    // Damage
-                    hit.collider.gameObject.SendMessageUpwards("ChangeHealth", damage, SendMessageOptions.DontRequireReceiver);
+                    reflectionPoints.Add(nextPoint);
                     reflections++;
                 }
                 else
                 {
-
                     keepReflecting = false;
                 }
 
-                // Add the next point to the list of beam reflection points
-                reflectionPoints.Add(nextPoint);
-
             } while (CanReflect(keepReflecting, reflections));
 
-            _laserLine.positionCount = reflectionPoints.Count;
 
-            for (var i = 0; i < reflectionPoints.Count; i++)
-                _laserLine.SetPosition(i, reflectionPoints[i]);
+            DrawLaserBeams(reflections, reflectionPoints);
 
+            _currentDamageTimer += Time.deltaTime;
+
+            if (!(_currentDamageTimer >= _damageTimeReceiver))
+                return;
+
+            _currentDamageTimer = 0f;
+            damageableObjects.ForEach(x => x.TakeDamage(damage, attackable));
+        }
+
+        private void DrawLaserBeams(int reflections, List<Vector3> reflectionPoints)
+        {
             if (reflections < 1)
-                StopShoot();
+            {
+                _laserLine.positionCount = 2;
+                _laserLine.SetPosition(0, _beamStartPoint.position);
+                _laserLine.SetPosition(1,
+                    _beamStartPoint.position + _beamStartPoint.forward * _lazerBeamRange * NoHitLaserRange);
+            }
+            else
+            {
+                _laserLine.positionCount = reflectionPoints.Count;
+                for (var i = 0; i < reflectionPoints.Count; i++)
+                    _laserLine.SetPosition(i, reflectionPoints[i]);
+            }
         }
 
         public void StopShoot()
         {
+            _currentDamageTimer = 0f;
             _laserLine.positionCount = 0;
         }
 
