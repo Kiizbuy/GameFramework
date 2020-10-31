@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 namespace GameFramework.Quest
 {
-    public class CollectItemsQuest : IQuest
+    public class ReachTargetQuest : IQuest
     {
         public event Action<IQuest> OnStart;
         public event Action<IQuest> OnComplete;
@@ -17,27 +17,24 @@ namespace GameFramework.Quest
         public int ExperienceReward { get; private set; }
         public bool QuestHasBeenComplete { get; }
 
-        public int CurrentCollectableItemsCount
+        public int CurrentDeadEnemiesCount
         {
-            get => _currentCollectableItemsCount;
+            get => _currentDeadEnemiesCount;
             private set
             {
-                _currentCollectableItemsCount = value;
+                _currentDeadEnemiesCount = value;
                 EvaluateQuestCompletion();
             }
         }
 
-        private int _maxItemsCountToCompleteQuest;
-        private int _currentCollectableItemsCount;
+        private int _maxDeadEnemiesCountToCompleteQuest;
+        private int _currentDeadEnemiesCount;
 
         private readonly List<BaseItemData> _rewardItems = new List<BaseItemData>();
-        private readonly QuestItemData _collectableItemType;
 
-        public CollectItemsQuest(string questName, int maxItemsCountToCompleteQuest, QuestItemData collectableItemType)
+        public ReachTargetQuest(string questName)
         {
             QuestName = questName;
-            _maxItemsCountToCompleteQuest = maxItemsCountToCompleteQuest;
-            _collectableItemType = collectableItemType;
         }
 
         public IQuest AddExperienceReward(int expPoints)
@@ -50,15 +47,6 @@ namespace GameFramework.Quest
         {
             _rewardItems.AddRange(rewardItems);
             return this;
-        }
-
-        public void FetchCollectableItem(QuestItemData questItem)
-        {
-            //if (CurrentQuestStatus == QuestStatus.NotStarted)
-            //    return;
-
-            if (questItem.Title == _collectableItemType.Title && _collectableItemType.GetType() == questItem.GetType())
-                CurrentCollectableItemsCount++;
         }
 
         public void Dispose()
@@ -91,10 +79,9 @@ namespace GameFramework.Quest
 
         public void EvaluateQuestCompletion()
         {
-            if (CurrentCollectableItemsCount >= _maxItemsCountToCompleteQuest)
+            if (CurrentDeadEnemiesCount >= _maxDeadEnemiesCountToCompleteQuest)
                 CompleteQuest();
         }
-
 
         private void ChangeQuestStatus(QuestStatus status)
         {

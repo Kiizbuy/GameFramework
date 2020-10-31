@@ -24,7 +24,7 @@ namespace GameFramework.Quest
             private set
             {
                 _currentDeadEnemiesCount = value;
-                Evaluate();
+                EvaluateQuestCompletion();
             }
         }
 
@@ -60,6 +60,8 @@ namespace GameFramework.Quest
 
             if (enemy.EnemyHasDied && enemy.EnemyName == _enemyType.EnemyName && enemy.GetType() == _enemyType.GetType())
                 CurrentDeadEnemiesCount++;
+
+            ChangeQuestStatus(QuestStatus.InProgress);
         }
 
         public void Dispose()
@@ -90,7 +92,7 @@ namespace GameFramework.Quest
             OnFailed?.Invoke(this);
         }
 
-        public void Evaluate()
+        public void EvaluateQuestCompletion()
         {
             if (CurrentDeadEnemiesCount >= _maxDeadEnemiesCountToCompleteQuest)
                 CompleteQuest();

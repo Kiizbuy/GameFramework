@@ -66,7 +66,7 @@ namespace GameFramework.Quest
         }
 
 
-        public void Evaluate()
+        public void EvaluateQuestCompletion()
         {
         }
 

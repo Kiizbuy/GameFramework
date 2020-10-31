@@ -23,6 +23,6 @@ namespace GameFramework.Quest
         void Accept(IQuestVisiter visiter);
         void CompleteQuest();
         void FailQuest();
-        void Evaluate();
+        void EvaluateQuestCompletion();
     }
 }

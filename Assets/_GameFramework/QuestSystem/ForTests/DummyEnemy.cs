@@ -7,6 +7,7 @@ namespace GameFramework.Quest
         public void DeadEnemy()
         {
             EnemyHasDied = true;
+            QuestStarterVisiter.DeadEnemy(this);
         }
 
         public string EnemyName => "Dummy";
