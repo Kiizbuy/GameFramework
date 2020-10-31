@@ -1,6 +1,7 @@
 ﻿using GameFramework.Inventory.Items;
 using System;
 using System.Collections.Generic;
+using UnityEngine;
 
 namespace GameFramework.Quest
 {
@@ -26,7 +27,7 @@ namespace GameFramework.Quest
         Parallel
     }
 
-    public class Quest
+    public class Quest : IDisposable
     {
         public event Action<Quest> OnStart;
         public event Action<Quest> OnComplete;
@@ -38,12 +39,14 @@ namespace GameFramework.Quest
         private QuestStatus _questStatus = QuestStatus.NotStarted;
         private QuestType _questType;
         private NestedQuestType _childQuestType;
+        private Vector3 _destinationPoint;
         private int _experienceReward;
 
         public readonly string QuestName;
         private readonly List<Quest> _childQuests = new List<Quest>();
         private readonly List<BaseItemData> _rewardItems = new List<BaseItemData>();
 
+        public Vector3 DestinationPoint => _destinationPoint;
         public IEnumerable<Quest> GetChildQuests => _childQuests;
         public IEnumerable<BaseItemData> GetRewardItems => _rewardItems;
         public QuestStatus GetQuestStatus => _questStatus;
@@ -95,6 +98,15 @@ namespace GameFramework.Quest
         public Quest SetNestedQuestType(NestedQuestType nestedQuestType)
         {
             _childQuestType = nestedQuestType;
+
+            return this;
+        }
+
+        public Quest SetQuestTypeToDestination(Vector3 destinationPoint)
+        {
+            _questType = QuestType.GetDestination;
+            _destinationPoint = destinationPoint;
+
             return this;
         }
 
@@ -151,22 +163,22 @@ namespace GameFramework.Quest
             OnFailed?.Invoke(this);
         }
 
-        public void ProcessChildGuestStatus(Quest quest, QuestStatus newStatus)
+        private void ProcessChildGuestStatus(Quest quest, QuestStatus newStatus)
         {
-            if (newStatus == QuestStatus.InProgress)
-                return;
-
-            if (newStatus == QuestStatus.Failed)
+            switch (newStatus)
             {
-                _childQuests.ForEach(x => x.FailQuest());
-                FailQuest();
-                return;
-            }
-
-            if (newStatus == QuestStatus.Complete)
-            {
-                if (_childQuests.TrueForAll(x => x.GetQuestStatus == QuestStatus.Complete))
-                    CompleteQuest();
+                case QuestStatus.InProgress:
+                    return;
+                case QuestStatus.Failed:
+                    _childQuests.ForEach(x => x.FailQuest());
+                    FailQuest();
+                    return;
+                case QuestStatus.Complete:
+                    {
+                        if (_childQuests.TrueForAll(x => x.GetQuestStatus == QuestStatus.Complete))
+                            CompleteQuest();
+                        break;
+                    }
             }
 
 
@@ -185,6 +197,11 @@ namespace GameFramework.Quest
                 if (currentQuest.GetQuestStatus == QuestStatus.Complete && nextQuest.GetQuestStatus == QuestStatus.NotStarted)
                     nextQuest.StartQuest();
             }
+
+        }
+
+        public void Dispose()
+        {
 
         }
     }
