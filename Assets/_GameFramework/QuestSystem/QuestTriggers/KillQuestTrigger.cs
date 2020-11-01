@@ -1,11 +1,19 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using UnityEngine;
 namespace GameFramework.Quest
 {
+    [Serializable]
+    public class Huy
+    {
+        [QuestEnemyName]
+        public string Huyy;
+    }
+
     public class KillQuestTrigger : MonoBehaviour, IQuestTrigger<KillEnemyQuestInfo>
     {
         public QuestHandler QuestHandler;
-
+        public Huy Huy;
         [QuestEnemyName]
         public string EnemyName;
 

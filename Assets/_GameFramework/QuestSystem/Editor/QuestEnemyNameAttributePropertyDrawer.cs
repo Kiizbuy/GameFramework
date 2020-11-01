@@ -1,100 +1,65 @@
-﻿using System;
+﻿using NaughtyAttributes.Editor;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using UnityEditor;
 using UnityEngine;
-using Object = UnityEngine.Object;
 
 namespace GameFramework.Quest
 {
     [CustomPropertyDrawer(typeof(QuestEnemyNameAttribute))]
-    public class QuestEnemyNameAttributePropertyDrawer : PropertyDrawer
+    public class QuestEnemyNameAttributePropertyDrawer : PropertyDrawerBase
     {
-        private QuestInfoStorage _questInfoStorage;
+        private static QuestInfoStorage _questInfoStorage;
 
-        public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
+        protected override float GetPropertyHeight_Internal(SerializedProperty property, GUIContent label)
         {
-            EditorGUI.BeginProperty(position, label, property);
-            //if (property.propertyType == SerializedPropertyType.String)
-            //{
-            if (_questInfoStorage == null)
-                _questInfoStorage = GetAssetsOfType<QuestInfoStorage>(typeof(QuestInfoStorage), ".asset").FirstOrDefault();
-
-            var propertyString = property.stringValue;
-            var questItemNamesList = new List<string> { "(None)" };
-
-
-            if (_questInfoStorage != null)
-                questItemNamesList.AddRange(_questInfoStorage.AllQuestEnemiesNames);
-
-            var index = 0;
-
-            if (questItemNamesList.Count == 0)
-                EditorGUILayout.HelpBox("ПОШЕЛ НАХУЙ, ЛИБО НЕ НАШЕЛ ТВОЕ ГОВНО, ЛИБО ИНФА ПУСТАЯ, ДОЛБОЕБИНА", MessageType.Warning);
-
-
-            for (var i = 1; i < questItemNamesList.Count; i++)
-            {
-                if (questItemNamesList[i] != propertyString)
-                    continue;
-                index = i;
-                break;
-            }
-
-            index = EditorGUI.Popup(position, label.text, index, questItemNamesList.ToArray());
-            property.stringValue = index > 0 ? questItemNamesList[index] : string.Empty;
-            //}
-            //else
-            //{
-            var message = $"{nameof(QuestItemNameAttributePropertyDrawer)} supports only string fields";
-            EditorGUILayout.HelpBox(message, MessageType.Warning);
-            //}
-            EditorGUI.EndProperty();
-
+            return (property.propertyType == SerializedPropertyType.String)
+                ? GetPropertyHeight(property)
+                : GetPropertyHeight(property) + GetHelpBoxHeight();
         }
 
-        public static T[] GetAssetsOfType<T>(Type type, string fileExtension) where T : Object
+        protected override void OnGUI_Internal(Rect rect, SerializedProperty property, GUIContent label)
         {
-            var tempObjects = new List<T>();
-            var directory = new DirectoryInfo(Application.dataPath);
-            var goFileInfo = directory.GetFiles("*" + fileExtension, SearchOption.AllDirectories);
-
-            var i = 0;
-            var goFileInfoLength = goFileInfo.Length;
-
-            string tempFilePath;
-            FileInfo tempGoFileInfo;
-            Object tempGO;
-
-            for (; i < goFileInfoLength; i++)
+            EditorGUI.BeginProperty(rect, label, property);
+            if (property.propertyType == SerializedPropertyType.String)
             {
-                tempGoFileInfo = goFileInfo[i];
-                if (tempGoFileInfo == null)
-                    continue;
+                if (_questInfoStorage == null)
+                    _questInfoStorage = EditorUtils
+                        .GetAllAssetsOfType<QuestInfoStorage>(typeof(QuestInfoStorage), ".asset")
+                        .FirstOrDefault();
 
-                tempFilePath = tempGoFileInfo.FullName;
-                tempFilePath = tempFilePath.Replace(@"\", "/").Replace(Application.dataPath, "Assets");
+                var propertyString = property.stringValue;
+                var questItemNamesList = new List<string> { "(None)" };
 
-                Debug.Log(tempFilePath + "\n" + Application.dataPath);
 
-                tempGO = AssetDatabase.LoadAssetAtPath(tempFilePath, typeof(Object)) as Object;
-                if (tempGO == null)
+                if (_questInfoStorage != null)
+                    questItemNamesList.AddRange(_questInfoStorage.AllQuestEnemiesNames);
+
+                var index = 0;
+
+                if (questItemNamesList.Count == 0)
+                    EditorGUILayout.HelpBox("ПОШЕЛ НАХУЙ, ЛИБО НЕ НАШЕЛ ТВОЕ ГОВНО, ЛИБО ИНФА ПУСТАЯ, ДОЛБОЕБИНА",
+                        MessageType.Warning);
+
+
+                for (var i = 1; i < questItemNamesList.Count; i++)
                 {
-                    Debug.LogWarning("Skipping Null");
-                    continue;
+                    if (questItemNamesList[i] != propertyString)
+                        continue;
+                    index = i;
+                    break;
                 }
 
-                if (tempGO.GetType() != type)
-                {
-                    Debug.LogWarning("Skipping " + tempGO.GetType().ToString());
-                    continue;
-                }
-
-                tempObjects.Add(tempGO as T);
+                index = EditorGUI.Popup(rect, label.text, index, questItemNamesList.ToArray());
+                property.stringValue = index > 0 ? questItemNamesList[index] : string.Empty;
+            }
+            else
+            {
+                var message = $"{nameof(QuestItemNameAttributePropertyDrawer)} supports only string fields";
+                EditorGUILayout.HelpBox("message", MessageType.Warning);
             }
 
-            return tempObjects.ToArray();
+            EditorGUI.EndProperty();
         }
     }
 }

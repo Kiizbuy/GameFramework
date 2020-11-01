@@ -1,7 +1,5 @@
 ﻿#if UNITY_EDITOR
 
-using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using UnityEditor;
@@ -32,7 +30,7 @@ namespace UnityEditorExtensions
         public static void SavePrefab(this Editor editor)
             => SavePrefab(editor, (MonoBehaviour)editor.target);
 
-        public static void SavePrefab(this Editor editor, MonoBehaviour mono) 
+        public static void SavePrefab(this Editor editor, MonoBehaviour mono)
             => SavePrefab(mono);
 
 
@@ -49,7 +47,7 @@ namespace UnityEditorExtensions
             instance.SetActive(wasActive);
         }
 
-        public static GameObject GetPrefabGameObject(this Editor editor) 
+        public static GameObject GetPrefabGameObject(this Editor editor)
             => (GameObject)GetPrefab(editor, (MonoBehaviour)editor.target);
 
 
@@ -86,4 +84,3 @@ namespace UnityEditorExtensions
 }
 
 #endif
-

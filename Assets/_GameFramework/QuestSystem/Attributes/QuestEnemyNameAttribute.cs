@@ -1,9 +1,10 @@
-﻿using System;
+﻿using NaughtyAttributes;
+using System;
 
 namespace GameFramework.Quest
 {
     [AttributeUsage(AttributeTargets.Field)]
-    public class QuestEnemyNameAttribute : Attribute
+    public class QuestEnemyNameAttribute : DrawerAttribute
     {
     }
 }
