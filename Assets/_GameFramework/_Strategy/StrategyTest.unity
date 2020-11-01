@@ -1080,6 +1080,7 @@ GameObject:
   - component: {fileID: 1144082504}
   - component: {fileID: 1144082508}
   - component: {fileID: 1144082509}
+  - component: {fileID: 1144082510}
   m_Layer: 0
   m_Name: Cube
   m_TagString: Untagged
@@ -1201,6 +1202,17 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+      - m_Target: {fileID: 1144082510}
+        m_MethodName: InvokeTrigger
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
   OnHealthChanged:
     m_PersistentCalls:
       m_Calls: []
@@ -1219,6 +1231,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 955c677b552254547816918570b41452, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &1144082510
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1144082503}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: de5315450fd5fe649ac97cc8ea388401, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  QuestHandler: {fileID: 1356609234}
+  EnemyName: Dummy
 --- !u!1 &1169800766
 GameObject:
   m_ObjectHideFlags: 0
@@ -1294,7 +1320,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1356609232}
-  - component: {fileID: 1356609235}
   - component: {fileID: 1356609234}
   - component: {fileID: 1356609233}
   m_Layer: 0
@@ -1334,7 +1359,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 198a775a0329a4945a9308c54041c65d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  DummyEnemy: {fileID: 1144082509}
+  DummyQuestEnemy: {fileID: 1144082509}
   QuestHandler: {fileID: 1356609234}
 --- !u!114 &1356609234
 MonoBehaviour:
@@ -1346,18 +1371,6 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 44a31aa384bc60046bc513cdf1bfa914, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!114 &1356609235
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1356609231}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6772ae42dc1f95047a67defa3bba4ebf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1 &1502482145
@@ -1374,6 +1387,7 @@ GameObject:
   - component: {fileID: 1502482147}
   - component: {fileID: 1502482146}
   - component: {fileID: 1502482151}
+  - component: {fileID: 1502482152}
   m_Layer: 0
   m_Name: Cube (1)
   m_TagString: Untagged
@@ -1412,6 +1426,17 @@ MonoBehaviour:
         m_CallState: 2
       - m_Target: {fileID: 1502482151}
         m_MethodName: DeadEnemy
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 1502482152}
+        m_MethodName: InvokeTrigger
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -1513,6 +1538,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 955c677b552254547816918570b41452, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &1502482152
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1502482145}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: de5315450fd5fe649ac97cc8ea388401, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  QuestHandler: {fileID: 1356609234}
+  EnemyName: Dummy
 --- !u!4 &1523929636 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 8768709827192520729, guid: 9b35563b9d19ad04bb4ed23542e9bc7a,

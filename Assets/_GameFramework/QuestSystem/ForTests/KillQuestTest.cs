@@ -15,7 +15,7 @@ namespace GameFramework.Quest
                 Debug.Log($"quest {quest.QuestName} changed status - {quest.CurrentQuestStatus}");
             QuestHandler.OnQuestComplete += (quest) => Debug.Log($"Quest {quest.QuestName} has been completed");
 
-            var killQuest = new KillQuest("Kill Dummy questEnemy", 2, DummyQuestEnemy).AddExperienceReward(20);
+            var killQuest = new KillQuest("Kill Dummy questEnemy", new KillEnemyQuestInfo(DummyQuestEnemy.EnemyName, 2)).AddExperienceReward(20);
             QuestHandler.TryAddQuest(killQuest);
             QuestHandler.StartQuest(killQuest);
         }

@@ -2,23 +2,20 @@
 using UnityEngine;
 namespace GameFramework.Quest
 {
-    public class KillQuestTrigger : MonoBehaviour, IQuestTrigger<KillQuest, IQuestEnemy>
+    public class KillQuestTrigger : MonoBehaviour, IQuestTrigger<KillEnemyQuestInfo>
     {
         public QuestHandler QuestHandler;
 
-        private DummyQuestEnemy _dummyQuestEnemy;
+        [QuestEnemyName]
+        public string EnemyName;
 
-        private void Awake()
-        {
-            _dummyQuestEnemy = GetComponent<DummyQuestEnemy>();
-        }
 
         public void InvokeTrigger()
         {
-            Trigger(QuestHandler, _dummyQuestEnemy);
+            Trigger(QuestHandler, new KillEnemyQuestInfo(EnemyName, 0));
         }
 
-        public void Trigger(QuestHandler questHandler, IQuestEnemy questData)
+        public void Trigger(QuestHandler questHandler, KillEnemyQuestInfo questData)
         {
             foreach (var collectableQuest in questHandler.GetAllQuests(QuestStatus.InProgress).Cast<KillQuest>())
             {
