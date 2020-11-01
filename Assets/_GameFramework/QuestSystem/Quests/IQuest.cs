@@ -20,7 +20,6 @@ namespace GameFramework.Quest
         bool QuestHasBeenComplete { get; }
 
         void StartQuest();
-        void Accept(IQuestVisiter visiter);
         void CompleteQuest();
         void FailQuest();
         void EvaluateQuestCompletion();

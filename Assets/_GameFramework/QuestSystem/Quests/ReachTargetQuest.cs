@@ -1,6 +1,7 @@
 ﻿using GameFramework.Inventory.Items;
 using System;
 using System.Collections.Generic;
+using UnityEngine;
 
 namespace GameFramework.Quest
 {
@@ -17,24 +18,24 @@ namespace GameFramework.Quest
         public int ExperienceReward { get; private set; }
         public bool QuestHasBeenComplete { get; }
 
-        public int CurrentDeadEnemiesCount
+        private Vector3 ActualPosition
         {
-            get => _currentDeadEnemiesCount;
-            private set
+            get => _actualPosition;
+            set
             {
-                _currentDeadEnemiesCount = value;
+                _actualPosition = value;
                 EvaluateQuestCompletion();
             }
         }
 
-        private int _maxDeadEnemiesCountToCompleteQuest;
-        private int _currentDeadEnemiesCount;
-
+        private Vector3 _actualPosition;
+        private readonly Vector3 _reachPosition;
         private readonly List<BaseItemData> _rewardItems = new List<BaseItemData>();
 
-        public ReachTargetQuest(string questName)
+        public ReachTargetQuest(string questName, Vector3 reachPosition)
         {
             QuestName = questName;
+            _reachPosition = reachPosition;
         }
 
         public IQuest AddExperienceReward(int expPoints)
@@ -60,11 +61,6 @@ namespace GameFramework.Quest
             OnStart?.Invoke(this);
         }
 
-        public void Accept(IQuestVisiter visiter)
-        {
-            visiter.Visit(this);
-        }
-
         public void CompleteQuest()
         {
             ChangeQuestStatus(QuestStatus.Complete);
@@ -77,9 +73,17 @@ namespace GameFramework.Quest
             OnFailed?.Invoke(this);
         }
 
+        public void ChangeActualPosition(Vector3 newPosition)
+        {
+            ActualPosition = newPosition;
+        }
+
         public void EvaluateQuestCompletion()
         {
-            if (CurrentDeadEnemiesCount >= _maxDeadEnemiesCountToCompleteQuest)
+            if (CurrentQuestStatus == QuestStatus.NotStarted || CurrentQuestStatus == QuestStatus.Complete)
+                return;
+
+            if ((ActualPosition - _reachPosition).sqrMagnitude < 0.001f)
                 CompleteQuest();
         }
 

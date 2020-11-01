@@ -28,17 +28,17 @@ namespace GameFramework.Quest
             }
         }
 
-        private int _maxDeadEnemiesCountToCompleteQuest;
         private int _currentDeadEnemiesCount;
 
+        private readonly int _maxDeadEnemiesCountToCompleteQuest;
         private readonly List<BaseItemData> _rewardItems = new List<BaseItemData>();
-        private readonly IEnemy _enemyType;
+        private readonly IQuestEnemy questEnemyType;
 
-        public KillQuest(string questName, int maxDeadEnemiesCountToCompleteQuest, IEnemy enemyType)
+        public KillQuest(string questName, int maxDeadEnemiesCountToCompleteQuest, IQuestEnemy questEnemyType)
         {
             QuestName = questName;
             _maxDeadEnemiesCountToCompleteQuest = maxDeadEnemiesCountToCompleteQuest;
-            _enemyType = enemyType;
+            this.questEnemyType = questEnemyType;
         }
 
         public IQuest AddExperienceReward(int expPoints)
@@ -53,15 +53,15 @@ namespace GameFramework.Quest
             return this;
         }
 
-        public void IncreaseKilledEnemy(IEnemy enemy)
+        public void IncreaseKilledEnemy(IQuestEnemy questEnemy)
         {
             if (CurrentQuestStatus == QuestStatus.NotStarted)
                 return;
 
-            if (enemy.EnemyHasDied && enemy.EnemyName == _enemyType.EnemyName && enemy.GetType() == _enemyType.GetType())
+            if (questEnemy.EnemyHasDied && questEnemy.EnemyName == questEnemyType.EnemyName)
                 CurrentDeadEnemiesCount++;
 
-            ChangeQuestStatus(QuestStatus.InProgress);
+            ChangeQuestStatus(CurrentQuestStatus);
         }
 
         public void Dispose()
@@ -73,11 +73,6 @@ namespace GameFramework.Quest
         {
             ChangeQuestStatus(QuestStatus.InProgress);
             OnStart?.Invoke(this);
-        }
-
-        public void Accept(IQuestVisiter visiter)
-        {
-            visiter.Visit(this);
         }
 
         public void CompleteQuest()
@@ -94,6 +89,9 @@ namespace GameFramework.Quest
 
         public void EvaluateQuestCompletion()
         {
+            if (CurrentQuestStatus == QuestStatus.NotStarted || CurrentQuestStatus == QuestStatus.Complete)
+                return;
+
             if (CurrentDeadEnemiesCount >= _maxDeadEnemiesCountToCompleteQuest)
                 CompleteQuest();
         }

@@ -27,9 +27,9 @@ namespace GameFramework.Quest
             }
         }
 
-        private int _maxItemsCountToCompleteQuest;
         private int _currentCollectableItemsCount;
 
+        private readonly int _maxItemsCountToCompleteQuest;
         private readonly List<BaseItemData> _rewardItems = new List<BaseItemData>();
         private readonly QuestItemData _collectableItemType;
 
@@ -54,27 +54,20 @@ namespace GameFramework.Quest
 
         public void FetchCollectableItem(QuestItemData questItem)
         {
-            //if (CurrentQuestStatus == QuestStatus.NotStarted)
-            //    return;
-
             if (questItem.Title == _collectableItemType.Title && _collectableItemType.GetType() == questItem.GetType())
                 CurrentCollectableItemsCount++;
+
+            ChangeQuestStatus(CurrentQuestStatus);
         }
 
         public void Dispose()
         {
-            throw new NotImplementedException();
         }
 
         public void StartQuest()
         {
             ChangeQuestStatus(QuestStatus.InProgress);
             OnStart?.Invoke(this);
-        }
-
-        public void Accept(IQuestVisiter visiter)
-        {
-            visiter.Visit(this);
         }
 
         public void CompleteQuest()

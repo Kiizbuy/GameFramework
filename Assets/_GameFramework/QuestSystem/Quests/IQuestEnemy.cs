@@ -1,6 +1,6 @@
 ﻿namespace GameFramework.Quest
 {
-    public interface IEnemy
+    public interface IQuestEnemy
     {
         string EnemyName { get; }
         bool EnemyHasDied { get; }

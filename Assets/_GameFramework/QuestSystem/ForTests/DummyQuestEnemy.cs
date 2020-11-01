@@ -2,12 +2,14 @@
 
 namespace GameFramework.Quest
 {
-    public class DummyEnemy : MonoBehaviour, IEnemy
+    public class DummyQuestEnemy : MonoBehaviour, IQuestEnemy
     {
+        private QuestHandler _questHandler;
+        private KillQuestTrigger _killQuestTrigger;
+
         public void DeadEnemy()
         {
             EnemyHasDied = true;
-            QuestStarterVisiter.DeadEnemy(this);
         }
 
         public string EnemyName => "Dummy";
