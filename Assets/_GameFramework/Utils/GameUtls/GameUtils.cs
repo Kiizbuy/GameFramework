@@ -360,9 +360,9 @@ namespace GameFramework.Protection
     public struct Protected_Int
     {
         /// <summary>
-        /// Get encrypted value (for serialization or something else).
+        /// Get encrypted QuestValue (for serialization or something else).
         /// </summary>
-        /// <value>The encrypted value.</value>
+        /// <QuestValue>The encrypted QuestValue.</QuestValue>
         public int EncryptedValue
         {
             get
@@ -401,9 +401,9 @@ namespace GameFramework.Protection
     public struct Protected_Float
     {
         /// <summary>
-        /// Get encrypted value (for serialization or something else).
+        /// Get encrypted QuestValue (for serialization or something else).
         /// </summary>
-        /// <value>The encrypted value.</value>
+        /// <QuestValue>The encrypted QuestValue.</QuestValue>
         public float EncryptedValue
         {
             get
@@ -543,13 +543,13 @@ namespace KiizbuyProduction.MathfFast
         }
 
         /// <summary>
-        /// Absolute value of provided data.
+        /// Absolute QuestValue of provided data.
         /// </summary>
         /// <param name="v">Raw data.</param>
         public static float Abs(float v) => v < 0f ? -v : v;
 
         /// <summary>
-        /// /// Absolute value of provided data.
+        /// /// Absolute QuestValue of provided data.
         /// </summary>
         /// <param name="v">Raw data.</param>
         public static int Abs(int v) => v < 0f ? -v : v;
@@ -637,7 +637,7 @@ namespace KiizbuyProduction.MathfFast
         }
 
         /// <summary>
-        /// Clamp data value to [min;max] range (inclusive).
+        /// Clamp data QuestValue to [min;max] range (inclusive).
         /// Not faster than Mathf.Clamp, but performance very close.
         /// </summary>
         /// <param name="data">Data to clamp.</param>
@@ -660,7 +660,7 @@ namespace KiizbuyProduction.MathfFast
         }
 
         /// <summary>
-        /// Clamp data value to [min;max] range (inclusive).
+        /// Clamp data QuestValue to [min;max] range (inclusive).
         /// Not faster than Mathf.Clamp, but performance very close.
         /// </summary>
         /// <param name="data">Data to clamp.</param>
@@ -683,7 +683,7 @@ namespace KiizbuyProduction.MathfFast
         }
 
         /// <summary>
-        /// Clamp data value to [0;1] range (inclusive).
+        /// Clamp data QuestValue to [0;1] range (inclusive).
         /// Not faster than Mathf.Clamp01, but performance very close.
         /// </summary>
         /// <param name="data">Data to clamp.</param>
@@ -879,7 +879,7 @@ namespace KiizbuyProduction.MathfFast
         /// <summary>
         /// /// Get int32 random number from range [0, max).
         /// </summary>
-        /// <returns>Random int value.</returns>
+        /// <returns>Random int QuestValue.</returns>
         public int GetInt(int max)
         {
             var t = _x ^ (_x << 11);
@@ -892,9 +892,9 @@ namespace KiizbuyProduction.MathfFast
         /// <summary>
         /// Get int32 random number from range [min, max).
         /// </summary>
-        /// <returns>Random int value.</returns>
-        /// <param name="min">Min value.</param>
-        /// <param name="max">Max value (excluded).</param>
+        /// <returns>Random int QuestValue.</returns>
+        /// <param name="min">Min QuestValue.</param>
+        /// <param name="max">Max QuestValue (excluded).</param>
         public int GetInt(int min, int max)
         {
             if (min >= max)
@@ -930,7 +930,7 @@ namespace KiizbuyProduction.MathfFast
         /// <returns>The float.</returns>
         /// <param name="min">Мин. значение.</param>
         /// <param name="max">Макс. значение.</param>
-        /// <param name="includeMax">Include max value for searching.</param>
+        /// <param name="includeMax">Include max QuestValue for searching.</param>
         public float GetFloat(float min, float max, bool includeMax = true)
         {
             if (min >= max)

@@ -4,18 +4,6 @@ using System.Collections.Generic;
 
 namespace GameFramework.Quest
 {
-    public readonly struct KillEnemyQuestInfo
-    {
-        public readonly string EnemyName;
-        public readonly int MaxKilledEnemies;
-
-        public KillEnemyQuestInfo(string enemyName, int maxKilledEnemies)
-        {
-            EnemyName = enemyName;
-            MaxKilledEnemies = maxKilledEnemies;
-        }
-    }
-
     public class KillQuest : IQuest
     {
         public event Action<IQuest> OnStart;
@@ -27,8 +15,6 @@ namespace GameFramework.Quest
         public IEnumerable<BaseItemData> RewardItems { get; }
         public string QuestName { get; }
         public int ExperienceReward { get; private set; }
-        public bool QuestHasBeenComplete { get; }
-
 
         public int CurrentDeadEnemiesCount
         {
@@ -63,31 +49,30 @@ namespace GameFramework.Quest
             return this;
         }
 
-        public void IncreaseKilledEnemy(KillEnemyQuestInfo questEnemy)
+        public void ApplyQuestDTO(IQuestDTO questDto)
         {
-            if (CurrentQuestStatus == QuestStatus.NotStarted)
+            if (CurrentQuestStatus == QuestStatus.NotStarted || questDto.EnemyId == string.Empty)
                 return;
 
-            if (questEnemy.EnemyName == _questEnemyType.EnemyName)
+            if (questDto.EnemyId == _questEnemyType.EnemyName)
                 CurrentDeadEnemiesCount++;
 
             ChangeQuestStatus(CurrentQuestStatus);
         }
 
-        public void Dispose()
-        {
-            throw new NotImplementedException();
-        }
-
         public void StartQuest()
         {
-            ChangeQuestStatus(QuestStatus.InProgress);
+            if (CurrentQuestStatus != QuestStatus.InProgress || CurrentQuestStatus != QuestStatus.Complete)
+                ChangeQuestStatus(QuestStatus.InProgress);
+
             OnStart?.Invoke(this);
         }
 
         public void CompleteQuest()
         {
-            ChangeQuestStatus(QuestStatus.Complete);
+            if (CurrentQuestStatus != QuestStatus.Complete)
+                ChangeQuestStatus(QuestStatus.Complete);
+
             OnComplete?.Invoke(this);
         }
 

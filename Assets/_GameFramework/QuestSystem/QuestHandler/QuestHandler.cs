@@ -37,6 +37,12 @@ namespace GameFramework.Quest
                 quest.StartQuest();
         }
 
+        public void FailQuest(IQuest quest)
+        {
+            if (_allQuests.Contains(quest))
+                quest.FailQuest();
+        }
+
         public void QuestStatusChangeHandler(IQuest quest, QuestStatus status)
             => OnQuestStatusHasChanged?.Invoke(quest, status);
 

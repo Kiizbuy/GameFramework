@@ -4,7 +4,19 @@ using System.Collections.Generic;
 
 namespace GameFramework.Quest
 {
-    public class CollectItemsQuest : IQuest
+    public readonly struct CollectItemQuestInfo
+    {
+        public readonly string QuestItemId;
+        public readonly int MaxItemsCountToCompleteQuest;
+
+        public CollectItemQuestInfo(string questItemId, int maxItemsCountToCompleteQuest)
+        {
+            QuestItemId = questItemId;
+            MaxItemsCountToCompleteQuest = maxItemsCountToCompleteQuest;
+        }
+    }
+
+    public sealed class CollectItemsQuest : IQuest
     {
         public event Action<IQuest> OnStart;
         public event Action<IQuest> OnComplete;
@@ -15,7 +27,6 @@ namespace GameFramework.Quest
         public IEnumerable<BaseItemData> RewardItems { get; }
         public string QuestName { get; }
         public int ExperienceReward { get; private set; }
-        public bool QuestHasBeenComplete { get; }
 
         public int CurrentCollectableItemsCount
         {
@@ -29,15 +40,13 @@ namespace GameFramework.Quest
 
         private int _currentCollectableItemsCount;
 
-        private readonly int _maxItemsCountToCompleteQuest;
         private readonly List<BaseItemData> _rewardItems = new List<BaseItemData>();
-        private readonly QuestItemData _collectableItemType;
+        private readonly CollectItemQuestInfo _collectItemQuestInfo;
 
-        public CollectItemsQuest(string questName, int maxItemsCountToCompleteQuest, QuestItemData collectableItemType)
+        public CollectItemsQuest(string questName, CollectItemQuestInfo collectItemQuestInfo)
         {
             QuestName = questName;
-            _maxItemsCountToCompleteQuest = maxItemsCountToCompleteQuest;
-            _collectableItemType = collectableItemType;
+            _collectItemQuestInfo = collectItemQuestInfo;
         }
 
         public IQuest AddExperienceReward(int expPoints)
@@ -52,39 +61,45 @@ namespace GameFramework.Quest
             return this;
         }
 
-        public void FetchCollectableItem(QuestItemData questItem)
+        public void ApplyQuestDTO(IQuestDTO questDto)
         {
-            if (questItem.Title == _collectableItemType.Title && _collectableItemType.GetType() == questItem.GetType())
+            if (questDto.ItemId == string.Empty)
+                return;
+
+            if (questDto.ItemId == _collectItemQuestInfo.QuestItemId)
                 CurrentCollectableItemsCount++;
 
             ChangeQuestStatus(CurrentQuestStatus);
         }
 
-        public void Dispose()
-        {
-        }
-
         public void StartQuest()
         {
-            ChangeQuestStatus(QuestStatus.InProgress);
+            if (CurrentQuestStatus != QuestStatus.InProgress || CurrentQuestStatus != QuestStatus.Complete)
+                ChangeQuestStatus(QuestStatus.InProgress);
+
             OnStart?.Invoke(this);
         }
 
         public void CompleteQuest()
         {
-            ChangeQuestStatus(QuestStatus.Complete);
+            if (CurrentQuestStatus != QuestStatus.Complete)
+                ChangeQuestStatus(QuestStatus.Complete);
             OnComplete?.Invoke(this);
         }
 
         public void FailQuest()
         {
-            ChangeQuestStatus(QuestStatus.Failed);
+            if (CurrentQuestStatus != QuestStatus.Failed)
+                ChangeQuestStatus(QuestStatus.Failed);
             OnFailed?.Invoke(this);
         }
 
         public void EvaluateQuestCompletion()
         {
-            if (CurrentCollectableItemsCount >= _maxItemsCountToCompleteQuest)
+            if (CurrentQuestStatus == QuestStatus.NotStarted || CurrentQuestStatus == QuestStatus.Complete)
+                return;
+
+            if (CurrentCollectableItemsCount >= _collectItemQuestInfo.MaxItemsCountToCompleteQuest)
                 CompleteQuest();
         }
 

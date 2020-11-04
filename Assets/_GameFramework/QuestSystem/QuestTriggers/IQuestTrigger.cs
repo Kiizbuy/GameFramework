@@ -1,8 +1,9 @@
-﻿namespace GameFramework.Quest
+﻿using System.Collections.Generic;
+
+namespace GameFramework.Quest
 {
-    public interface IQuestTrigger<in TQuestData>
+    public interface IQuestTrigger<in TQuestData> where TQuestData : IQuestDTO
     {
-        void InvokeTrigger();
-        void Trigger(QuestHandler questHandler, TQuestData questData);
+        void Trigger(IEnumerable<IQuest> quests, TQuestData questData);
     }
 }

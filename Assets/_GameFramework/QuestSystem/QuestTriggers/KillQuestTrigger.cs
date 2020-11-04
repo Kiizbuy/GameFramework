@@ -1,5 +1,5 @@
 ﻿using System;
-using System.Linq;
+using System.Collections.Generic;
 using UnityEngine;
 namespace GameFramework.Quest
 {
@@ -10,24 +10,24 @@ namespace GameFramework.Quest
         public string Huyy;
     }
 
-    public class KillQuestTrigger : MonoBehaviour, IQuestTrigger<KillEnemyQuestInfo>
+    public class KillQuestTrigger : MonoBehaviour, IQuestTrigger<KillQuestDTO>
     {
         public QuestHandler QuestHandler;
         public Huy Huy;
         [QuestEnemyName]
         public string EnemyName;
 
-
         public void InvokeTrigger()
         {
-            Trigger(QuestHandler, new KillEnemyQuestInfo(EnemyName, 0));
+            Trigger(QuestHandler.GetAllQuests(), new KillQuestDTO(EnemyName));
         }
 
-        public void Trigger(QuestHandler questHandler, KillEnemyQuestInfo questData)
+
+        public void Trigger(IEnumerable<IQuest> quests, KillQuestDTO questData)
         {
-            foreach (var collectableQuest in questHandler.GetAllQuests(QuestStatus.InProgress).Cast<KillQuest>())
+            foreach (var quest in quests)
             {
-                collectableQuest.IncreaseKilledEnemy(questData);
+                quest.ApplyQuestDTO(questData);
             }
         }
     }

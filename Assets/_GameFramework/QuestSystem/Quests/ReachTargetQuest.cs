@@ -50,9 +50,10 @@ namespace GameFramework.Quest
             return this;
         }
 
-        public void Dispose()
+
+        public void ApplyQuestDTO(IQuestDTO questDto)
         {
-            throw new NotImplementedException();
+            ActualPosition = questDto.ReachTargetPosition;
         }
 
         public void StartQuest()
@@ -71,11 +72,6 @@ namespace GameFramework.Quest
         {
             ChangeQuestStatus(QuestStatus.Failed);
             OnFailed?.Invoke(this);
-        }
-
-        public void ChangeActualPosition(Vector3 newPosition)
-        {
-            ActualPosition = newPosition;
         }
 
         public void EvaluateQuestCompletion()

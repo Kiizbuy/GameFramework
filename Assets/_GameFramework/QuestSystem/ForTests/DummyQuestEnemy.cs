@@ -2,7 +2,7 @@
 
 namespace GameFramework.Quest
 {
-    public class DummyQuestEnemy : MonoBehaviour, IQuestEnemy
+    public class DummyQuestEnemy : MonoBehaviour
     {
         private QuestHandler _questHandler;
         private KillQuestTrigger _killQuestTrigger;
