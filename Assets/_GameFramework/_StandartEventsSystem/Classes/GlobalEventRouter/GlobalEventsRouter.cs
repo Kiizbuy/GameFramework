@@ -1,8 +1,6 @@
-﻿using GameFramework.Components;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 
 namespace GameFramework.Events
 {

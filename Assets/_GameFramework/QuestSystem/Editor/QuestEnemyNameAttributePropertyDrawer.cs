@@ -1,4 +1,5 @@
-﻿using NaughtyAttributes.Editor;
+﻿using GameFramework.Utils.Editor;
+using NaughtyAttributes.Editor;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEditor;
@@ -9,7 +10,7 @@ namespace GameFramework.Quest
     [CustomPropertyDrawer(typeof(QuestEnemyNameAttribute))]
     public class QuestEnemyNameAttributePropertyDrawer : PropertyDrawerBase
     {
-        private static QuestInfoStorage _questInfoStorage;
+        private QuestInfoStorage _questInfoStorage;
 
         protected override float GetPropertyHeight_Internal(SerializedProperty property, GUIContent label)
         {
@@ -25,12 +26,11 @@ namespace GameFramework.Quest
             {
                 if (_questInfoStorage == null)
                     _questInfoStorage = EditorUtils
-                        .GetAllAssetsOfType<QuestInfoStorage>(typeof(QuestInfoStorage), ".asset")
+                        .GetAllInstances<QuestInfoStorage>()
                         .FirstOrDefault();
 
                 var propertyString = property.stringValue;
                 var questItemNamesList = new List<string> { "(None)" };
-
 
                 if (_questInfoStorage != null)
                     questItemNamesList.AddRange(_questInfoStorage.AllQuestEnemiesNames);
@@ -41,11 +41,11 @@ namespace GameFramework.Quest
                     EditorGUILayout.HelpBox("ПОШЕЛ НАХУЙ, ЛИБО НЕ НАШЕЛ ТВОЕ ГОВНО, ЛИБО ИНФА ПУСТАЯ, ДОЛБОЕБИНА",
                         MessageType.Warning);
 
-
                 for (var i = 1; i < questItemNamesList.Count; i++)
                 {
                     if (questItemNamesList[i] != propertyString)
                         continue;
+
                     index = i;
                     break;
                 }
@@ -56,7 +56,7 @@ namespace GameFramework.Quest
             else
             {
                 var message = $"{nameof(QuestItemNameAttributePropertyDrawer)} supports only string fields";
-                EditorGUILayout.HelpBox("message", MessageType.Warning);
+                EditorGUILayout.HelpBox(message, MessageType.Warning);
             }
 
             EditorGUI.EndProperty();

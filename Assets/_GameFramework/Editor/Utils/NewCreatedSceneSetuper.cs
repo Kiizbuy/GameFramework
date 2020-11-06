@@ -1,16 +1,16 @@
-﻿using UnityEngine;
+﻿using System;
 using UnityEditor;
 using UnityEditor.SceneManagement;
-using UnityEngine.SceneManagement;
+using UnityEngine;
 using UnityEngine.EventSystems;
-using System;
+using UnityEngine.SceneManagement;
 
 namespace GameFramework.Editor.Utils
 {
     [InitializeOnLoad]
     public class NewCreatedSceneSetuper
     {
-        private static readonly string _debugConsolePath = "Assets/_GameFramework/Prefabs/DebugConsole/IngameDebugConsolePlaceholder.prefab";
+        private static readonly string _debugObjectPath = "Assets/_GameFramework/Prefabs/DebugConsole/DebugObjects.prefab";
         private static readonly string _sceneContextConsolePath = "Assets/_GameFramework/Prefabs/SceneContextPrefab/SceneContext.prefab";
 
 
@@ -46,8 +46,6 @@ namespace GameFramework.Editor.Utils
 
             lighting.SetParent(environment.transform);
             mainCamera?.SetParent(cameras.transform);
-             
-            debug.SetParent(logic);
 
             cameras.SetParent(environment.transform);
             directionalLight?.SetParent(lighting.transform);
@@ -72,7 +70,7 @@ namespace GameFramework.Editor.Utils
 
         private static void CreateSceneLogicPrefabs(Transform logicObject)
         {
-            СreateGameObjectFromAssetAtPath(_debugConsolePath, logicObject, (debugConsoleObject) =>
+            СreateGameObjectFromAssetAtPath(_debugObjectPath, logicObject, (debugConsoleObject) =>
             {
                 var debugPlaceholder = logicObject.Find("Debug");
                 debugConsoleObject.transform.SetParent(debugPlaceholder);
@@ -101,9 +99,8 @@ namespace GameFramework.Editor.Utils
             }
             else
             {
-                Debug.LogError($"Scene context prefab is not found on path: {_debugConsolePath}");
+                Debug.LogError($"Scene context prefab is not found on path: {_debugObjectPath}");
             }
         }
     }
 }
-
