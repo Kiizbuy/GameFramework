@@ -1,14 +1,13 @@
 ﻿using GameFramework.Components;
-using GameFramework.Utils.Gizmos;
 using NaughtyAttributes;
 using UnityEngine;
 
 namespace GameFramework.WeaponSystem
 {
-    public class MeleeWeapon : MonoBehaviour, IWeapon, IAttackable
+    public class MeleeWeapon : MonoBehaviour, IWeapon
     {
         [System.Serializable]
-        public struct AttackPoint
+        public struct AttackPoint : IAttackable
         {
             public float Radius;
             public Vector3 Offset;
@@ -22,6 +21,7 @@ namespace GameFramework.WeaponSystem
 
         [SerializeField] private WeaponData _meleeWeaponData;
         [SerializeField] private LayerMask _damageableLayerMask = ~0;
+        [SerializeField] private int _heavyAttackMultiplier = 30;
 
         private Vector3[] _previousAttackPosition;
         private Vector3 _attackDirection;
@@ -31,7 +31,9 @@ namespace GameFramework.WeaponSystem
         private readonly float _attackDistanceThreshold = 0.001f;
         private readonly float _attackOffsetMultiplier = 0.0001f;
 
-        public int Damage => _meleeWeaponData.Damage;
+        public bool IsHeavyAttack { get; set; }
+        public int Damage => _meleeWeaponData.Damage * (IsHeavyAttack ? _heavyAttackMultiplier : 1);
+
 
 
         private void Awake()
@@ -65,14 +67,19 @@ namespace GameFramework.WeaponSystem
 
         private void FixedUpdate()
         {
-            if (!_inAttackState)
+            if (!CanAttack())
                 return;
 
+            HandleMeleeDamage();
+        }
+
+        private void HandleMeleeDamage()
+        {
             for (var i = 0; i < _attackPoints.Length; ++i)
             {
                 var currentAttackPoint = _attackPoints[i];
-
-                var translatedWorldPosition = currentAttackPoint.AttackRoot.position + currentAttackPoint.AttackRoot.TransformVector(currentAttackPoint.Offset);
+                var translatedWorldPosition = currentAttackPoint.AttackRoot.position +
+                                              currentAttackPoint.AttackRoot.TransformVector(currentAttackPoint.Offset);
                 var attackVector = translatedWorldPosition - _previousAttackPosition[i];
 
                 if (attackVector.magnitude < _attackDistanceThreshold)
@@ -81,11 +88,11 @@ namespace GameFramework.WeaponSystem
 
                 var attackRay = new Ray(translatedWorldPosition, attackVector.normalized);
                 var contacts = Physics.SphereCastNonAlloc(attackRay,
-                                                             currentAttackPoint.Radius,
-                                                             _raycastHitCache,
-                                                    attackVector.magnitude,
-                                                             _damageableLayerMask,
-                                                             QueryTriggerInteraction.Ignore);
+                    currentAttackPoint.Radius,
+                    _raycastHitCache,
+           attackVector.magnitude,
+                    _damageableLayerMask,
+                    QueryTriggerInteraction.Ignore);
 
 
                 for (var k = 0; k < contacts; k++)
@@ -108,13 +115,13 @@ namespace GameFramework.WeaponSystem
             //if (Damageable is own owner)
             //    return; 
 
-            damageableHealth?.TakeDamage(Damage, this);
+            damageableHealth?.TakeDamage(Damage, attackPoint);
 
         }
 
         public bool CanAttack()
         {
-            throw new System.NotImplementedException();
+            return _inAttackState;
         }
 
 
