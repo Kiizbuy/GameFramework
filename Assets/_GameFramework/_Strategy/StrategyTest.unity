@@ -1745,6 +1745,8 @@ GameObject:
   - component: {fileID: 1680075203}
   - component: {fileID: 1680075202}
   - component: {fileID: 1680075201}
+  - component: {fileID: 1680075206}
+  - component: {fileID: 1680075207}
   m_Layer: 0
   m_Name: Cube (2)
   m_TagString: Untagged
@@ -1855,12 +1857,44 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1680075200}
   m_LocalRotation: {x: -0, y: 0.079746634, z: -0, w: 0.9968152}
-  m_LocalPosition: {x: 18.85, y: 15.6126585, z: 0.69}
+  m_LocalPosition: {x: 18.5, y: 15.6126585, z: -1.2}
   m_LocalScale: {x: 18.92601, y: 8.046514, z: 2.4456}
   m_Children: []
   m_Father: {fileID: 1077505847}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 9.148001, z: 0}
+--- !u!114 &1680075206
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1680075200}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e994ea92a8eae074e96955640adfda35, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _seeRange: 24.51
+  _seeAngle: 2.5
+  _seeSensorPoint: {fileID: 1680075205}
+  _canSee: 1
+--- !u!114 &1680075207
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1680075200}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4972efac0f2d4c742aa0d497a3a7cb6f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  NearestTransform: {fileID: 0}
+  LayerMask:
+    serializedVersion: 2
+    m_Bits: 4294967295
 --- !u!1 &1740133171
 GameObject:
   m_ObjectHideFlags: 0
