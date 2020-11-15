@@ -22,10 +22,10 @@ namespace GameFramework.WeaponSystem
         [SerializeField] private WeaponData _meleeWeaponData;
         [SerializeField] private LayerMask _damageableLayerMask = ~0;
         [SerializeField] private int _heavyAttackMultiplier = 30;
+        [SerializeField, ReadOnly] private bool _inAttackState;
 
         private Vector3[] _previousAttackPosition;
         private Vector3 _attackDirection;
-        [SerializeField] private bool _inAttackState;
 
         private readonly RaycastHit[] _raycastHitCache = new RaycastHit[64];
         private readonly float _attackDistanceThreshold = 0.001f;

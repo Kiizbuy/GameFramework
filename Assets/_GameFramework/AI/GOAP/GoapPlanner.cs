@@ -6,29 +6,31 @@ namespace GameFramework.AI.GOAP
 {
     public class ActionNode
     {
-        public readonly ActionNode Parent;
-        public readonly float Cost;
         public readonly Dictionary<string, int> State;
-        public readonly GAction Action;
+        public readonly ActionNode Parent;
+        public readonly GoapAction Action;
+        public readonly float Cost;
 
-        public ActionNode(ActionNode parent, float cost, Dictionary<string, int> allstates, GAction action)
+        public ActionNode(ActionNode parent, float cost, IDictionary<string, int> allStates, GoapAction action)
         {
             Parent = parent;
             Cost = cost;
-            State = new Dictionary<string, int>(allstates);
+            State = new Dictionary<string, int>(allStates);
             Action = action;
         }
     }
 
-    public class GPlanner
+    public class GoapPlanner
     {
-        public Queue<GAction> plan(List<GAction> actions, Dictionary<string, int> goal, WorldStates states)
+        public Queue<GoapAction> GetPlan(List<GoapAction> actions, Dictionary<string, int> goal, WorldStates states)
         {
             var usableActions = actions.Where(a => a.IsAchievable()).ToList();
 
             var leaves = new List<ActionNode>();
             var start = new ActionNode(null, 0, GWorld.Instance.GetWorld().GetStates(), null);
             var success = BuildGraph(start, leaves, usableActions, goal);
+            var cheapest = GetCheapestNode(leaves);
+            var result = new List<GoapAction>();
 
             if (!success)
             {
@@ -36,6 +38,33 @@ namespace GameFramework.AI.GOAP
                 return null;
             }
 
+            var n = cheapest;
+            while (n != null)
+            {
+                if (n.Action != null)
+                {
+                    result.Insert(0, n.Action);
+                }
+
+                n = n.Parent;
+            }
+
+            var queue = new Queue<GoapAction>();
+            foreach (var a in result)
+                queue.Enqueue(a);
+
+
+#if UNITY_EDITOR
+            Debug.Log("The Plan is: ");
+            foreach (var a in queue)
+                Debug.Log("Q: " + a.ActionName);
+#endif
+
+            return queue;
+        }
+
+        private ActionNode GetCheapestNode(IEnumerable<ActionNode> leaves)
+        {
             ActionNode cheapest = null;
 
             foreach (var leaf in leaves)
@@ -51,33 +80,10 @@ namespace GameFramework.AI.GOAP
                 }
             }
 
-            var result = new List<GAction>();
-            var n = cheapest;
-            while (n != null)
-            {
-                if (n.Action != null)
-                {
-                    result.Insert(0, n.Action);
-                }
-
-                n = n.Parent;
-            }
-
-            var queue = new Queue<GAction>();
-            foreach (var a in result)
-                queue.Enqueue(a);
-
-
-#if UNITY_EDITOR
-            Debug.Log("The Plan is: ");
-            foreach (var a in queue)
-                Debug.Log("Q: " + a.actionName);
-#endif
-
-            return queue;
+            return cheapest;
         }
 
-        private bool BuildGraph(ActionNode parent, ICollection<ActionNode> leaves, IReadOnlyCollection<GAction> usableActions,
+        private bool BuildGraph(ActionNode parent, ICollection<ActionNode> leaves, IReadOnlyCollection<GoapAction> usableActions,
             Dictionary<string, int> goal)
         {
             var foundPath = false;
@@ -88,13 +94,13 @@ namespace GameFramework.AI.GOAP
                 if (!action.IsAchievableGiven(parent.State))
                     continue;
 
-                foreach (var eff in action.effects)
+                foreach (var effect in action.Effects)
                 {
-                    if (!currentState.ContainsKey(eff.Key))
-                        currentState.Add(eff.Key, eff.Value);
+                    if (!currentState.ContainsKey(effect.Key))
+                        currentState.Add(effect.Key, effect.Value);
                 }
 
-                var node = new ActionNode(parent, parent.Cost + action.cost, currentState, action);
+                var node = new ActionNode(parent, parent.Cost + action.Cost, currentState, action);
 
                 if (GoalAchieved(goal, currentState))
                 {
@@ -105,6 +111,7 @@ namespace GameFramework.AI.GOAP
                 {
                     var subset = ActionSubset(usableActions, action);
                     var found = BuildGraph(node, leaves, subset, goal);
+
                     if (found)
                         foundPath = true;
                 }
@@ -118,9 +125,9 @@ namespace GameFramework.AI.GOAP
             return goal.All(g => state.ContainsKey(g.Key));
         }
 
-        private List<GAction> ActionSubset(IEnumerable<GAction> actions, GAction removeMe)
+        private List<GoapAction> ActionSubset(IEnumerable<GoapAction> actions, GoapAction removableActionPredicate)
         {
-            return actions.Where(a => !a.Equals(removeMe)).ToList();
+            return actions.Where(a => !a.Equals(removableActionPredicate)).ToList();
         }
     }
 }

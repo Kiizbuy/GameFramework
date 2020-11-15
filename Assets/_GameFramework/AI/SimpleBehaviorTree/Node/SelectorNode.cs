@@ -4,11 +4,11 @@ namespace GameFramework.AI.SimpleBehaviorTree
 {
     public class Selector : BaseBehaviorNode
     {
-        protected readonly List<BaseBehaviorNode> _nodeLeaves;
+        protected readonly List<BaseBehaviorNode> _nodeLeaves = new List<BaseBehaviorNode>();
 
-        public Selector(string nodeName, List<BaseBehaviorNode> nodes) : base(nodeName)
+        public Selector(string nodeName, IEnumerable<BaseBehaviorNode> nodes) : base(nodeName)
         {
-            _nodeLeaves = nodes;
+            _nodeLeaves.AddRange(nodes);
         }
 
         public override NodeStatus Evaluate()
@@ -29,6 +29,7 @@ namespace GameFramework.AI.SimpleBehaviorTree
                         continue;
                 }
             }
+
             _nodeStatus = NodeStatus.Failed;
             return _nodeStatus;
         }

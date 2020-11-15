@@ -1,7 +1,22 @@
 ﻿namespace GameFramework.AI.GOAP
 {
-    public class GoToWaitingRoom : GAction
+    public class GoToWaitingRoom : GoapAction
     {
+        public override bool CanStartAction()
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public override bool ActionHasRunning()
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public override bool ActionHasComplete()
+        {
+            throw new System.NotImplementedException();
+        }
+
         public override bool PrePerform()
         {
             return true;
