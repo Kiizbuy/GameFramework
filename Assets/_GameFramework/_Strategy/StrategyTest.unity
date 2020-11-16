@@ -1385,11 +1385,19 @@ MonoBehaviour:
   m_GameObject: {fileID: 1162841119}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f11fbe66ebbb20749a1e98aee9146b96, type: 3}
+  m_Script: {fileID: 11500000, guid: a6a00e6c28b974a798eb6d871ba3c88c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Actions: []
-  CurrentAction: {fileID: 1162841122}
+  _actionName: Action
+  _actionCost: 1
+  _actionDuration: 1
+  _preConditionsSettings: []
+  _effectsSettings:
+  - key: isWaiting
+    value: 1
+  _agent: {fileID: 1162841123}
+  _target: {fileID: 191941841}
+  _targetTag: Enemy
 --- !u!114 &1162841122
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1399,27 +1407,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 1162841119}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 47f680ae0bfb6be499ac616f38ecb4ea, type: 3}
+  m_Script: {fileID: 11500000, guid: eb9a1bc4a1633424ea04ee0e361085c0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ActionName: ActionName
-  ActionCost: 1
-  Agent: {fileID: 1162841123}
-  Target: {fileID: 794744423}
-  TargetTag: Target
-  Duration: 1
-  PreConditions:
-  - Key: isWaiting
-    Value: 1
-  AfterEffects:
-  - Key: ds
-    Value: 0
-  - Key: g
-    Value: 0
-  AgentBeliefs:
-    Key: 
-    Value: 0
-  Running: 0
+  _actions: []
+  CurrentAction: {fileID: 0}
 --- !u!195 &1162841123
 NavMeshAgent:
   m_ObjectHideFlags: 0

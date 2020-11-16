@@ -1,23 +1,42 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.AI;
 
 namespace GameFramework.AI.GOAP
 {
-    public abstract class GoapAction : MonoBehaviour
+    public enum ActionState
     {
-        //TODO - MOVE TO ANOTHER RESPONSIBILITY
-        public GameObject Target;
-        public string TargetTag;
-        public NavMeshAgent agent;
+        Idle,
+        Running,
+        Error
+    }
 
-        public bool Running = false; // TODO Remove that shit
+    public interface IGoapAction
+    {
+        IReadOnlyDictionary<string, int> Preconditions { get; }
+        IReadOnlyDictionary<string, int> Effects { get; }
+        string ActionName { get; }
+        float Cost { get; }
+        float Duration { get; }
+        bool IsAchievable();
+        bool IsAchievableGiven(Dictionary<string, int> conditions);
+        void StartAction();
+        void StopAction();
+        bool CanStartAction();
+        bool ActionRunning();
+        bool ActionHasComplete();
+        bool PrePerform();
+        bool PostPerform();
+    }
 
+    public abstract class GoapAction : MonoBehaviour, IGoapAction
+    {
         [SerializeField] private string _actionName = "Action";
         [SerializeField] private float _actionCost = 1f;
         [SerializeField] private float _actionDuration = 1f;
         [SerializeField] private WorldState[] _preConditionsSettings;
         [SerializeField] private WorldState[] _effectsSettings;
+
+        protected ActionState _actionState;
 
         private Dictionary<string, int> _preconditions = new Dictionary<string, int>();
         private Dictionary<string, int> _effects = new Dictionary<string, int>();
@@ -31,12 +50,10 @@ namespace GameFramework.AI.GOAP
 
         public void Awake()
         {
-            agent = gameObject.GetComponent<NavMeshAgent>();
-
             InitActions();
         }
 
-        private void InitActions()
+        protected void InitActions()
         {
             foreach (var w in _preConditionsSettings)
             {
@@ -66,8 +83,10 @@ namespace GameFramework.AI.GOAP
             return true;
         }
 
+        public abstract void StartAction();
+        public abstract void StopAction();
         public abstract bool CanStartAction();
-        public abstract bool ActionHasRunning();
+        public abstract bool ActionRunning();
         public abstract bool ActionHasComplete();
         public abstract bool PrePerform();
         public abstract bool PostPerform();

@@ -1,20 +1,45 @@
 ﻿using GameFramework.AI.GOAP;
+using UnityEngine;
+using UnityEngine.AI;
 
+[RequireComponent(typeof(NavMeshAgent))]
 public class GoToHospital : GoapAction
 {
-    public override bool CanStartAction()
+    [SerializeField] private NavMeshAgent _agent;
+    [SerializeField] private Transform _target;
+    [SerializeField] private string _targetTag = "Enemy";
+
+    private void Start()
     {
-        throw new System.NotImplementedException();
+        _agent = GetComponent<NavMeshAgent>();
     }
 
-    public override bool ActionHasRunning()
+    public override void StartAction()
     {
-        throw new System.NotImplementedException();
+        _agent.SetDestination(_target.position);
+    }
+
+    public override void StopAction()
+    {
+        _agent.isStopped = true;
+    }
+
+    public override bool CanStartAction()
+    {
+        if (_target == null && _targetTag != string.Empty)
+            _target = GameObject.FindWithTag(_targetTag).transform;
+
+        return _target != null;
+    }
+
+    public override bool ActionRunning()
+    {
+        return _actionState == ActionState.Running;
     }
 
     public override bool ActionHasComplete()
     {
-        throw new System.NotImplementedException();
+        return _agent.hasPath && _agent.remainingDistance < 1f;
     }
 
     public override bool PrePerform()

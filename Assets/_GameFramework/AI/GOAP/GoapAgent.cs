@@ -6,13 +6,12 @@ namespace GameFramework.AI.GOAP
 {
     public class Goal
     {
-        public Dictionary<string, int> Sgoals;
+        public readonly Dictionary<string, int> Goals;
         public readonly bool Remove;
 
         public Goal(string s, int i, bool r)
         {
-            Sgoals = new Dictionary<string, int>();
-            Sgoals.Add(s, i);
+            Goals = new Dictionary<string, int> { { s, i } };
             Remove = r;
         }
     }
@@ -22,9 +21,10 @@ namespace GameFramework.AI.GOAP
         [SerializeField] private List<GoapAction> _actions = new List<GoapAction>();
         [SerializeField] private GoapAction CurrentAction;
 
-        private Dictionary<Goal, int> _goals = new Dictionary<Goal, int>();
+        private readonly Dictionary<Goal, int> _goals = new Dictionary<Goal, int>();
+        private Queue<GoapAction> _actionsQueue = new Queue<GoapAction>();
+
         private GoapPlanner _planner;
-        private Queue<GoapAction> _actionsQueue;
         private Goal _currentGoal;
         private bool _invoked;
 
@@ -34,84 +34,82 @@ namespace GameFramework.AI.GOAP
 
             foreach (var a in acts)
                 _actions.Add(a);
+
+            _planner = new GoapPlanner();
         }
 
-        public void AddGoal(Goal goal, int goalCost)
+        public void AddGoal(Goal goal, int goalPriority)
         {
-            _goals.Add(goal, goalCost);
+            _goals.Add(goal, goalPriority);
         }
 
-        private void CompleteAction()
+        public void CompleteCurrentAction()
         {
-            CurrentAction.Running = false;
+            CurrentAction.StopAction();
             CurrentAction.PostPerform();
-
-            _invoked = false;
         }
 
         private void LateUpdate()
         {
-            ///TODO - if(Action Running);
-            if (CurrentAction != null && CurrentAction.Running)
+            if (_actionsQueue.Count <= 0)
             {
-                ///TODO - if(Action.HasComplete) -> Action.CompleteAction();
-                if (CurrentAction.agent.hasPath && CurrentAction.agent.remainingDistance < 1f)
-                {
-                    if (_invoked) return;
-                    Invoke(nameof(CompleteAction), CurrentAction.Duration);
-                    _invoked = true;
-                }
+                TryGetPlanOfActions();
+            }
+
+            TryRemoveCompletedGoal();
+
+            if (CurrentAction != null && CurrentAction.ActionRunning())
+            {
+                if (!CurrentAction.ActionHasComplete())
+                    return;
+                if (_invoked)
+                    return;
+
+                Invoke(nameof(CompleteCurrentAction), CurrentAction.Duration); // TODO - cancer remove that shit
+                _invoked = true;
 
                 return;
             }
 
-            //TODO - Get PriorityGoal
-            if (_planner == null || _actionsQueue == null)
-            {
-                _planner = new GoapPlanner();
-
-                var sortedGoals = _goals.OrderByDescending(entry => entry.Value);
-
-                foreach (var sg in sortedGoals)
-                {
-                    _actionsQueue = _planner.GetPlan(_actions, sg.Key.Sgoals, null);
-                    if (_actionsQueue == null)
-                        continue;
-
-                    _currentGoal = sg.Key;
-                    break;
-                }
-            }
-
-            //TODO - Remove _goals
-            if (_actionsQueue != null && _actionsQueue.Count == 0)
-            {
-                if (_currentGoal.Remove)
-                    _goals.Remove(_currentGoal);
-                _planner = null;
-            }
-
-            if (_actionsQueue == null || _actionsQueue.Count <= 0)
+            if (_actionsQueue.Count <= 0)
                 return;
 
             CurrentAction = _actionsQueue.Dequeue();
 
-            /// TODO - if Action can push - Start Action
             if (CurrentAction.PrePerform())
             {
-                if (CurrentAction.Target == null && CurrentAction.TargetTag != string.Empty)
-                    CurrentAction.Target = GameObject.FindWithTag(CurrentAction.TargetTag);
-
-                if (CurrentAction.Target == null)
-                    return;
-
-                CurrentAction.Running = true;
-                CurrentAction.agent.SetDestination(CurrentAction.Target.transform.position);
+                if (CurrentAction.CanStartAction())
+                    CurrentAction.StartAction();
             }
             else
             {
-                _actionsQueue = null;
+                _actionsQueue.Clear();
             }
+        }
+
+        private void TryGetPlanOfActions()
+        {
+            var sortedGoals = _goals.OrderByDescending(entry => entry.Value);
+
+            foreach (var sg in sortedGoals)
+            {
+                _actionsQueue = _planner.GetPlan(_actions, sg.Key.Goals, null);
+                if (_actionsQueue == null)
+                    continue;
+
+                _currentGoal = sg.Key;
+                break;
+            }
+        }
+
+        private void TryRemoveCompletedGoal()
+        {
+            if (_actionsQueue == null || _actionsQueue.Count != 0)
+                return;
+
+            if (_currentGoal.Remove)
+                _goals.Remove(_currentGoal);
+            _planner = null;
         }
     }
 }
