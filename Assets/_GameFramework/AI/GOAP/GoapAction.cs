@@ -84,6 +84,7 @@ namespace GameFramework.AI.GOAP
         }
 
         public abstract void StartAction();
+        public abstract void ScheduleAction();
         public abstract void StopAction();
         public abstract bool CanStartAction();
         public abstract bool ActionRunning();

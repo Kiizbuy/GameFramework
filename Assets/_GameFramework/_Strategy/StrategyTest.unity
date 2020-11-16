@@ -1353,8 +1353,8 @@ GameObject:
   m_Component:
   - component: {fileID: 1162841120}
   - component: {fileID: 1162841123}
-  - component: {fileID: 1162841122}
   - component: {fileID: 1162841121}
+  - component: {fileID: 1162841122}
   m_Layer: 0
   m_Name: GOAPEntity
   m_TagString: Untagged
@@ -1395,6 +1395,7 @@ MonoBehaviour:
   _effectsSettings:
   - key: isWaiting
     value: 1
+  _stopDistance: 5
   _agent: {fileID: 1162841123}
   _target: {fileID: 191941841}
   _targetTag: Enemy

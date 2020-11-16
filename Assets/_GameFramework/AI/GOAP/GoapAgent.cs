@@ -85,6 +85,8 @@ namespace GameFramework.AI.GOAP
             {
                 _actionsQueue.Clear();
             }
+
+            CurrentAction.ScheduleAction();
         }
 
         private void TryGetPlanOfActions()

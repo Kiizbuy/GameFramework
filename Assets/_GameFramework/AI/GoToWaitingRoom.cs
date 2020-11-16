@@ -7,6 +7,11 @@
             throw new System.NotImplementedException();
         }
 
+        public override void ScheduleAction()
+        {
+            throw new System.NotImplementedException();
+        }
+
         public override void StopAction()
         {
             throw new System.NotImplementedException();

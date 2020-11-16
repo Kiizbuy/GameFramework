@@ -3,8 +3,9 @@ using UnityEngine;
 using UnityEngine.AI;
 
 [RequireComponent(typeof(NavMeshAgent))]
-public class GoToHospital : GoapAction
+public class GoToTarget : GoapAction
 {
+    [SerializeField] private float _stopDistance = 5f;
     [SerializeField] private NavMeshAgent _agent;
     [SerializeField] private Transform _target;
     [SerializeField] private string _targetTag = "Enemy";
@@ -14,19 +15,26 @@ public class GoToHospital : GoapAction
         _agent = GetComponent<NavMeshAgent>();
     }
 
+    public override bool IsAchievable()
+    {
+        return CanStartAction();
+    }
+
     public override void StartAction()
     {
-        _agent.SetDestination(_target.position);
+        _agent.isStopped = false;
+        _actionState = ActionState.Running;
     }
 
     public override void ScheduleAction()
     {
-        throw new System.NotImplementedException();
+        _agent.SetDestination(_target.position);
     }
 
     public override void StopAction()
     {
         _agent.isStopped = true;
+        _actionState = ActionState.Idle;
     }
 
     public override bool CanStartAction()
@@ -34,7 +42,9 @@ public class GoToHospital : GoapAction
         if (_target == null && _targetTag != string.Empty)
             _target = GameObject.FindWithTag(_targetTag).transform;
 
-        return _target != null;
+        var dist = (transform.position - _target.position).sqrMagnitude;
+
+        return _target != null && dist > _stopDistance * _stopDistance;
     }
 
     public override bool ActionRunning()
