@@ -19,7 +19,7 @@ namespace OneLine.Settings {
         }
 
 #if ONE_LINE_DEFAULTS_ONLY
-        [MenuItem(itemName: "Window/OneLine Settings - Create")]
+        [MenuItem(itemName: "Screen/OneLine Settings - Create")]
         public static void RestoreSettingsAsset(){
             ApplyDirectiveDefaultsOnly(false);
         }
@@ -29,7 +29,7 @@ namespace OneLine.Settings {
             return settings;
         }
 #else
-        [MenuItem(itemName: "Window/OneLine Settings")]
+        [MenuItem(itemName: "Screen/OneLine Settings")]
         public static void OpenSettings(){
             Selection.activeObject = LoadSettings();
         }

@@ -67,7 +67,7 @@ namespace Tayx.Graphy.Advanced
 
         private readonly            string[]                    m_windowStrings =
         {
-            "Window: ",
+            "Screen: ",
             "x",
             "@",
             "Hz",

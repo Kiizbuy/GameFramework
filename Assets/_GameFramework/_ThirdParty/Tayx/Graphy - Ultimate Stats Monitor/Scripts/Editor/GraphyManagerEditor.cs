@@ -785,7 +785,7 @@ namespace Tayx.Graphy
                     m_FFTWindow,
                     new GUIContent
                     (
-                        text:       "FFT Window",
+                        text:       "FFT Screen",
                         tooltip:    "Used to reduce leakage between frequency bins/bands. Note, the more complex window type, the better the quality, but reduced speed. \n\nSimplest is rectangular. Most complex is BlackmanHarris"
                     )
                 );
