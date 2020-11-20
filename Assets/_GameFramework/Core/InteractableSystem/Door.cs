@@ -15,25 +15,41 @@ namespace GameFramework.InteractableSystem
     {
         Move,
         Rotate,
-        Both
     }
 
     public class Door : MonoBehaviour, IInteractable
     {
-        [Range(0, 1)]
-        public float previewPosition;
-
         [SerializeField] private DoorState _doorState;
         [SerializeField] private OpenType _openType;
         [SerializeField] private Transform _doorPoint;
 
-        [SerializeField] private float _doorSpeed = 5f;
+        [SerializeField] private float _transformDuration = 5f;
 
         //TODO - Move to SO settings
         [SerializeField] private Vector3 _startOpenPoint;
         [SerializeField] private Vector3 _endOpenPoint;
-        [SerializeField] private Vector3 _startOpenRotation;
-        [SerializeField] private Vector3 _endOpenRotation;
+
+        [SerializeField] private Vector3 _rotationAxis;
+        [SerializeField, Range(-180, 180)] private float _startRotationAngle;
+        [SerializeField, Range(-180, 180)] private float _endRotationAngle;
+
+
+        private Vector3 _startOpenPointWorld;
+        private Vector3 _endOpenPointWorld;
+
+
+        private void Start()
+        {
+            if (_doorPoint == null)
+            {
+                Debug.LogError("_door point field is null", gameObject);
+                return;
+            }
+
+            _startOpenPointWorld = _doorPoint.position + _doorPoint.TransformVector(_startOpenPoint);
+            _endOpenPointWorld = _doorPoint.position + _doorPoint.TransformVector(_endOpenPoint);
+
+        }
 
         public void LockDoor() => _doorState = DoorState.Locked;
         public void UnlockDoor() => _doorState = DoorState.Closed;
@@ -52,10 +68,10 @@ namespace GameFramework.InteractableSystem
             switch (_doorState)
             {
                 case DoorState.Open:
-                    MoveDoor(_endOpenPoint, _endOpenRotation);
+                    MoveDoor(_endOpenPointWorld, _endRotationAngle);
                     break;
                 case DoorState.Closed:
-                    MoveDoor(_startOpenPoint, _startOpenRotation);
+                    MoveDoor(_startOpenPointWorld, _startRotationAngle);
                     break;
                 case DoorState.Locked:
                     return;
@@ -63,22 +79,17 @@ namespace GameFramework.InteractableSystem
                     throw new ArgumentOutOfRangeException();
             }
         }
-        private void MoveDoor(Vector3 endPosition, Vector3 endRotation)
+        private void MoveDoor(Vector3 endPosition, float rotationAngle)
         {
+            var doorQuaternion = Quaternion.AngleAxis(rotationAngle, _rotationAxis);
+
             switch (_openType)
             {
                 case OpenType.Move:
-                    {
-
-                    }
-                    //var endPos = _doorPoint.TransformPoint(_doorPoint.position - endPosition);
+                    _doorPoint.DOMove(endPosition, _transformDuration);
                     break;
                 case OpenType.Rotate:
-                    _doorPoint.DORotate(_doorPoint.TransformPoint(endRotation), _doorSpeed);
-                    break;
-                case OpenType.Both:
-                    _doorPoint.DOMove(_doorPoint.TransformPoint(endPosition), _doorSpeed);
-                    _doorPoint.DORotate(_doorPoint.TransformPoint(endRotation), _doorSpeed);
+                    _doorPoint.DOLocalRotateQuaternion(doorQuaternion, _transformDuration);
                     break;
                 default:
                     throw new ArgumentOutOfRangeException();

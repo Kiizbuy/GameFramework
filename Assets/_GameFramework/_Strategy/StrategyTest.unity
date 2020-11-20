@@ -1870,8 +1870,8 @@ GameObject:
   - component: {fileID: 1555673151}
   - component: {fileID: 1555673150}
   - component: {fileID: 1555673149}
-  - component: {fileID: 1555673148}
   - component: {fileID: 1555673147}
+  - component: {fileID: 1555673148}
   m_Layer: 0
   m_Name: Cube
   m_TagString: Untagged
@@ -1919,14 +1919,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a12fbaebd672ba34ca7a8ac576b80c86, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _doorState: 0
-  _openType: 0
+  _doorState: 1
+  _openType: 1
   _doorPoint: {fileID: 1555673152}
-  _doorSpeed: 5
-  _startOpenPoint: {x: 0, y: 0.01250695, z: -0.17313385}
-  _endOpenPoint: {x: 0, y: 0.4781973, z: -2.5434875}
-  _startOpenRotation: {x: 0, y: 0, z: 0}
-  _endOpenRotation: {x: 0, y: 0, z: 0}
+  _transformDuration: 0.25
+  _startOpenPoint: {x: 0, y: 0, z: 0}
+  _endOpenPoint: {x: 0, y: 0, z: 3.07}
+  _rotationAxis: {x: 0, y: 1, z: 0}
+  _startRotationAngle: 0
+  _endRotationAngle: -90
 --- !u!65 &1555673149
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -1995,7 +1996,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1555673146}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 4.95, y: -0.73, z: -26.71}
+  m_LocalPosition: {x: 0.48, y: 0.14, z: 1.25}
   m_LocalScale: {x: 2.7710447, y: 4.5288086, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
@@ -2716,6 +2717,7 @@ GameObject:
   - component: {fileID: 2060565740}
   - component: {fileID: 2060565742}
   - component: {fileID: 2060565741}
+  - component: {fileID: 2060565743}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -2789,6 +2791,22 @@ Camera:
   m_OcclusionCulling: 1
   m_StereoConvergence: 10
   m_StereoSeparation: 0.022
+--- !u!114 &2060565743
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2060565739}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c49b4cc203aa6414fae5c798d1d0e7d6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_EventMask:
+    serializedVersion: 2
+    m_Bits: 23
+  m_MaxRayIntersections: 0
 --- !u!1001 &2094615012512232274
 PrefabInstance:
   m_ObjectHideFlags: 0
