@@ -3,7 +3,7 @@ using UnityEngine.Events;
 
 namespace GameFramework.UI
 {
-    public class Screen : MonoBehaviour, IScreen
+    public class ScreenMonobehavior : MonoBehaviour, IScreen
     {
         public UnityEvent OnPanelShow;
         public UnityEvent OnPanelHide;

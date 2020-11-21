@@ -357,7 +357,7 @@ namespace IngameDebugConsole
         }
 #endif
 
-        // Screen is resized, update the list
+        // ScreenMonobehavior is resized, update the list
         private void OnRectTransformDimensionsChange()
         {
             screenDimensionsChanged = true;
@@ -986,12 +986,12 @@ namespace IngameDebugConsole
 
 #if UNITY_2017_2_OR_NEWER && !UNITY_EDITOR && ( UNITY_ANDROID || UNITY_IOS )
             // Check if there is a cutout at the top of the screen
-            int screenHeight = Screen.height;
-            float safeYMax = Screen.safeArea.yMax;
+            int screenHeight = ScreenMonobehavior.height;
+            float safeYMax = ScreenMonobehavior.safeArea.yMax;
             if( safeYMax < screenHeight - 1 ) // 1: a small threshold
             {
                 // There is a cutout, shift the log window downwards
-                float cutoutPercentage = ( screenHeight - safeYMax ) / Screen.height;
+                float cutoutPercentage = ( screenHeight - safeYMax ) / ScreenMonobehavior.height;
                 float cutoutLocalSize = cutoutPercentage * canvasTR.rect.height;
 
                 logWindowTR.anchoredPosition = new Vector2( 0f, -cutoutLocalSize );

@@ -14,7 +14,7 @@ namespace OneLine {
 
         private const string INSPECTOR_WINDOW_ASSEMBLY_QUALIFIED_NAME =
                                 "UnityEditor.InspectorWindow, UnityEditor, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null";
-        private const string INITIALIZATION_ERROR_MESSAGE = @"OneLine can not initialize Inspector Screen Utility. 
+        private const string INITIALIZATION_ERROR_MESSAGE = @"OneLine can not initialize Inspector ScreenMonobehavior Utility. 
 You may experience some performance issues. 
 Please create an issue on https://github.com/slavniyteo/one-line/ and we will repair it.
 

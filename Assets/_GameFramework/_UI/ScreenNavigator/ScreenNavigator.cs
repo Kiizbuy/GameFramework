@@ -4,20 +4,6 @@ using UnityEngine.Events;
 
 namespace GameFramework.UI
 {
-    public interface IScreenNavigator
-    {
-        void NavigateBack();
-        void NavigateTo(IScreen screen, bool saveHistory);
-        void ClearHistory();
-    }
-
-    public interface IScreen
-    {
-        void Show();
-        void Hide();
-        bool HideAfterShowAnotherPanel { get; }
-    }
-
     public sealed class ScreenNavigator : MonoBehaviour, IScreenNavigator
     {
         public UnityEvent OnHistoryPanelsHasBeenEnded;
@@ -29,11 +15,11 @@ namespace GameFramework.UI
         public IScreen Previous => _history.Count > 0 ? _history.Peek() : null;
         public IScreen Current => _current;
 
-        public void NavigateToWithSaveHistory(Screen screen)
-            => NavigateTo(screen, true);
+        public void NavigateToWithSaveHistory(ScreenMonobehavior screenMonobehavior)
+            => NavigateTo(screenMonobehavior, true);
 
-        public void NavigateToWithoutSaveHistory(Screen screen)
-            => NavigateTo(screen, false);
+        public void NavigateToWithoutSaveHistory(ScreenMonobehavior screenMonobehavior)
+            => NavigateTo(screenMonobehavior, false);
 
         public void NavigateTo(IScreen screen, bool saveToHistory)
         {

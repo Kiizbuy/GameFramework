@@ -67,7 +67,7 @@ namespace Tayx.Graphy.Advanced
 
         private readonly            string[]                    m_windowStrings =
         {
-            "Screen: ",
+            "ScreenMonobehavior: ",
             "x",
             "@",
             "Hz",
@@ -311,7 +311,7 @@ namespace Tayx.Graphy.Advanced
             Resolution res = Screen.currentResolution;
 
             m_screenResolutionText.text
-                = "Screen: "
+                = "ScreenMonobehavior: "
                 + res.width
                 + "x"
                 + res.height
