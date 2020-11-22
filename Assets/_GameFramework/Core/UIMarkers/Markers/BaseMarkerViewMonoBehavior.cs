@@ -2,15 +2,15 @@
 
 namespace GameFramework.UI
 {
-    public class BaseMarkerMonoBehavior : MonoBehaviour, IMarker
+    public class BaseMarkerViewMonoBehavior : MonoBehaviour, IMarkerView
     {
         [SerializeField] private int _sizeInPixels = 32;
 
-        public void SetPosition(ICameraView camera, Vector3 position)
+        public void SetPosition(ICameraView cameraView, Vector3 position)
         {
-            var point = camera.GetWorldToScreenPoint(position);
+            var point = cameraView.GetWorldToScreenPoint(position);
 
-            if (InCameraRect(point))
+            if (OnCameraRect(point))
             {
                 var screenPixels = _sizeInPixels;
                 var screenSize = new Vector2(screenPixels, screenPixels);
@@ -29,7 +29,12 @@ namespace GameFramework.UI
                 (point.y - Screen.height / 2.0f) / transform.lossyScale.y, 0);
         }
 
-        private bool InCameraRect(Vector3 point)
+        public void DestroyMarker()
+        {
+            Destroy(gameObject);
+        }
+
+        private bool OnCameraRect(Vector3 point)
         {
             return point.x > 0 && point.x < Screen.width && point.y > 0 && point.y < Screen.height && point.z > 0;
         }

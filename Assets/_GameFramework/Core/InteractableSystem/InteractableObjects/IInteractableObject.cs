@@ -1,6 +1,6 @@
 ﻿namespace GameFramework.InteractableSystem
 {
-    public interface IInteractable
+    public interface IInteractableObject
     {
         void Interact();
         bool InteractRequirements();

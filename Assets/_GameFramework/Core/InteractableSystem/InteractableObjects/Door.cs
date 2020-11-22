@@ -17,7 +17,7 @@ namespace GameFramework.InteractableSystem
         Rotate,
     }
 
-    public class Door : MonoBehaviour, IInteractable
+    public class Door : MonoBehaviour, IInteractableObject
     {
         [SerializeField] private DoorState _doorState;
         [SerializeField] private OpenType _openType;
